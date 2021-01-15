@@ -10,6 +10,14 @@
             "StackName": "amplify-itiempo-prod-123019",
             "StackId": "arn:aws:cloudformation:us-east-1:388597641926:stack/amplify-itiempo-prod-123019/5514b640-56a7-11eb-97d2-12446ecd5e01",
             "AmplifyAppId": "d1gvlkpw4nf2kk"
+        },
+        "categories": {
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d1gvlkpw4nf2kk",
+                    "type": "cicd"
+                }
+            }
         }
     },
     "dev": {
