@@ -33,7 +33,11 @@
       },
       "function": {
         "authPreSignup": {},
-        "authPreTokenGeneration": {}
+        "authPreTokenGeneration": {},
+        "iTiempoModules": {
+          "deploymentBucketName": "amplify-itiempo-dev-123613-deployment",
+          "s3Key": "amplify-builds/iTiempoModules-build.zip"
+        }
       },
       "auth": {
         "auth": {}
@@ -48,7 +52,8 @@
                 {
                   "type": "private"
                 }
-              ]
+              ],
+              "hash": "3JaQYrLTNg+YBOV9G6XU+tbNqd4sIgXLMKslnNjxXy4="
             }
           }
         }
