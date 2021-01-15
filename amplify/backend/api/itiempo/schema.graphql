@@ -1,0 +1,210 @@
+type Mutation {
+  setupNewAccount: Employee! @function(name: "GraphQLResolver-${env}")
+  createUser(input: CreateUserInput!): Employee
+    @function(name: "GraphQLResolver-${env}")
+  updateUserRole(
+    username: ID!
+    employeeId: ID!
+    managerIds: [String!]!
+    roles: [Role!]!
+    previousRoles: [Role!]!
+    _version: Int!
+  ): Employee @function(name: "GraphQLResolver-${env}")
+}
+type Company
+  @model
+  @auth(
+    rules: [
+      # Allows creation only through GraphQLResolver (setupNewAccount)
+      { allow: private, provider: iam, operations: [create, update, read] }
+      {
+        # Allow only company owners, and admins to update company info
+        allow: groups
+        groupsField: "allowUpdate"
+        operations: [update]
+      }
+      {
+        # Allow all memebers of a company to read
+        allow: owner
+        ownerField: "id"
+        identityClaim: "cId"
+        operations: [read]
+      }
+    ]
+  ) {
+  id: ID!
+  name: String
+  website: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  employees: [Employee!] @connection(keyName: "byCompany", fields: ["id"])
+  timeRecords: [TimeRecord!] @connection(keyName: "byCompany", fields: ["id"])
+  # allowUpdate is populated dynamically through the resolver to include
+  # Owener-${cId} and Admin-${cId}
+  allowUpdate: [String]
+    @auth(
+      rules: [
+        # Allows it to be set only once through setupNewAccount
+        { allow: private, provider: iam, operations: [create, read] }
+        {
+          # Allow all memebers of a company to read
+          allow: owner
+          ownerField: "id"
+          identityClaim: "cId"
+          operations: [read]
+        }
+      ]
+    )
+}
+type Employee
+  @model
+  @key(
+    name: "byCompany"
+    fields: ["companyId", "email"]
+    queryField: "listEmployeesByEmail"
+  )
+  @auth(
+    rules: [
+      # Only allow GraphQLResolver (setupNewAccount, addUser) to create
+      { allow: private, provider: iam, operations: [create, update, read] }
+      {
+        # Allow the employee itself to update and read it's own rec.
+        allow: owner
+        ownerField: "id"
+        identityClaim: "eId"
+        operations: [read, update]
+      }
+      {
+        # Allow the employee's manager full access
+        allow: owner
+        ownerField: "primaryManagerId"
+        identityClaim: "eId"
+        operations: [update, delete, read]
+      }
+      {
+        # Allow company admins/owners full access
+        allow: groups
+        groupsField: "allowFull"
+        operations: [update, delete, read]
+      }
+    ]
+  ) {
+  id: ID!
+  username: String!
+  profilePhoto: String
+  email: AWSEmail!
+  email_2: AWSEmail
+  firstName: String
+  lastName: String
+  phone: AWSPhone
+  phone_2: AWSPhone
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  jobTitle: String
+  payRates: [PayRate!]
+  roles: [Role!]
+    @auth(
+      rules: [
+        # Allow all with access to read
+        { allow: private, provider: userPools, operations: [read] }
+        # Only allow GraphQLResolver to create, read, update
+        { allow: private, provider: iam, operations: [create, update, read] }
+      ]
+    )
+  companyId: ID!
+  company: Company @connection(fields: ["companyId"])
+  timeRecords: [TimeRecord!] @connection(keyName: "byEmployee", fields: ["id"])
+  primaryManagerId: ID!
+  primaryManager: Employee @connection(fields: ["primaryManagerId"])
+  allowFull: [String]
+    @auth(
+      rules: [
+        # Allow all with access to read
+        { allow: private, provider: userPools, operations: [read] }
+        # Allows it to be set only once through setupNewAccount or createUser
+        { allow: private, provider: iam, operations: [create, read] }
+      ]
+    )
+}
+type TimeRecord
+  @model
+  @key(name: "byCompany", fields: ["companyId", "employeeId"])
+  @key(name: "byEmployee", fields: ["employeeId", "companyId"])
+  @key(
+    name: "byEmployeeTimestamp"
+    fields: ["employeeId", "timestampIn"]
+    queryField: "listEmployeeTimeRecords"
+  )
+  @key(
+    name: "byCompanyTimestamp"
+    fields: ["companyId", "timestampIn"]
+    queryField: "listCompanyTimeRecords"
+  )
+  @auth(
+    rules: [
+      { allow: private, provider: iam }
+      { allow: private, provider: userPools }
+    ]
+  ) {
+  id: ID!
+  companyId: ID!
+  company: Company @connection(fields: ["companyId"])
+  employeeId: ID!
+  employee: Employee @connection(fields: ["employeeId"])
+  primaryManagerId: ID!
+  primaryManage: Employee @connection(fields: ["primaryManagerId"])
+  timestampIn: AWSTimestamp!
+  timestampOut: AWSTimestamp
+  photoIn: String
+  photoOut: String
+  noteIn: String
+  noteOut: String
+  rate: PayRate
+}
+type PayRate {
+  name: String
+  amount: Float!
+  isHourly: Boolean!
+  isDefault: Boolean!
+}
+enum Role {
+  Owner
+  Admin
+  Manager
+  Employee
+}
+## Input types
+input CreateUserInput {
+  profilePhoto: String
+  email: AWSEmail!
+  email_2: AWSEmail
+  firstName: String
+  lastName: String
+  phone: AWSPhone
+  phone_2: AWSPhone
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  jobTitle: String
+  payRates: [PayRateCreateInput!]
+  roles: [Role!]!
+  companyId: ID!
+  primaryManagerId: ID!
+}
+input PayRateCreateInput {
+  name: String
+  amount: Float!
+  isHourly: Boolean!
+  isDefault: Boolean!
+}
