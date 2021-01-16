@@ -1,0 +1,82 @@
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
+import clsx from "clsx";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/styles";
+import { Avatar, Typography } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    minHeight: "fit-content",
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+  },
+  name: {
+    marginTop: theme.spacing(1),
+    textAlign: "center",
+  },
+  nameHidden: {
+    marginTop: theme.spacing(1),
+    color: "transparent",
+    textAlign: "center",
+  },
+}));
+/**
+ * 
+ * @param {*} props 
+ */
+const Profile = (props) => {
+  const classes = useStyles();
+  const {
+    className,
+    onClose,
+    profileURL,
+    avatarURL,
+    profileName,
+    clockedIn,
+    ...rest
+  } = props;
+  const subtext = `Clocked ${clockedIn ? `In` : `Out`}`;
+
+  return (
+    <div {...rest} className={clsx(classes.root, className)}>
+      <Avatar
+        alt="Person"
+        className={classes.avatar}
+        component={RouterLink}
+        src={avatarURL}
+        to={profileURL}
+        onClick={onClose}
+      />
+      <Typography
+        className={profileName ? classes.name : classes.nameHidden}
+        variant="h4"
+      >
+        <RouterLink
+          to={profileURL}
+          onClick={onClose}
+          style={{ color: "inherit" }}
+        >
+          {profileName ? profileName : "Loading User"}
+        </RouterLink>
+      </Typography>
+      <Typography variant="body2">{subtext}</Typography>
+    </div>
+  );
+};
+
+Profile.propTypes = {
+  className: PropTypes.string,
+  profileName: PropTypes.string,
+  profileURL: PropTypes.string,
+  avatarURL: PropTypes.string,
+  clockedIn: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default Profile;

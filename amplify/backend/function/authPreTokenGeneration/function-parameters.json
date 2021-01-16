@@ -12,5 +12,12 @@
   "triggerTemplate": "PreTokenGeneration.json.ejs",
   "roleName": "authPreTokenGeneration",
   "skipEdit": true,
-  "enableCors": false
+  "enableCors": false,
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "iTiempoModules",
+      "version": 2
+    }
+  ]
 }
