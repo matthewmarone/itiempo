@@ -72,7 +72,8 @@
         "iTiempoModules": {
           "deploymentBucketName": "amplify-itiempo-dev-123613-deployment",
           "s3Key": "amplify-builds/iTiempoModules-build.zip"
-        }
+        },
+        "GraphQLResolver": {}
       },
       "auth": {
         "auth": {}
