@@ -97,7 +97,7 @@
         ],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-itiempo-dev-123613-deployment",
+          "S3Bucket": "amplify-itiempo-prod-123019-deployment",
           "S3Key": "amplify-builds/GraphQLResolver-5741384b45505044796d-build.zip"
         }
       }
