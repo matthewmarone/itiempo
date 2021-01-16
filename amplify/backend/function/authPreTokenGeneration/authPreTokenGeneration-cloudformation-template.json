@@ -99,7 +99,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-itiempo-dev-123613-deployment",
-          "S3Key": "amplify-builds/authPreTokenGeneration-4c70447655704f64506a-build.zip"
+          "S3Key": "amplify-builds/authPreTokenGeneration-30573354794462466346-build.zip"
         },
         "Layers": [
           {
