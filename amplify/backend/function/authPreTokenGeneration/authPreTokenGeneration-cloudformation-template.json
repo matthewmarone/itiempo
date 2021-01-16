@@ -33,6 +33,10 @@
     },
     "env": {
       "Type": "String"
+    },
+    "functioniTiempoModulesArn": {
+      "Type": "String",
+      "Default": "functioniTiempoModulesArn"
     }
   },
   "Conditions": {
@@ -94,9 +98,14 @@
         "Runtime": "nodejs10.x",
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-itiempo-prod-123019-deployment",
+          "S3Bucket": "amplify-itiempo-dev-123613-deployment",
           "S3Key": "amplify-builds/authPreTokenGeneration-30573354794462466346-build.zip"
-        }
+        },
+        "Layers": [
+          {
+            "Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:iTiempoModules-dev:2"
+          }
+        ]
       }
     },
     "LambdaExecutionRole": {
