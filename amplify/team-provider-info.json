@@ -89,6 +89,14 @@
                 }
               ],
               "hash": "3JaQYrLTNg+YBOV9G6XU+tbNqd4sIgXLMKslnNjxXy4="
+            },
+            "2": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "D3MAkyNReklepiKluC0YoqcuM305+Y/HhkJYmGoFudM="
             }
           }
         }
