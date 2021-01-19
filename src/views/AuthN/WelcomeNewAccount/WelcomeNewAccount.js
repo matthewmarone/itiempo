@@ -114,7 +114,7 @@ const WelcomeNewAccount = (props) => {
     }
   }, [calledEmpl, dataEmpl, dispatch, errorEmpl, loadingEmpl]);
 
-  // Hook fires when the app context is updated
+  // Hook fires when the app context is 
   useEffect(() => {
     if (userLocalAppData.accountSetup) onAuthStateChange(UIAuthState.SignedIn);
   }, [onAuthStateChange, userLocalAppData.accountSetup]);
