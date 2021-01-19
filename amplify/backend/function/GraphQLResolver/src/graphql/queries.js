@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 const getEmployee = /* GraphQL */ `
   query GetEmployee($id: ID!) {
     getEmployee(id: $id) {

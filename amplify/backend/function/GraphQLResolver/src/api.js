@@ -5,7 +5,6 @@
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
-
 const fetch = require("node-fetch");
 const URL = require("url");
 const AWS = require("aws-sdk");

@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 const updateCompany = /* GraphQL */ `
   mutation UpdateCompany(
     $input: UpdateCompanyInput!

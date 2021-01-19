@@ -43,7 +43,7 @@ type Company
   country: String
   employees: [Employee!] @connection(keyName: "byCompany", fields: ["id"])
   timeRecords: [TimeRecord!] @connection(keyName: "byCompany", fields: ["id"])
-  # allowUpdate is populated dynamically through the resolver to include
+  # allowUpdate is populated dynamically through the resolver to include:
   # Owener-${cId} and Admin-${cId}
   allowUpdate: [String]
     @auth(

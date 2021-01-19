@@ -3,7 +3,6 @@ const uuid = require("uuid");
 exports.handler = async (event, context, callback) => {
   // console.log("event:", JSON.stringify(event, null, 4));
   // console.log("context", JSON.stringify(context, null, 4));
-
   const cId = event.request.userAttributes["custom:cId"] || uuid.v4();
   const eId = event.request.userAttributes["custom:eId"] || uuid.v4();
   const roles = event.request.userAttributes["custom:roles"] || "Owner";

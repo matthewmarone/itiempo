@@ -10,6 +10,5 @@ exports.handler = (event, context, callback) => {
   if (event.request.userAttributes.hasOwnProperty("email")) {
     event.response.autoVerifyEmail = true;
   }
-
   callback(null, event);
 };

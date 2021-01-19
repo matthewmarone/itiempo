@@ -5,7 +5,6 @@
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
-
 const { CognitoIdentityServiceProvider } = require("aws-sdk");
 const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider();
 /**

@@ -5,7 +5,6 @@
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
-
 const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
