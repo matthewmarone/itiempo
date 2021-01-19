@@ -73,6 +73,45 @@ const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
 };
 
 /**
+ * Includes cId, eId, and roles
+ */
+const getAppsCustomUserAttributes = () => [
+  {
+    AttributeDataType: "string",
+    DeveloperOnlyAttribute: true,
+    Mutable: true,
+    Name: "cId",
+    Required: false,
+    StringAttributeConstraints: {
+      MaxLength: "255",
+      MinLength: "0",
+    },
+  },
+  {
+    AttributeDataType: "string",
+    DeveloperOnlyAttribute: true,
+    Mutable: true,
+    Name: "eId",
+    Required: false,
+    StringAttributeConstraints: {
+      MaxLength: "255",
+      MinLength: "0",
+    },
+  },
+  {
+    AttributeDataType: "string",
+    DeveloperOnlyAttribute: true,
+    Mutable: true,
+    Name: "roles",
+    Required: false,
+    StringAttributeConstraints: {
+      MaxLength: "255",
+      MinLength: "0",
+    },
+  },
+];
+
+/**
  * Using this as the entry point,
  * you can use a single function to handle many resolvers.
  */
@@ -101,7 +140,6 @@ const resolvers = {
           allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
         },
       };
-
       // New company data
       const companyVars = {
         input: {
@@ -115,33 +153,62 @@ const resolvers = {
       // Create the new Employee
       const employeePromise = api.CreateEmployee(employeeVars);
       // Persist the companyId, employeeId and Role to the Cognito user rec.
-      const updateUserPromise = user.updateUser(username, [
-        { Name: "custom:cId", Value: cId },
-        { Name: "custom:eId", Value: eId },
-        // Assign the user to the Owner group for this new company
-        { Name: "custom:roles", Value: OWNER_ROLE },
-      ]);
+      const updateUsr = () =>
+        // We wrapped the function call because we may call a 2nd time later
+        user.updateUser(username, [
+          { Name: "custom:cId", Value: cId },
+          { Name: "custom:eId", Value: eId },
+          // Assign the user to the Owner group for this new company
+          { Name: "custom:roles", Value: OWNER_ROLE },
+        ]);
+      const updateUserPromise = updateUsr();
 
       // Asynchronously create Employee, Company and update user role
       const [companyRes, employeeRes, userRes] = await Promise.all([
-        companyPromise.catch((error) => {
+        companyPromise.catch(async (error) => {
           console.error(error);
-          return null;
+          try {
+            // Perhaps the company was already created
+            const { data: { getCompany } = {} } =
+              (await api.GetCompany(cId)) || {};
+            return !getCompany ? null : { data: { createCompany: getCompany } };
+          } catch (e) {
+            console.error(e);
+            return null;
+          }
         }),
-        employeePromise.catch((error) => {
+        employeePromise.catch(async (error) => {
           console.error(error);
-          return null;
+          try {
+            // Perhaps the Employee was already created
+            const { data: { getEmployee } = {} } =
+              (await api.GetEmployee(eId)) || {};
+            return !getEmployee
+              ? null
+              : { data: { createEmployee: getEmployee } };
+          } catch (e) {
+            console.error(e);
+            return null;
+          }
         }),
-        updateUserPromise.catch((error) => {
-          console.error(error);
-          return null;
+        updateUserPromise.catch(async (error) => {
+          // Perhaps this is a new user pool and we need to create the 
+          // custom attributes first
+          console.log("Creating missing attributes", error);
+          try {
+            await user.addCustomAttributes(getAppsCustomUserAttributes());
+            return await updateUsr();
+          } catch (e) {
+            console.error(e);
+            return null;
+          }
         }),
       ]);
 
       // TODO (Matthew): Can we handle these (allbeit rare) errors better?
-      if (!companyRes) throw new Error("Could not craete company");
-      if (!employeeRes) throw new Error("Could not craete Employee");
-      if (!userRes) throw new Error("Could not add role to user");
+      if (!companyRes) throw new Error("Could not create Company");
+      if (!employeeRes) throw new Error("Could not create Employee");
+      if (!userRes) throw new Error("Could not update User");
 
       return employeeRes.data.createEmployee;
     },
@@ -326,4 +393,3 @@ exports.handler = async (event) => {
     throw e;
   }
 };
-

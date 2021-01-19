@@ -52,10 +52,22 @@ const UpdateTimeRecord = async (variables) => {
   const graphQL = Mutations.updateTimeRecord;
   return await query(operationName, graphQL, variables);
 };
-
+/**
+ *
+ * @param {*} id
+ */
 const GetEmployee = async (id) => {
   const operationName = "GetEmployee";
   const graphQL = Queries.getEmployee;
+  return await query(operationName, graphQL, { id });
+};
+/**
+ *
+ * @param {*} id
+ */
+const GetCompany = async (id) => {
+  const operationName = "GetCompany";
+  const graphQL = Queries.getCompany;
   return await query(operationName, graphQL, { id });
 };
 
@@ -90,5 +102,6 @@ exports.CreateCompany = CreateCompany;
 exports.CreateEmployee = CreateEmployee;
 exports.UpdateEmployee = UpdateEmployee;
 exports.GetEmployee = GetEmployee;
+exports.GetCompany = GetCompany;
 exports.CreateTimeRecord = CreateTimeRecord;
 exports.UpdateTimeRecord = UpdateTimeRecord;

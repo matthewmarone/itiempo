@@ -23,7 +23,7 @@ const createUser = async (
   UserAttributes = [],
   ClientMetadata = {}
 ) => {
-  var params = {
+  const params = {
     UserPoolId: COGNITO_USERPOOL_ID /* required */,
     Username,
     UserAttributes,
@@ -91,7 +91,7 @@ const updateUser = async (
   UserAttributes = [],
   ClientMetadata = {}
 ) => {
-  var params = {
+  const params = {
     UserPoolId: COGNITO_USERPOOL_ID,
     Username,
     UserAttributes,
@@ -106,8 +106,43 @@ const updateUser = async (
   }
 };
 
+/**
+ * 
+ * @param {*} CustomAttributes "CustomAttributes": [ 
+      { 
+         "AttributeDataType": "string",
+         "DeveloperOnlyAttribute": boolean,
+         "Mutable": boolean,
+         "Name": "string",
+         "NumberAttributeConstraints": { 
+            "MaxValue": "string",
+            "MinValue": "string"
+         },
+         "Required": boolean,
+         "StringAttributeConstraints": { 
+            "MaxLength": "string",
+            "MinLength": "string"
+         }
+      }
+   ]
+ */
+const addCustomAttributes = async (CustomAttributes) => {
+  const params = {
+    CustomAttributes,
+    UserPoolId: COGNITO_USERPOOL_ID,
+  };
+  try {
+    return await cognitoIdentityServiceProvider
+      .addCustomAttributes(params)
+      .promise();
+  } catch (e) {
+    throw e;
+  }
+};
+
 exports.createUser = createUser;
 exports.addUserToGroup = addUserToGroup;
 exports.removeUserFromGroup = removeUserFromGroup;
 exports.listUserGroups = listUserGroups;
 exports.updateUser = updateUser;
+exports.addCustomAttributes = addCustomAttributes;
