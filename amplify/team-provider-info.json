@@ -70,7 +70,12 @@
         "iTiempoModules": {
           "deploymentBucketName": "amplify-itiempo-dev-123613-deployment",
           "s3Key": "amplify-builds/iTiempoModules-build.zip"
-        }
+        },
+        "authPreSignup": {},
+        "authPreTokenGeneration": {}
+      },
+      "auth": {
+        "auth": {}
       }
     },
     "nonCFNdata": {
@@ -83,7 +88,7 @@
                   "type": "private"
                 }
               ],
-              "hash": "z/a8OiWjVCcSdgW+NYHeSoz/7xwpD2a3l88rVMOKYJE="
+              "hash": "mnPhEZd3zcXZhAbN3dFzycIeP3aw/YOZ+4s1QsxysJI="
             }
           }
         }

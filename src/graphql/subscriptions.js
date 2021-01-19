@@ -20,10 +20,54 @@ export const onCreateCompany = /* GraphQL */ `
       updatedAt
       allowUpdate
       employees {
+        items {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         nextToken
         startedAt
       }
       timeRecords {
+        items {
+          id
+          companyId
+          employeeId
+          primaryManagerId
+          timestampIn
+          timestampOut
+          photoIn
+          photoOut
+          noteIn
+          noteOut
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
         nextToken
         startedAt
       }
@@ -49,10 +93,54 @@ export const onUpdateCompany = /* GraphQL */ `
       updatedAt
       allowUpdate
       employees {
+        items {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         nextToken
         startedAt
       }
       timeRecords {
+        items {
+          id
+          companyId
+          employeeId
+          primaryManagerId
+          timestampIn
+          timestampOut
+          photoIn
+          photoOut
+          noteIn
+          noteOut
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
         nextToken
         startedAt
       }
@@ -78,10 +166,54 @@ export const onDeleteCompany = /* GraphQL */ `
       updatedAt
       allowUpdate
       employees {
+        items {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         nextToken
         startedAt
       }
       timeRecords {
+        items {
+          id
+          companyId
+          employeeId
+          primaryManagerId
+          timestampIn
+          timestampOut
+          photoIn
+          photoOut
+          noteIn
+          noteOut
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
         nextToken
         startedAt
       }
@@ -136,6 +268,14 @@ export const onCreateEmployee = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
+        employees {
+          nextToken
+          startedAt
+        }
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       primaryManager {
         id
@@ -154,6 +294,12 @@ export const onCreateEmployee = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -161,12 +307,77 @@ export const onCreateEmployee = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       roles
       allowFull
       timeRecords {
+        items {
+          id
+          companyId
+          employeeId
+          primaryManagerId
+          timestampIn
+          timestampOut
+          photoIn
+          photoOut
+          noteIn
+          noteOut
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
         nextToken
         startedAt
       }
@@ -221,6 +432,14 @@ export const onUpdateEmployee = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
+        employees {
+          nextToken
+          startedAt
+        }
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       primaryManager {
         id
@@ -239,6 +458,12 @@ export const onUpdateEmployee = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -246,12 +471,77 @@ export const onUpdateEmployee = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       roles
       allowFull
       timeRecords {
+        items {
+          id
+          companyId
+          employeeId
+          primaryManagerId
+          timestampIn
+          timestampOut
+          photoIn
+          photoOut
+          noteIn
+          noteOut
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
         nextToken
         startedAt
       }
@@ -306,6 +596,14 @@ export const onDeleteEmployee = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
+        employees {
+          nextToken
+          startedAt
+        }
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       primaryManager {
         id
@@ -324,6 +622,12 @@ export const onDeleteEmployee = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -331,12 +635,77 @@ export const onDeleteEmployee = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       roles
       allowFull
       timeRecords {
+        items {
+          id
+          companyId
+          employeeId
+          primaryManagerId
+          timestampIn
+          timestampOut
+          photoIn
+          photoOut
+          noteIn
+          noteOut
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+        }
         nextToken
         startedAt
       }
@@ -383,6 +752,14 @@ export const onCreateTimeRecord = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
+        employees {
+          nextToken
+          startedAt
+        }
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       employee {
         id
@@ -401,6 +778,12 @@ export const onCreateTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -408,8 +791,56 @@ export const onCreateTimeRecord = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       primaryManage {
         id
@@ -428,6 +859,12 @@ export const onCreateTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -435,8 +872,56 @@ export const onCreateTimeRecord = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
     }
   }
@@ -481,6 +966,14 @@ export const onUpdateTimeRecord = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
+        employees {
+          nextToken
+          startedAt
+        }
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       employee {
         id
@@ -499,6 +992,12 @@ export const onUpdateTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -506,8 +1005,56 @@ export const onUpdateTimeRecord = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       primaryManage {
         id
@@ -526,6 +1073,12 @@ export const onUpdateTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -533,8 +1086,56 @@ export const onUpdateTimeRecord = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
     }
   }
@@ -579,6 +1180,14 @@ export const onDeleteTimeRecord = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
+        employees {
+          nextToken
+          startedAt
+        }
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       employee {
         id
@@ -597,6 +1206,12 @@ export const onDeleteTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -604,8 +1219,56 @@ export const onDeleteTimeRecord = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
       primaryManage {
         id
@@ -624,6 +1287,12 @@ export const onDeleteTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
         companyId
         primaryManagerId
         _version
@@ -631,8 +1300,56 @@ export const onDeleteTimeRecord = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        company {
+          id
+          name
+          website
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          allowUpdate
+        }
+        primaryManager {
+          id
+          username
+          profilePhoto
+          email
+          email_2
+          firstName
+          lastName
+          phone
+          phone_2
+          addressLine1
+          addressLine2
+          city
+          state
+          zip
+          country
+          jobTitle
+          companyId
+          primaryManagerId
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          roles
+          allowFull
+        }
         roles
         allowFull
+        timeRecords {
+          nextToken
+          startedAt
+        }
       }
     }
   }

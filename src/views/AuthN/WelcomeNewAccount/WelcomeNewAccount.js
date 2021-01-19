@@ -92,7 +92,6 @@ const WelcomeNewAccount = (props) => {
       called: calledEmpl,
     },
   ] = useMutation(gql(updateEmployeeGQL));
-
   const { onAuthStateChange } = props;
   const [formState, setFormState] = useState({
     isValid: false,
@@ -100,6 +99,27 @@ const WelcomeNewAccount = (props) => {
     touched: {},
     errors: {},
   });
+
+  // Setup account on load
+  useEffect(() => {
+    if (!calledAcct) createAccount();
+  }, [calledAcct, createAccount]);
+  
+  // Update employee after account setup, and name form is submitted
+  useEffect(() => {
+    if (calledAcct && !loadingAcct && !errorAcct && dataAcct && name) {
+      logger.debug("dataAcct", dataAcct);
+      const {
+        setupNewAccount: { id },
+      } = dataAcct || { setupNewAccount: {} };
+      if (id) {
+        const { firstName, lastName } = name;
+        updateEmployee({
+          variables: { input: { id, firstName, lastName } },
+        });
+      }
+    }
+  }, [calledAcct, dataAcct, errorAcct, loadingAcct, name, updateEmployee]);
 
   // Runs after successfull employee update response
   // We dispatch to the context the fact that the account has been setup
@@ -118,27 +138,6 @@ const WelcomeNewAccount = (props) => {
   useEffect(() => {
     if (userLocalAppData.accountSetup) onAuthStateChange(UIAuthState.SignedIn);
   }, [onAuthStateChange, userLocalAppData.accountSetup]);
-
-  // Setup account on load
-  useEffect(() => {
-    if (!calledAcct) createAccount();
-  }, [calledAcct, createAccount]);
-
-  // Update employee after account setup and name is submitted
-  useEffect(() => {
-    if (calledAcct && !loadingAcct && !errorAcct && dataAcct && name) {
-      logger.debug("dataAcct", dataAcct);
-      const {
-        setupNewAccount: { id },
-      } = dataAcct || { setupNewAccount: {} };
-      if (id) {
-        const { firstName, lastName } = name;
-        updateEmployee({
-          variables: { input: { id, firstName, lastName } },
-        });
-      }
-    }
-  }, [calledAcct, dataAcct, errorAcct, loadingAcct, name, updateEmployee]);
 
   // Checks for errors on from change
   useEffect(() => {
