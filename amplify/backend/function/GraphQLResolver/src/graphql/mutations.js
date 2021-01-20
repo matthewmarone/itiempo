@@ -1,80 +1,3 @@
-/* eslint-disable */
-const updateCompany = /* GraphQL */ `
-  mutation UpdateCompany(
-    $input: UpdateCompanyInput!
-    $condition: ModelCompanyConditionInput
-  ) {
-    updateCompany(input: $input, condition: $condition) {
-      id
-      name
-      website
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      allowUpdate
-      employees {
-        items {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        nextToken
-        startedAt
-      }
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
 const deleteCompany = /* GraphQL */ `
   mutation DeleteCompany(
     $input: DeleteCompanyInput!
@@ -96,225 +19,6 @@ const deleteCompany = /* GraphQL */ `
       createdAt
       updatedAt
       allowUpdate
-      employees {
-        items {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        nextToken
-        startedAt
-      }
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-const updateEmployee = /* GraphQL */ `
-  mutation UpdateEmployee(
-    $input: UpdateEmployeeInput!
-    $condition: ModelEmployeeConditionInput
-  ) {
-    updateEmployee(input: $input, condition: $condition) {
-      id
-      username
-      profilePhoto
-      email
-      email_2
-      firstName
-      lastName
-      phone
-      phone_2
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      jobTitle
-      payRates {
-        name
-        amount
-        isHourly
-        isDefault
-      }
-      roles
-      companyId
-      primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManager {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      allowFull
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -346,7 +50,6 @@ const deleteEmployee = /* GraphQL */ `
         isHourly
         isDefault
       }
-      roles
       companyId
       primaryManagerId
       _version
@@ -354,134 +57,32 @@ const deleteEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManager {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
+      roles
       allowFull
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
+    }
+  }
+`;
+const updateCompany = /* GraphQL */ `
+  mutation UpdateCompany(
+    $input: UpdateCompanyInput!
+    $condition: ModelCompanyConditionInput
+  ) {
+    updateCompany(input: $input, condition: $condition) {
+      id
+      name
+      website
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      allowUpdate
     }
   }
 `;
@@ -506,58 +107,46 @@ const createCompany = /* GraphQL */ `
       createdAt
       updatedAt
       allowUpdate
-      employees {
-        items {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        nextToken
-        startedAt
+    }
+  }
+`;
+const updateEmployee = /* GraphQL */ `
+  mutation UpdateEmployee(
+    $input: UpdateEmployeeInput!
+    $condition: ModelEmployeeConditionInput
+  ) {
+    updateEmployee(input: $input, condition: $condition) {
+      id
+      username
+      profilePhoto
+      email
+      email_2
+      firstName
+      lastName
+      phone
+      phone_2
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      jobTitle
+      payRates {
+        name
+        amount
+        isHourly
+        isDefault
       }
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
+      companyId
+      primaryManagerId
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      roles
+      allowFull
     }
   }
 `;
@@ -589,7 +178,6 @@ const createEmployee = /* GraphQL */ `
         isHourly
         isDefault
       }
-      roles
       companyId
       primaryManagerId
       _version
@@ -597,134 +185,8 @@ const createEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManager {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
+      roles
       allowFull
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -755,193 +217,6 @@ const createTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      employee {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManage {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
     }
   }
 `;
@@ -972,193 +247,6 @@ const updateTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      employee {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManage {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
     }
   }
 `;
@@ -1189,193 +277,6 @@ const deleteTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      employee {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManage {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          roles
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowFull
-        }
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
     }
   }
 `;
