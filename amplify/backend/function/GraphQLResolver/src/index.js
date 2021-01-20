@@ -77,7 +77,7 @@ const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
 const getAppsCustomUserAttributes = () => [
   {
     AttributeDataType: "string",
-    DeveloperOnlyAttribute: true,
+    DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "cId",
     Required: false,
@@ -88,7 +88,7 @@ const getAppsCustomUserAttributes = () => [
   },
   {
     AttributeDataType: "string",
-    DeveloperOnlyAttribute: true,
+    DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "eId",
     Required: false,
@@ -99,7 +99,7 @@ const getAppsCustomUserAttributes = () => [
   },
   {
     AttributeDataType: "string",
-    DeveloperOnlyAttribute: true,
+    DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "roles",
     Required: false,
@@ -164,34 +164,46 @@ const resolvers = {
 
       // Asynchronously create Employee, Company and update user role
       const [companyRes, employeeRes, userRes] = await Promise.all([
-        companyPromise.catch(async (error) => {
-          console.error(error);
-          try {
-            // Perhaps the company was already created
-            const { data: { getCompany } = {} } =
-              (await api.GetCompany(cId)) || {};
-            return !getCompany ? null : { data: { createCompany: getCompany } };
-          } catch (e) {
-            console.error(e);
-            return null;
-          }
-        }),
-        employeePromise.catch(async (error) => {
-          console.error(error);
-          try {
-            // Perhaps the Employee was already created
-            const { data: { getEmployee } = {} } =
-              (await api.GetEmployee(eId)) || {};
-            return !getEmployee
-              ? null
-              : { data: { createEmployee: getEmployee } };
-          } catch (e) {
-            console.error(e);
-            return null;
-          }
-        }),
+        companyPromise
+          .then((r) => {
+            if (!r || r.errors) throw new Error("Company may already exist");
+            return r;
+          })
+          .catch(async (error) => {
+            console.error(error);
+            try {
+              // Perhaps the company was already created
+              const { data: { getCompany } = {} } =
+                (await api.GetCompany(cId)) || {};
+              return !getCompany
+                ? null
+                : { data: { createCompany: getCompany } };
+            } catch (e) {
+              console.error(e);
+              return null;
+            }
+          }),
+        employeePromise
+          .then((r) => {
+            if (!r || r.errors) throw new Error("Employee may already exist");
+            return r;
+          })
+          .catch(async (error) => {
+            console.error(error);
+            try {
+              // Perhaps the Employee was already created
+              const { data: { getEmployee } = {} } =
+                (await api.GetEmployee(eId)) || {};
+              return !getEmployee
+                ? null
+                : { data: { createEmployee: getEmployee } };
+            } catch (e) {
+              console.error(e);
+              return null;
+            }
+          }),
         updateUserPromise.catch(async (error) => {
-          // Perhaps this is a new user pool and we need to create the 
+          // Perhaps this is a new user pool and we need to create the
           // custom attributes first
           console.log("Creating missing attributes", error);
           try {
@@ -208,6 +220,10 @@ const resolvers = {
       if (!companyRes) throw new Error("Could not create Company");
       if (!employeeRes) throw new Error("Could not create Employee");
       if (!userRes) throw new Error("Could not update User");
+
+      console.log(JSON.stringify(companyRes, null, 4));
+      console.log(JSON.stringify(employeeRes, null, 4));
+      console.log(JSON.stringify(userRes, null, 4));
 
       return employeeRes.data.createEmployee;
     },
