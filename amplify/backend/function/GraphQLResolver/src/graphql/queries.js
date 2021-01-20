@@ -1,4 +1,25 @@
-/* eslint-disable */
+
+const getCompany = /* GraphQL */ `
+  query GetCompany($id: ID!) {
+    getCompany(id: $id) {
+      id
+      name
+      website
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      allowUpdate
+    }
+  }
+`;
 const getEmployee = /* GraphQL */ `
   query GetEmployee($id: ID!) {
     getEmployee(id: $id) {
@@ -31,85 +52,8 @@ const getEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-      }
-      primaryManager {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        roles
-        allowFull
-      }
       roles
       allowFull
-      timeRecords {
-        nextToken
-        startedAt
-      }
-    }
-  }
-`;
-const getCompany = /* GraphQL */ `
-  query GetCompany($id: ID!) {
-    getCompany(id: $id) {
-      id
-      name
-      website
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      allowUpdate
-      employees {
-        nextToken
-        startedAt
-      }
-      timeRecords {
-        nextToken
-        startedAt
-      }
     }
   }
 `;

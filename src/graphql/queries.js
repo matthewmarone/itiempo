@@ -30,14 +30,6 @@ export const syncCompanies = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       nextToken
       startedAt
@@ -62,58 +54,6 @@ export const getCompany = /* GraphQL */ `
       createdAt
       updatedAt
       allowUpdate
-      employees {
-        items {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        nextToken
-        startedAt
-      }
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -140,14 +80,6 @@ export const listCompanys = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       nextToken
       startedAt
@@ -201,56 +133,8 @@ export const listEmployeesByEmail = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
         roles
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       nextToken
       startedAt
@@ -300,56 +184,8 @@ export const syncEmployees = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
         roles
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       nextToken
       startedAt
@@ -388,135 +224,8 @@ export const getEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManager {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
       roles
       allowFull
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -557,56 +266,8 @@ export const listEmployees = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
         roles
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       nextToken
       startedAt
@@ -637,193 +298,6 @@ export const getTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      employee {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManage {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
     }
   }
 `;
@@ -856,77 +330,6 @@ export const listTimeRecords = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        employee {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        primaryManage {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
       }
       nextToken
       startedAt
@@ -972,77 +375,6 @@ export const listEmployeeTimeRecords = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        employee {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        primaryManage {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
       }
       nextToken
       startedAt
@@ -1088,77 +420,6 @@ export const listCompanyTimeRecords = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        employee {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        primaryManage {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
       }
       nextToken
       startedAt
@@ -1200,77 +461,6 @@ export const syncTimeRecords = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        employee {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        primaryManage {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
       }
       nextToken
       startedAt
