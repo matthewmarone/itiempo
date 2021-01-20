@@ -14,11 +14,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { parseFullName } from "helpers";
-import { gql, useMutation } from "@apollo/client";
-import {
-  setupNewAccount as setupNewAccountGQL,
-  updateEmployee as updateEmployeeGQL,
-} from "graphql/mutations";
+import { useUpdateEmployee, useSetupNewAccount } from "hooks";
 // eslint-disable-next-line
 const logger = new Logger("WelcomeNewAccount.js", "ERROR");
 
@@ -82,7 +78,7 @@ const WelcomeNewAccount = (props) => {
       error: errorAcct,
       called: calledAcct,
     },
-  ] = useMutation(gql(setupNewAccountGQL));
+  ] = useSetupNewAccount();
   const [
     updateEmployee,
     {
@@ -91,7 +87,7 @@ const WelcomeNewAccount = (props) => {
       error: errorEmpl,
       called: calledEmpl,
     },
-  ] = useMutation(gql(updateEmployeeGQL));
+  ] = useUpdateEmployee();
   const { onAuthStateChange } = props;
   const [formState, setFormState] = useState({
     isValid: false,
@@ -100,7 +96,8 @@ const WelcomeNewAccount = (props) => {
     errors: {},
   });
 
-  // Setup account on load
+  // Setup account on load, and return the new employee record
+  // server will also return the employee record if account is already setup
   useEffect(() => {
     if (!calledAcct) createAccount();
   }, [calledAcct, createAccount]);

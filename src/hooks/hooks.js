@@ -6,6 +6,7 @@ import {
   listCompanyTimeRecords as listCompanyTimeRecordsGQL,
 } from "graphql/queries";
 import {
+  setupNewAccount as setupNewAccountGQL,
   createTimeRecord as createTimeRecordGQL,
   updateTimeRecord as updateTimeRecordGQL,
   createUser as createUserGQL,
@@ -108,6 +109,11 @@ export const useUploadImage = () => {
  *
  */
 export const useUpdateEmployee = () => useMutation(gql(updateEmployeeGQL));
+
+/**
+ * 
+ */
+export const useSetupNewAccount = () => useMutation(gql(setupNewAccountGQL));
 
 /**
  * 

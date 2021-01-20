@@ -221,9 +221,9 @@ const resolvers = {
       if (!employeeRes) throw new Error("Could not create Employee");
       if (!userRes) throw new Error("Could not update User");
 
-      console.log(JSON.stringify(companyRes, null, 4));
-      console.log(JSON.stringify(employeeRes, null, 4));
-      console.log(JSON.stringify(userRes, null, 4));
+      // console.log(JSON.stringify(companyRes, null, 4));
+      // console.log(JSON.stringify(employeeRes, null, 4));
+      // console.log(JSON.stringify(userRes, null, 4));
 
       return employeeRes.data.createEmployee;
     },

@@ -12,4 +12,5 @@ export {
   useUpdateUserRole,
   useListEmployeeTimeRecord,
   useListCompanyTimeRecord,
+  useSetupNewAccount,
 } from "./hooks";
