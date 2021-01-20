@@ -104,18 +104,18 @@ const WelcomeNewAccount = (props) => {
   useEffect(() => {
     if (!calledAcct) createAccount();
   }, [calledAcct, createAccount]);
-  
+
   // Update employee after account setup, and name form is submitted
   useEffect(() => {
     if (calledAcct && !loadingAcct && !errorAcct && dataAcct && name) {
       logger.debug("dataAcct", dataAcct);
       const {
-        setupNewAccount: { id },
+        setupNewAccount: { id, _version },
       } = dataAcct || { setupNewAccount: {} };
       if (id) {
         const { firstName, lastName } = name;
         updateEmployee({
-          variables: { input: { id, firstName, lastName } },
+          variables: { input: { id, firstName, lastName, _version } },
         });
       }
     }
