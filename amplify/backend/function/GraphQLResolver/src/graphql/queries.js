@@ -1,4 +1,3 @@
-
 const getCompany = /* GraphQL */ `
   query GetCompany($id: ID!) {
     getCompany(id: $id) {

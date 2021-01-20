@@ -281,7 +281,6 @@ const deleteTimeRecord = /* GraphQL */ `
   }
 `;
 
-
 exports.createCompany = createCompany;
 exports.updateCompany = updateCompany;
 exports.deleteCompany = deleteCompany;
