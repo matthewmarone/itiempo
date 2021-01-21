@@ -210,7 +210,7 @@ const WelcomeNewAccount = (props) => {
           Account created
         </Typography>
         <Typography color="textSecondary" gutterBottom>
-          Tell us your name to get started
+          One last step, please tell us your name to get started
         </Typography>
         <TextField
           autoFocus
