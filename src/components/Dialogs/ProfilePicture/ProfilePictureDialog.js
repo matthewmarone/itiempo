@@ -5,11 +5,12 @@ import PropTypes from "prop-types";
 import AvatarEditor from "react-avatar-editor";
 import { Logger } from "aws-amplify";
 import { ZoomSlider } from "components";
-import { DropFileBrowse } from "components";
 import { DialogTemplate } from "../components";
 import { WebcamCapture } from "components";
 import CropRotateIcon from "@material-ui/icons/CropRotate";
+import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import { makeStyles } from "@material-ui/styles";
+import { useDropzone } from "react-dropzone";
 
 const logger = new Logger("ProfilePictureDialog.js", "ERROR");
 
@@ -21,7 +22,12 @@ const useStyles = makeStyles((theme) => ({
 
 const UploadScean = (props) => {
   const classes = useStyles();
-  const { onFileChange, onFileError } = props;
+  const { onFileChange: onDrop } = props;
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: "image/*",
+  });
+  const color = isDragActive ? "secondary" : "primary";
   return (
     <Grid
       container
@@ -31,10 +37,13 @@ const UploadScean = (props) => {
       classes={{ root: classes.middle }}
     >
       <Grid item xs={12}>
-        <DropFileBrowse onFileChange={onFileChange} onFileError={onFileError} />
-        <DialogContentText>
-          Click here to choose an exisiting photo from your device.
-        </DialogContentText>
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <PhotoLibraryIcon fontSize="large" color={color} />
+          <DialogContentText color={color}>
+            Drag 'n' drop or click here to choose a photo from your device.
+          </DialogContentText>
+        </div>
       </Grid>
     </Grid>
   );
@@ -117,11 +126,11 @@ const ProfilePictureDialog = (props) => {
   const onFileChange = (files) => {
     logger.debug("files", files);
     if (files && files.length > 0) {
-      const {
-        preview: { url },
-      } = files[0];
-      logger.debug("url", url);
-      setImage(url);
+      // const {
+      //   preview: { url },
+      // } = files[0];
+      logger.debug("file", files[0]);
+      setImage(files[0]);
       setScean(EDIT_SCEAN);
     }
   };

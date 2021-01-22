@@ -9,7 +9,6 @@ export {
   ProfilePictureDialog,
   ClockinDialog,
 } from "./Dialogs";
-export { default as DropFileBrowse } from "./DropFileBrowse";
 export { default as Image } from "./Image";
 export { default as RouteWithLayout } from "./RouteWithLayout";
 export { default as SearchInput } from "./SearchInput";
