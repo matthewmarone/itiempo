@@ -386,10 +386,7 @@ const PrivateTimeCardTable = (props) => {
   timeRecords.forEach((value, key) => {
     if (value[0]) {
       const {
-        employee: { firstName, lastName } = {
-          firstName: "fix",
-          lastName: "This",
-        },
+        employee: { firstName, lastName },
       } = value[0];
       const open = collapseObj[key] !== undefined ? collapseObj[key] : true;
       const [r, time] = createTimeSheetRow(value, classes.linkIcon);
