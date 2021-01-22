@@ -221,9 +221,9 @@ const resolvers = {
       if (!employeeRes) throw new Error("Could not create Employee");
       if (!userRes) throw new Error("Could not update User");
 
-      console.log(JSON.stringify(companyRes, null, 4));
-      console.log(JSON.stringify(employeeRes, null, 4));
-      console.log(JSON.stringify(userRes, null, 4));
+      // console.log(JSON.stringify(companyRes, null, 4));
+      // console.log(JSON.stringify(employeeRes, null, 4));
+      // console.log(JSON.stringify(userRes, null, 4));
 
       return employeeRes.data.createEmployee;
     },
@@ -267,7 +267,14 @@ const resolvers = {
       ];
 
       // Create the user
-      const { User } = await user.createUser(email, UserAttributes);
+      const { User } = await user
+        .createUser(email, UserAttributes)
+        .catch((e) => {
+          console.warn("Failed attempt to create new user", e);
+          return {};
+        });
+
+      console.log(JSON.stringify(User, null, 4)); // for testing
 
       if (User && User.Username) {
         // create an employee record linking it to the new user
