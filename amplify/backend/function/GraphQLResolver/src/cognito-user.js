@@ -138,10 +138,44 @@ const addCustomAttributes = async (CustomAttributes) => {
     throw e;
   }
 };
+/**
+ *
+ * @param {*} Username
+ */
+const getUser = async (Username) => {
+  const params = {
+    Username,
+    UserPoolId: COGNITO_USERPOOL_ID,
+  };
+  try {
+    return await cognitoIdentityServiceProvider.adminGetUser(params).promise();
+  } catch (e) {
+    throw e;
+  }
+};
+/**
+ *
+ * @param {*} Username
+ */
+const globalSignOut = async (Username) => {
+  const params = {
+    Username,
+    UserPoolId: COGNITO_USERPOOL_ID,
+  };
+  try {
+    return await cognitoIdentityServiceProvider
+      .adminUserGlobalSignOut(params)
+      .promise();
+  } catch (e) {
+    throw e;
+  }
+};
 
+exports.getUser = getUser;
 exports.createUser = createUser;
 exports.addUserToGroup = addUserToGroup;
 exports.removeUserFromGroup = removeUserFromGroup;
 exports.listUserGroups = listUserGroups;
 exports.updateUser = updateUser;
 exports.addCustomAttributes = addCustomAttributes;
+exports.globalSignOut = globalSignOut;

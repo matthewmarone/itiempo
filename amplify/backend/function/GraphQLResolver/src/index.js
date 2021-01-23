@@ -228,10 +228,6 @@ const resolvers = {
       return employeeRes.data.createEmployee;
     },
     createUser: async (ctx) => {
-      // TODO (Matthew): If the function doesn't complete then there is the
-      // potential that a new user was created with an eId before the
-      // corrosponding employee with that eId was also created
-
       // GraphQL arguments from client
       const { input } = ctx.arguments;
       // User must belong to same company (cId)
@@ -240,6 +236,7 @@ const resolvers = {
       const {
         email,
         roles = [DEFAULT_EMPLOYEE_ROLE],
+        // Default current user to be primary manager
         primaryManagerId = pManagerId,
       } = input;
 
@@ -266,38 +263,78 @@ const resolvers = {
         { Name: "custom:roles", Value: roles.reduce((a, c) => `${a},${c}`) },
       ];
 
-      // Create the user
-      const { User } = await user
+      // Attempt to create the user, the employeeId is also returned here
+      // in the rare case that this is the second attempt and the user was created
+      // before with a different employeeId because
+      // the first attempt didn't fully complete, like if the API was down, etc.
+      const username = await user
         .createUser(email, UserAttributes)
-        .catch((e) => {
-          console.warn("Failed attempt to create new user", e);
-          return {};
+        .then(({ User: { Username } }) => Username)
+        .catch(async (e) => {
+          // Something went wrong creating a new user
+          // Handle this exception gracfully
+          if (e.name === "UsernameExistsException") {
+            // Let's lookup the user and see for which company it belongs to
+            // and if there already is an associated Employee record
+            const { Username, UserAttributes = [] } = await user.getUser(email);
+            const { companyId, employeeId } = UserAttributes.reduce(
+              (retVal, { Name, Value }) => {
+                switch (Name) {
+                  case "custom:cId":
+                    return { ...retVal, companyId: Value };
+                  case "custom:eId":
+                    return { ...retVal, employeeId: Value };
+                  default:
+                    return retVal;
+                }
+              },
+              {}
+            );
+            // Check that the user belongs to this company
+            if (cId !== companyId)
+              throw new Error("User exists in another comapny");
+            // Perhaps this is a subsequent request for a previously added employee
+            // So let's see if it exists
+            const { data: { getEmployee } = {} } = await api.GetEmployee(
+              employeeId
+            );
+            if (getEmployee) throw new Error("Employee already exists");
+            // Lastly,
+            // A rare case where the user was created but the sequence didn't finish
+            // creating the associated employee the first time
+            // So let's create the employee & update the user's employeeId and role
+            // to be whatever is in this final request
+            user.globalSignOut(Username).catch((e) => console.warn(e));
+            // This is safe because we already checked the companyId
+            // and confirmed that the employee record was not in existance
+            await user.updateUser(Username, UserAttributes);
+            // Return the Username
+            return Username;
+          } else {
+            // Other resons we can not handle gracfully
+            console.error("User could not be created", e);
+            throw e;
+          }
         });
 
-      console.log(JSON.stringify(User, null, 4)); // for testing
+      // create an employee record linking it to the new user
+      const { data } = await api.CreateEmployee({
+        input: {
+          ...input,
+          id: eId,
+          username,
+          email,
+          companyId: cId,
+          primaryManagerId,
+          roles,
+          allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
+        },
+      });
 
-      if (User && User.Username) {
-        // create an employee record linking it to the new user
-        const { data } = await api.CreateEmployee({
-          input: {
-            ...input,
-            id: eId,
-            username: User.Username,
-            email,
-            companyId: cId,
-            primaryManagerId,
-            roles,
-            allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
-          },
-        });
-
-        if (data && data.createEmployee) {
-          return data.createEmployee;
-        } else {
-          throw new Error("Failed to create new Employee");
-        }
+      if (data && data.createEmployee) {
+        return data.createEmployee;
       } else {
-        throw new Error("Failed to create new User");
+        throw new Error("Failed to create new Employee");
       }
     },
     updateUserRole: async (ctx) => {
