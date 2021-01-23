@@ -291,8 +291,7 @@ const resolvers = {
               {}
             );
             // Check that the user belongs to this company
-            if (cId !== companyId)
-              throw new Error("User exists in another comapny");
+            if (cId !== companyId) throw new Error("Account already exists");
             // Perhaps this is a subsequent request for a previously added employee
             // So let's see if it exists
             const { data: { getEmployee } = {} } = await api.GetEmployee(
