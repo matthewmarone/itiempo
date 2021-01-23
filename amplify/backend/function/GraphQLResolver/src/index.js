@@ -276,8 +276,8 @@ const resolvers = {
           if (e.name === "UsernameExistsException") {
             // Let's lookup the user and see for which company it belongs to
             // and if there already is an associated Employee record
-            const { Username, UserAttributes = [] } = await user.getUser(email);
-            const { companyId, employeeId } = UserAttributes.reduce(
+            const { Username, UserAttributes:UA = [] } = await user.getUser(email);
+            const { companyId, employeeId } = UA.reduce(
               (retVal, { Name, Value }) => {
                 switch (Name) {
                   case "custom:cId":
@@ -303,7 +303,8 @@ const resolvers = {
             // creating the associated employee the first time
             // So let's create the employee & update the user's employeeId and role
             // to be whatever is in this final request
-            user.globalSignOut(Username).catch((e) => console.warn(e));
+            console.warn("Rare exception has occurred, attempting to recover");
+            user.globalSignOut(Username).catch((e) => console.error(e));
             // This is safe because we already checked the companyId
             // and confirmed that the employee record was not in existance
             await user.updateUser(Username, UserAttributes);

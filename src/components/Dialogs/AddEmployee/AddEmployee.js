@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Context } from "Store";
 import { DialogTemplate } from "../components";
 import PropTypes from "prop-types";
@@ -53,6 +53,38 @@ const schema = {
     presence: { allowEmpty: false, message: "is required" },
   },
 };
+/**
+ *
+ * @param {*} props
+ */
+const MySaveBtn = (props) => {
+  const { input, onError, onData } = props;
+  const [createEmployee, { loading, error, data }] = useCreateEmployee();
+  useEffect(() => {
+    if (input)
+      createEmployee({
+        variables: {
+          input,
+        },
+      });
+  }, [createEmployee, input]);
+
+  useEffect(() => {
+    if (!loading) {
+      if (error) {
+        onError(error);
+      } else if (data) {
+        onData(data);
+      }
+    }
+  }, [data, error, loading, onData, onError]);
+
+  return (
+    <Button color="primary" disabled>
+      Saving...
+    </Button>
+  );
+};
 
 /**
  *
@@ -61,13 +93,15 @@ const schema = {
 const AddEmployee = (props) => {
   const { open, onClose } = props;
   const classes = useStyles();
+  const [input, setInput] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},
     touched: {},
     errors: {},
   });
-  const [createEmployee, { loading, error }] = useCreateEmployee();
   const [{ user }] = useContext(Context);
   const { companyId, employeeId: primaryManagerId } = user || {};
   const {
@@ -77,26 +111,23 @@ const AddEmployee = (props) => {
     role = "",
   } = formState.values;
 
+  const reset = useCallback(() => {
+    setFormState({
+      isValid: false,
+      values: {},
+      touched: {},
+      errors: {},
+    });
+    setInput(null);
+    setLoading(false);
+    setError(null);
+  }, []);
+
   useEffect(() => {
     if (open) {
-      // Resets form onOpen
-      setFormState({
-        isValid: false,
-        values: {},
-        touched: {},
-        errors: {},
-      });
+      reset();
     }
-  }, [open]);
-
-  const handleSave = () => {
-    const { role, ...rest } = formState.values;
-    createEmployee({
-      variables: {
-        input: { ...rest, roles: [role], companyId, primaryManagerId },
-      },
-    });
-  };
+  }, [open, reset]);
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
@@ -129,10 +160,24 @@ const AddEmployee = (props) => {
     }));
   };
 
+  const handleSave = () => {
+    const { role, ...rest } = formState.values;
+    setLoading(true);
+    setError(null);
+    setInput({ ...rest, roles: [role], companyId, primaryManagerId });
+  };
+
   const hasError = (field) =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
-  if (error) console.log("error", error);
+  const handleOnError = useCallback((e) => {
+    setLoading(false);
+    setError(e);
+  }, []);
+  const handleOnData = useCallback(() => {
+    reset();
+    onClose();
+  }, [onClose, reset]);
 
   const actions = [
     <Button
@@ -144,15 +189,24 @@ const AddEmployee = (props) => {
     >
       Cancel
     </Button>,
-    <Button
-      key="add"
-      onClick={handleSave}
-      color="primary"
-      disabled={!formState.isValid || loading}
-    >
-      {loading ? "Saving..." : "Add"}
-    </Button>,
+    !loading ? (
+      <Button
+        key="add"
+        onClick={handleSave}
+        color="primary"
+        disabled={!formState.isValid}
+      >Add</Button>
+    ) : (
+      <MySaveBtn
+        key="add"
+        input={input}
+        onError={handleOnError}
+        onData={handleOnData}
+      />
+    ),
   ];
+
+  if (error) console.log("error", error);
 
   const dialogContent = (
     <form autoComplete="off" noValidate>
