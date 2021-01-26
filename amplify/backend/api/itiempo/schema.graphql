@@ -41,8 +41,6 @@ type Company
   state: String
   zip: String
   country: String
-  employees: [Employee!] @connection(keyName: "byCompany", fields: ["id"])
-  timeRecords: [TimeRecord!] @connection(keyName: "byCompany", fields: ["id"])
   # allowUpdate is populated dynamically through the resolver to include:
   # Owener-${cId} and Admin-${cId}
   allowUpdate: [String]
@@ -50,13 +48,7 @@ type Company
       rules: [
         # Allows it to be set only once through setupNewAccount
         { allow: private, provider: iam, operations: [create, read] }
-        {
-          # Allow all memebers of a company to read
-          allow: owner
-          ownerField: "id"
-          identityClaim: "cId"
-          operations: [read]
-        }
+        { allow: private, provider: userPools, operations: [create, read] }
       ]
     )
 }
@@ -83,20 +75,47 @@ type Employee
         allow: owner
         ownerField: "primaryManagerId"
         identityClaim: "eId"
-        operations: [update, delete, read]
+        operations: [update, read]
+      }
+      {
+        # Allow company admins/owners full access
+        allow: groups
+        groupClaim: "eId"
+        groupsField: "managerIds"
+        operations: [update, read]
+      }
+      {
+        # For future groups like accountant or super manager
+        allow: groups
+        groupsField: "allowRead"
+        operations: [read]
       }
       {
         # Allow company admins/owners full access
         allow: groups
         groupsField: "allowFull"
-        operations: [update, delete, read]
+        operations: [update, read]
       }
     ]
   ) {
   id: ID!
-  username: String!
+  username: String
+    @auth(
+      rules: [
+        # This field is set at creation
+        { allow: private, provider: iam, operations: [create, read] }
+        { allow: private, provider: userPools, operations: [read] }
+      ]
+    )
   profilePhoto: String
-  email: AWSEmail!
+  email: AWSEmail
+    @auth(
+      rules: [
+        # This field is set at creation
+        { allow: private, provider: iam, operations: [create, update, read] }
+        { allow: private, provider: userPools, operations: [read] }
+      ]
+    )
   email_2: AWSEmail
   firstName: String
   lastName: String
@@ -110,20 +129,86 @@ type Employee
   country: String
   jobTitle: String
   payRates: [PayRate!]
+    @auth(
+      rules: [
+        # Only allow GraphQLResolver (setupNewAccount, addUser) to create
+        { allow: private, provider: iam, operations: [create, update, read] }
+        {
+          # Allow the employee itself to update and read it's own rec.
+          allow: owner
+          ownerField: "id"
+          identityClaim: "eId"
+          operations: [read]
+        }
+        {
+          # Allow the employee's manager full access
+          allow: owner
+          ownerField: "primaryManagerId"
+          identityClaim: "eId"
+          operations: [update, read]
+        }
+        {
+          # Allow company admins/owners full access
+          allow: groups
+          groupsField: "allowFull"
+          operations: [update, read]
+        }
+      ]
+    )
   roles: [Role!]
+    @auth(
+      rules: [
+        # Only allow GraphQLResolver to create, read, update
+        { allow: private, provider: iam, operations: [create, update, read] }
+        # Allow all with access to read
+        { allow: private, provider: userPools, operations: [read] }
+      ]
+    )
+  companyId: ID
+    @auth(
+      rules: [
+        # This field is set at creation
+        { allow: private, provider: iam, operations: [create, read] }
+        { allow: private, provider: userPools, operations: [read] }
+      ]
+    )
+  primaryManagerId: ID
+    @auth(
+      rules: [
+        # Only allow GraphQLResolver (setupNewAccount, addUser) to create
+        { allow: private, provider: iam, operations: [create, update, read] }
+        {
+          # Allow the employee itself to update and read it's own rec.
+          allow: owner
+          ownerField: "id"
+          identityClaim: "eId"
+          operations: [read]
+        }
+        {
+          # Allow the employee's manager full access
+          allow: owner
+          ownerField: "primaryManagerId"
+          identityClaim: "eId"
+          operations: [update, read]
+        }
+        {
+          # Allow company admins/owners full access
+          allow: groups
+          groupsField: "allowFull"
+          operations: [update, read]
+        }
+      ]
+    )
+  managerIds: [ID!]
+  allowRead: [String]
     @auth(
       rules: [
         # Allow all with access to read
         { allow: private, provider: userPools, operations: [read] }
-        # Only allow GraphQLResolver to create, read, update
-        { allow: private, provider: iam, operations: [create, update, read] }
+        # Allows it to be set only once through setupNewAccount or createUser
+        { allow: private, provider: iam, operations: [create, read] }
       ]
     )
-  companyId: ID!
-  company: Company @connection(fields: ["companyId"])
-  timeRecords: [TimeRecord!] @connection(keyName: "byEmployee", fields: ["id"])
-  primaryManagerId: ID!
-  primaryManager: Employee @connection(fields: ["primaryManagerId"])
   allowFull: [String]
     @auth(
       rules: [

@@ -7,7 +7,7 @@ import { Logger } from "aws-amplify";
 import { useGetEmployee, useUpdateEmployee, useUpdateUserRole } from "hooks";
 
 // eslint-disable-next-line no-unused-vars
-const logger = new Logger("User.js", "ERROR");
+const logger = new Logger("Employee.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: {
