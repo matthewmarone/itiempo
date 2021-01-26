@@ -103,8 +103,8 @@
           }
         ],
         "Code": {
-          "S3Bucket": "amplify-itiempo-dev-123613-deployment",
-          "S3Key": "amplify-builds/authPreTokenGeneration-2b36537975634d595151-build.zip"
+          "S3Bucket": "amplify-itiempo-tempdev-102053-deployment",
+          "S3Key": "amplify-builds/authPreTokenGeneration-6e6a454f676e522b677a-build.zip"
         }
       }
     },

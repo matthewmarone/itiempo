@@ -19,58 +19,6 @@ export const onCreateCompany = /* GraphQL */ `
       createdAt
       updatedAt
       allowUpdate
-      employees {
-        items {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        nextToken
-        startedAt
-      }
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -92,58 +40,6 @@ export const onUpdateCompany = /* GraphQL */ `
       createdAt
       updatedAt
       allowUpdate
-      employees {
-        items {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        nextToken
-        startedAt
-      }
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -165,58 +61,6 @@ export const onDeleteCompany = /* GraphQL */ `
       createdAt
       updatedAt
       allowUpdate
-      employees {
-        items {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        nextToken
-        startedAt
-      }
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -224,9 +68,7 @@ export const onCreateEmployee = /* GraphQL */ `
   subscription OnCreateEmployee($id: String, $primaryManagerId: String) {
     onCreateEmployee(id: $id, primaryManagerId: $primaryManagerId) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -239,148 +81,25 @@ export const onCreateEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManager {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      roles
+      managerIds
+      allowRead
       allowFull
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -388,9 +107,7 @@ export const onUpdateEmployee = /* GraphQL */ `
   subscription OnUpdateEmployee($id: String, $primaryManagerId: String) {
     onUpdateEmployee(id: $id, primaryManagerId: $primaryManagerId) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -403,148 +120,25 @@ export const onUpdateEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManager {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      roles
+      managerIds
+      allowRead
       allowFull
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -552,9 +146,7 @@ export const onDeleteEmployee = /* GraphQL */ `
   subscription OnDeleteEmployee($id: String, $primaryManagerId: String) {
     onDeleteEmployee(id: $id, primaryManagerId: $primaryManagerId) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -567,148 +159,25 @@ export const onDeleteEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      primaryManager {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        companyId
-        primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
-        allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
-      }
-      roles
+      managerIds
+      allowRead
       allowFull
-      timeRecords {
-        items {
-          id
-          companyId
-          employeeId
-          primaryManagerId
-          timestampIn
-          timestampOut
-          photoIn
-          photoOut
-          noteIn
-          noteOut
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-        nextToken
-        startedAt
-      }
     }
   }
 `;
@@ -752,20 +221,10 @@ export const onCreateTimeRecord = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       employee {
         id
-        username
         profilePhoto
-        email
         email_2
         firstName
         lastName
@@ -778,75 +237,29 @@ export const onCreateTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
         payRates {
           name
           amount
           isHourly
           isDefault
         }
+        roles
         companyId
         primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
+        managerIds
+        allowRead
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       primaryManage {
         id
-        username
         profilePhoto
-        email
         email_2
         firstName
         lastName
@@ -859,69 +272,25 @@ export const onCreateTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
         payRates {
           name
           amount
           isHourly
           isDefault
         }
+        roles
         companyId
         primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
+        managerIds
+        allowRead
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
     }
   }
@@ -966,20 +335,10 @@ export const onUpdateTimeRecord = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       employee {
         id
-        username
         profilePhoto
-        email
         email_2
         firstName
         lastName
@@ -992,75 +351,29 @@ export const onUpdateTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
         payRates {
           name
           amount
           isHourly
           isDefault
         }
+        roles
         companyId
         primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
+        managerIds
+        allowRead
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       primaryManage {
         id
-        username
         profilePhoto
-        email
         email_2
         firstName
         lastName
@@ -1073,69 +386,25 @@ export const onUpdateTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
         payRates {
           name
           amount
           isHourly
           isDefault
         }
+        roles
         companyId
         primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
+        managerIds
+        allowRead
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
     }
   }
@@ -1180,20 +449,10 @@ export const onDeleteTimeRecord = /* GraphQL */ `
         createdAt
         updatedAt
         allowUpdate
-        employees {
-          nextToken
-          startedAt
-        }
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       employee {
         id
-        username
         profilePhoto
-        email
         email_2
         firstName
         lastName
@@ -1206,75 +465,29 @@ export const onDeleteTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
         payRates {
           name
           amount
           isHourly
           isDefault
         }
+        roles
         companyId
         primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
+        managerIds
+        allowRead
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
       primaryManage {
         id
-        username
         profilePhoto
-        email
         email_2
         firstName
         lastName
@@ -1287,69 +500,25 @@ export const onDeleteTimeRecord = /* GraphQL */ `
         zip
         country
         jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
         payRates {
           name
           amount
           isHourly
           isDefault
         }
+        roles
         companyId
         primaryManagerId
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        primaryManager {
-          id
-          username
-          profilePhoto
-          email
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          companyId
-          primaryManagerId
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          roles
-          allowFull
-        }
-        roles
+        managerIds
+        allowRead
         allowFull
-        timeRecords {
-          nextToken
-          startedAt
-        }
       }
     }
   }

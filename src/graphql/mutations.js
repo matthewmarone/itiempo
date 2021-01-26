@@ -5,9 +5,7 @@ export const setupNewAccount = /* GraphQL */ `
   mutation SetupNewAccount {
     setupNewAccount {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -20,20 +18,24 @@ export const setupNewAccount = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -42,9 +44,7 @@ export const createUser = /* GraphQL */ `
   mutation CreateUser($input: CreateUserInput!) {
     createUser(input: $input) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -57,20 +57,24 @@ export const createUser = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -93,9 +97,7 @@ export const updateUserRole = /* GraphQL */ `
       _version: $_version
     ) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -108,20 +110,24 @@ export const updateUserRole = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -157,9 +163,7 @@ export const deleteEmployee = /* GraphQL */ `
   ) {
     deleteEmployee(input: $input, condition: $condition) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -172,20 +176,24 @@ export const deleteEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -245,9 +253,7 @@ export const updateEmployee = /* GraphQL */ `
   ) {
     updateEmployee(input: $input, condition: $condition) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -260,20 +266,24 @@ export const updateEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -285,9 +295,7 @@ export const createEmployee = /* GraphQL */ `
   ) {
     createEmployee(input: $input, condition: $condition) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -300,20 +308,24 @@ export const createEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -345,6 +357,93 @@ export const createTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      company {
+        id
+        name
+        website
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        allowUpdate
+      }
+      employee {
+        id
+        profilePhoto
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        allowRead
+        allowFull
+      }
+      primaryManage {
+        id
+        profilePhoto
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        allowRead
+        allowFull
+      }
     }
   }
 `;
@@ -375,6 +474,93 @@ export const updateTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      company {
+        id
+        name
+        website
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        allowUpdate
+      }
+      employee {
+        id
+        profilePhoto
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        allowRead
+        allowFull
+      }
+      primaryManage {
+        id
+        profilePhoto
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        allowRead
+        allowFull
+      }
     }
   }
 `;
@@ -405,6 +591,93 @@ export const deleteTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      company {
+        id
+        name
+        website
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        allowUpdate
+      }
+      employee {
+        id
+        profilePhoto
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        allowRead
+        allowFull
+      }
+      primaryManage {
+        id
+        profilePhoto
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        username
+        email
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        allowRead
+        allowFull
+      }
     }
   }
 `;

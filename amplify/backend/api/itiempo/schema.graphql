@@ -150,6 +150,19 @@ type Employee
         {
           # Allow company admins/owners full access
           allow: groups
+          groupClaim: "eId"
+          groupsField: "managerIds"
+          operations: [update, read]
+        }
+        # {
+        #   # For future groups like accountant or super manager
+        #   allow: groups
+        #   groupsField: "allowRead"
+        #   operations: [read]
+        # }
+        {
+          # Allow company admins/owners full access
+          allow: groups
           groupsField: "allowFull"
           operations: [update, read]
         }
@@ -194,28 +207,80 @@ type Employee
         {
           # Allow company admins/owners full access
           allow: groups
+          groupClaim: "eId"
+          groupsField: "managerIds"
+          operations: [update, read]
+        }
+        {
+          # For future groups like accountant or super manager
+          allow: groups
+          groupsField: "allowRead"
+          operations: [read]
+        }
+        {
+          # Allow company admins/owners full access
+          allow: groups
           groupsField: "allowFull"
           operations: [update, read]
         }
       ]
     )
   managerIds: [ID!]
+    @auth(
+      rules: [
+        # Only allow GraphQLResolver (setupNewAccount, addUser) to create
+        { allow: private, provider: iam, operations: [create, update, read] }
+        {
+          # Allow the employee itself to update and read it's own rec.
+          allow: owner
+          ownerField: "id"
+          identityClaim: "eId"
+          operations: [read]
+        }
+        {
+          # Allow the employee's manager full access
+          allow: owner
+          ownerField: "primaryManagerId"
+          identityClaim: "eId"
+          operations: [update, read]
+        }
+        {
+          # Allow company admins/owners full access
+          allow: groups
+          groupClaim: "eId"
+          groupsField: "managerIds"
+          operations: [update, read]
+        }
+        {
+          # For future groups like accountant or super manager
+          allow: groups
+          groupsField: "allowRead"
+          operations: [read]
+        }
+        {
+          # Allow company admins/owners full access
+          allow: groups
+          groupsField: "allowFull"
+          operations: [update, read]
+        }
+      ]
+    )
   allowRead: [String]
     @auth(
       rules: [
-        # Allow all with access to read
-        { allow: private, provider: userPools, operations: [read] }
         # Allows it to be set only once through setupNewAccount or createUser
         { allow: private, provider: iam, operations: [create, read] }
+        # Allow all with access to read
+        { allow: private, provider: userPools, operations: [read] }
       ]
     )
   allowFull: [String]
     @auth(
       rules: [
-        # Allow all with access to read
-        { allow: private, provider: userPools, operations: [read] }
         # Allows it to be set only once through setupNewAccount or createUser
         { allow: private, provider: iam, operations: [create, read] }
+        # Allow all with access to read
+        { allow: private, provider: userPools, operations: [read] }
       ]
     )
 }
