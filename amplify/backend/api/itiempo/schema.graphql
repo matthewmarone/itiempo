@@ -133,33 +133,22 @@ type Employee
       rules: [
         # Only allow GraphQLResolver (setupNewAccount, addUser) to create
         { allow: private, provider: iam, operations: [create, update, read] }
+        # allow anyone with access to read
+        { allow: private, provider: userPools, operations: [read] }
         {
-          # Allow the employee itself to update and read it's own rec.
-          allow: owner
-          ownerField: "id"
-          identityClaim: "eId"
-          operations: [read]
-        }
-        {
-          # Allow the employee's manager full access
+          # Allow the employee's manager to update
           allow: owner
           ownerField: "primaryManagerId"
           identityClaim: "eId"
           operations: [update, read]
         }
         {
-          # Allow company admins/owners full access
+          # Allow the employee's manager to update
           allow: groups
           groupClaim: "eId"
           groupsField: "managerIds"
           operations: [update, read]
         }
-        # {
-        #   # For future groups like accountant or super manager
-        #   allow: groups
-        #   groupsField: "allowRead"
-        #   operations: [read]
-        # }
         {
           # Allow company admins/owners full access
           allow: groups
@@ -190,32 +179,21 @@ type Employee
       rules: [
         # Only allow GraphQLResolver (setupNewAccount, addUser) to create
         { allow: private, provider: iam, operations: [create, update, read] }
+        # allow anyone with access to read
+        { allow: private, provider: userPools, operations: [read] }
         {
-          # Allow the employee itself to update and read it's own rec.
-          allow: owner
-          ownerField: "id"
-          identityClaim: "eId"
-          operations: [read]
-        }
-        {
-          # Allow the employee's manager full access
+          # Allow the employee's manager to update
           allow: owner
           ownerField: "primaryManagerId"
           identityClaim: "eId"
           operations: [update, read]
         }
         {
-          # Allow company admins/owners full access
+          # Allow the employee's manager to update
           allow: groups
           groupClaim: "eId"
           groupsField: "managerIds"
           operations: [update, read]
-        }
-        {
-          # For future groups like accountant or super manager
-          allow: groups
-          groupsField: "allowRead"
-          operations: [read]
         }
         {
           # Allow company admins/owners full access
@@ -230,32 +208,21 @@ type Employee
       rules: [
         # Only allow GraphQLResolver (setupNewAccount, addUser) to create
         { allow: private, provider: iam, operations: [create, update, read] }
+        # allow anyone with access to read
+        { allow: private, provider: userPools, operations: [read] }
         {
-          # Allow the employee itself to update and read it's own rec.
-          allow: owner
-          ownerField: "id"
-          identityClaim: "eId"
-          operations: [read]
-        }
-        {
-          # Allow the employee's manager full access
+          # Allow the employee's manager to update
           allow: owner
           ownerField: "primaryManagerId"
           identityClaim: "eId"
           operations: [update, read]
         }
         {
-          # Allow company admins/owners full access
+          # Allow the employee's manager to update
           allow: groups
           groupClaim: "eId"
           groupsField: "managerIds"
           operations: [update, read]
-        }
-        {
-          # For future groups like accountant or super manager
-          allow: groups
-          groupsField: "allowRead"
-          operations: [read]
         }
         {
           # Allow company admins/owners full access
@@ -286,8 +253,6 @@ type Employee
 }
 type TimeRecord
   @model
-  @key(name: "byCompany", fields: ["companyId", "employeeId"])
-  @key(name: "byEmployee", fields: ["employeeId", "companyId"])
   @key(
     name: "byEmployeeTimestamp"
     fields: ["employeeId", "timestampIn"]
@@ -305,12 +270,10 @@ type TimeRecord
     ]
   ) {
   id: ID!
-  companyId: ID!
-  company: Company @connection(fields: ["companyId"])
   employeeId: ID!
-  employee: Employee @connection(fields: ["employeeId"])
+  companyId: ID!
   primaryManagerId: ID!
-  primaryManage: Employee @connection(fields: ["primaryManagerId"])
+  managerIds: [ID!]
   timestampIn: AWSTimestamp!
   timestampOut: AWSTimestamp
   photoIn: String

@@ -391,26 +391,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "companyId": {
-                    "name": "companyId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "company": {
-                    "name": "company",
-                    "isArray": false,
-                    "type": {
-                        "model": "Company"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id"
-                    }
-                },
                 "employeeId": {
                     "name": "employeeId",
                     "isArray": false,
@@ -418,18 +398,12 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "employee": {
-                    "name": "employee",
+                "companyId": {
+                    "name": "companyId",
                     "isArray": false,
-                    "type": {
-                        "model": "Employee"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id"
-                    }
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "primaryManagerId": {
                     "name": "primaryManagerId",
@@ -438,18 +412,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "primaryManage": {
-                    "name": "primaryManage",
-                    "isArray": false,
-                    "type": {
-                        "model": "Employee"
-                    },
-                    "isRequired": false,
+                "managerIds": {
+                    "name": "managerIds",
+                    "isArray": true,
+                    "type": "ID",
+                    "isRequired": true,
                     "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id"
-                    }
+                    "isArrayNullable": true
                 },
                 "timestampIn": {
                     "name": "timestampIn",
@@ -509,26 +478,6 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byCompany",
-                        "fields": [
-                            "companyId",
-                            "employeeId"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byEmployee",
-                        "fields": [
-                            "employeeId",
-                            "companyId"
-                        ]
-                    }
                 },
                 {
                     "type": "key",
@@ -628,5 +577,5 @@ export const schema = {
             }
         }
     },
-    "version": "e1a1bfea1cb0c4492ddc2d16149ad631"
+    "version": "81ebd2ceaeddf9befd47641b548eb580"
 };

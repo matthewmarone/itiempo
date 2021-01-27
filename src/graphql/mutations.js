@@ -337,9 +337,10 @@ export const createTimeRecord = /* GraphQL */ `
   ) {
     createTimeRecord(input: $input, condition: $condition) {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -357,93 +358,6 @@ export const createTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-      }
-      employee {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
-      primaryManage {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
     }
   }
 `;
@@ -454,9 +368,10 @@ export const updateTimeRecord = /* GraphQL */ `
   ) {
     updateTimeRecord(input: $input, condition: $condition) {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -474,93 +389,6 @@ export const updateTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-      }
-      employee {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
-      primaryManage {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
     }
   }
 `;
@@ -571,9 +399,10 @@ export const deleteTimeRecord = /* GraphQL */ `
   ) {
     deleteTimeRecord(input: $input, condition: $condition) {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -591,93 +420,6 @@ export const deleteTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-      }
-      employee {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
-      primaryManage {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
     }
   }
 `;

@@ -286,9 +286,10 @@ export const getTimeRecord = /* GraphQL */ `
   query GetTimeRecord($id: ID!) {
     getTimeRecord(id: $id) {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -306,93 +307,6 @@ export const getTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-      }
-      employee {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
-      primaryManage {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
     }
   }
 `;
@@ -405,9 +319,10 @@ export const listTimeRecords = /* GraphQL */ `
     listTimeRecords(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        companyId
         employeeId
+        companyId
         primaryManagerId
+        managerIds
         timestampIn
         timestampOut
         photoIn
@@ -425,81 +340,6 @@ export const listTimeRecords = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        employee {
-          id
-          profilePhoto
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          username
-          email
-          roles
-          companyId
-          primaryManagerId
-          managerIds
-          allowRead
-          allowFull
-        }
-        primaryManage {
-          id
-          profilePhoto
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          username
-          email
-          roles
-          companyId
-          primaryManagerId
-          managerIds
-          allowRead
-          allowFull
-        }
       }
       nextToken
       startedAt
@@ -525,9 +365,10 @@ export const listEmployeeTimeRecords = /* GraphQL */ `
     ) {
       items {
         id
-        companyId
         employeeId
+        companyId
         primaryManagerId
+        managerIds
         timestampIn
         timestampOut
         photoIn
@@ -545,81 +386,6 @@ export const listEmployeeTimeRecords = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        employee {
-          id
-          profilePhoto
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          username
-          email
-          roles
-          companyId
-          primaryManagerId
-          managerIds
-          allowRead
-          allowFull
-        }
-        primaryManage {
-          id
-          profilePhoto
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          username
-          email
-          roles
-          companyId
-          primaryManagerId
-          managerIds
-          allowRead
-          allowFull
-        }
       }
       nextToken
       startedAt
@@ -645,9 +411,10 @@ export const listCompanyTimeRecords = /* GraphQL */ `
     ) {
       items {
         id
-        companyId
         employeeId
+        companyId
         primaryManagerId
+        managerIds
         timestampIn
         timestampOut
         photoIn
@@ -665,81 +432,6 @@ export const listCompanyTimeRecords = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        employee {
-          id
-          profilePhoto
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          username
-          email
-          roles
-          companyId
-          primaryManagerId
-          managerIds
-          allowRead
-          allowFull
-        }
-        primaryManage {
-          id
-          profilePhoto
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          username
-          email
-          roles
-          companyId
-          primaryManagerId
-          managerIds
-          allowRead
-          allowFull
-        }
       }
       nextToken
       startedAt
@@ -761,9 +453,10 @@ export const syncTimeRecords = /* GraphQL */ `
     ) {
       items {
         id
-        companyId
         employeeId
+        companyId
         primaryManagerId
+        managerIds
         timestampIn
         timestampOut
         photoIn
@@ -781,81 +474,6 @@ export const syncTimeRecords = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        company {
-          id
-          name
-          website
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          allowUpdate
-        }
-        employee {
-          id
-          profilePhoto
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          username
-          email
-          roles
-          companyId
-          primaryManagerId
-          managerIds
-          allowRead
-          allowFull
-        }
-        primaryManage {
-          id
-          profilePhoto
-          email_2
-          firstName
-          lastName
-          phone
-          phone_2
-          addressLine1
-          addressLine2
-          city
-          state
-          zip
-          country
-          jobTitle
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-          username
-          email
-          roles
-          companyId
-          primaryManagerId
-          managerIds
-          allowRead
-          allowFull
-        }
       }
       nextToken
       startedAt

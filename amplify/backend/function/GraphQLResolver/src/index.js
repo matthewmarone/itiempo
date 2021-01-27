@@ -76,7 +76,7 @@ const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
  */
 const getAppsCustomUserAttributes = () => [
   {
-    AttributeDataType: "string",
+    AttributeDataType: "String",
     DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "cId",
@@ -87,7 +87,7 @@ const getAppsCustomUserAttributes = () => [
     },
   },
   {
-    AttributeDataType: "string",
+    AttributeDataType: "String",
     DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "eId",
@@ -98,7 +98,7 @@ const getAppsCustomUserAttributes = () => [
     },
   },
   {
-    AttributeDataType: "string",
+    AttributeDataType: "String",
     DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "roles",
@@ -132,10 +132,11 @@ const resolvers = {
         input: {
           id: eId,
           username,
-          email,
+          email, // email should be lower case at signup
           roles: [OWNER_ROLE],
           companyId: cId,
           primaryManagerId: eId, // They are their own manager at 1st
+          allowRead: [`${MANAGER_ROLE}-${cId}`],
           allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
         },
       };
@@ -154,7 +155,7 @@ const resolvers = {
       // Persist the companyId, employeeId and Role to the Cognito user rec.
       const updateUsr = () =>
         // We wrapped the function call because we may call a 2nd time later
-        user.updateUser(username, [
+        user.updateUserAttributes(username, [
           { Name: "custom:cId", Value: cId },
           { Name: "custom:eId", Value: eId },
           // Assign the user to the Owner group for this new company
@@ -234,11 +235,11 @@ const resolvers = {
       const { cId, eId: pManagerId } = ctx.identity.claims;
       const eId = uuid.v4(); // Will be Employee.id
       const {
-        email,
         roles = [DEFAULT_EMPLOYEE_ROLE],
         // Default current user to be primary manager
         primaryManagerId = pManagerId,
       } = input;
+      const email = input.email.toLowerCase();
 
       // Loop through the role being asigned and make sure
       // the requestor is authorized to assign each role
@@ -261,6 +262,8 @@ const resolvers = {
         { Name: "custom:eId", Value: eId },
         // Transform roles array to comma seperated list of roles
         { Name: "custom:roles", Value: roles.reduce((a, c) => `${a},${c}`) },
+        { Name: "email", Value: email },
+        { Name: "email_verified", Value: "true" },
       ];
 
       // Attempt to create the user, the employeeId is also returned here
@@ -276,7 +279,9 @@ const resolvers = {
           if (e.name === "UsernameExistsException") {
             // Let's lookup the user and see for which company it belongs to
             // and if there already is an associated Employee record
-            const { Username, UserAttributes:UA = [] } = await user.getUser(email);
+            const { Username, UserAttributes: UA = [] } = await user.getUser(
+              email
+            );
             const { companyId, employeeId } = UA.reduce(
               (retVal, { Name, Value }) => {
                 switch (Name) {
@@ -307,7 +312,7 @@ const resolvers = {
             user.globalSignOut(Username).catch((e) => console.error(e));
             // This is safe because we already checked the companyId
             // and confirmed that the employee record was not in existance
-            await user.updateUser(Username, UserAttributes);
+            await user.updateUserAttributes(Username, UserAttributes);
             // Return the Username
             return Username;
           } else {
@@ -327,6 +332,7 @@ const resolvers = {
           companyId: cId,
           primaryManagerId,
           roles,
+          allowRead: [`${MANAGER_ROLE}-${cId}`],
           allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
         },
       });
@@ -372,7 +378,10 @@ const resolvers = {
       ];
 
       // Update Cognito User
-      const updateUserPromise = user.updateUser(username, UserAttributes);
+      const updateUserPromise = user.updateUserAttributes(
+        username,
+        UserAttributes
+      );
       // Update Employee Record
       const updateEmployeePromise = api.UpdateEmployee({
         input: {

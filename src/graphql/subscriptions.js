@@ -185,9 +185,10 @@ export const onCreateTimeRecord = /* GraphQL */ `
   subscription OnCreateTimeRecord {
     onCreateTimeRecord {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -205,93 +206,6 @@ export const onCreateTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-      }
-      employee {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
-      primaryManage {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
     }
   }
 `;
@@ -299,9 +213,10 @@ export const onUpdateTimeRecord = /* GraphQL */ `
   subscription OnUpdateTimeRecord {
     onUpdateTimeRecord {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -319,93 +234,6 @@ export const onUpdateTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-      }
-      employee {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
-      primaryManage {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
     }
   }
 `;
@@ -413,9 +241,10 @@ export const onDeleteTimeRecord = /* GraphQL */ `
   subscription OnDeleteTimeRecord {
     onDeleteTimeRecord {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -433,93 +262,6 @@ export const onDeleteTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      company {
-        id
-        name
-        website
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        allowUpdate
-      }
-      employee {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
-      primaryManage {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
-      }
     }
   }
 `;

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const getCompany = /* GraphQL */ `
   query GetCompany($id: ID!) {
     getCompany(id: $id) {
@@ -23,9 +25,7 @@ const getEmployee = /* GraphQL */ `
   query GetEmployee($id: ID!) {
     getEmployee(id: $id) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -38,20 +38,24 @@ const getEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }

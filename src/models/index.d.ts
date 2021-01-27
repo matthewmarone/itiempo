@@ -60,12 +60,10 @@ export declare class Company {
 
 export declare class TimeRecord {
   readonly id: string;
-  readonly companyId: string;
-  readonly company?: Company;
   readonly employeeId: string;
-  readonly employee?: Employee;
+  readonly companyId: string;
   readonly primaryManagerId: string;
-  readonly primaryManage?: Employee;
+  readonly managerIds?: string[];
   readonly timestampIn: number;
   readonly timestampOut?: number;
   readonly photoIn?: string;

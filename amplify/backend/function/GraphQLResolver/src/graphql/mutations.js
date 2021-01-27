@@ -1,3 +1,4 @@
+/* eslint-disable */
 const deleteCompany = /* GraphQL */ `
   mutation DeleteCompany(
     $input: DeleteCompanyInput!
@@ -29,9 +30,7 @@ const deleteEmployee = /* GraphQL */ `
   ) {
     deleteEmployee(input: $input, condition: $condition) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -44,20 +43,24 @@ const deleteEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -117,9 +120,7 @@ const updateEmployee = /* GraphQL */ `
   ) {
     updateEmployee(input: $input, condition: $condition) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -132,20 +133,24 @@ const updateEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -157,9 +162,7 @@ const createEmployee = /* GraphQL */ `
   ) {
     createEmployee(input: $input, condition: $condition) {
       id
-      username
       profilePhoto
-      email
       email_2
       firstName
       lastName
@@ -172,20 +175,24 @@ const createEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      username
+      email
       payRates {
         name
         amount
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      roles
+      managerIds
+      allowRead
       allowFull
     }
   }
@@ -197,9 +204,10 @@ const createTimeRecord = /* GraphQL */ `
   ) {
     createTimeRecord(input: $input, condition: $condition) {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -227,9 +235,10 @@ const updateTimeRecord = /* GraphQL */ `
   ) {
     updateTimeRecord(input: $input, condition: $condition) {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn
@@ -257,9 +266,10 @@ const deleteTimeRecord = /* GraphQL */ `
   ) {
     deleteTimeRecord(input: $input, condition: $condition) {
       id
-      companyId
       employeeId
+      companyId
       primaryManagerId
+      managerIds
       timestampIn
       timestampOut
       photoIn

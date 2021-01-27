@@ -85,7 +85,7 @@ const listUserGroups = async (Username) => {
   }
 };
 
-const updateUser = async (
+const updateUserAttributes = async (
   Username,
   UserAttributes = [],
   ClientMetadata = {}
@@ -176,6 +176,6 @@ exports.createUser = createUser;
 exports.addUserToGroup = addUserToGroup;
 exports.removeUserFromGroup = removeUserFromGroup;
 exports.listUserGroups = listUserGroups;
-exports.updateUser = updateUser;
+exports.updateUserAttributes = updateUserAttributes;
 exports.addCustomAttributes = addCustomAttributes;
 exports.globalSignOut = globalSignOut;
