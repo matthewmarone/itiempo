@@ -17,9 +17,9 @@ export declare class PayRate {
 
 export declare class Employee {
   readonly id: string;
-  readonly username?: string;
+  readonly username: string;
   readonly profilePhoto?: string;
-  readonly email?: string;
+  readonly email: string;
   readonly email_2?: string;
   readonly firstName?: string;
   readonly lastName?: string;
@@ -33,12 +33,12 @@ export declare class Employee {
   readonly country?: string;
   readonly jobTitle?: string;
   readonly payRates?: PayRate[];
-  readonly roles?: Role[] | keyof typeof Role;
-  readonly companyId?: string;
-  readonly primaryManagerId?: string;
+  readonly roles: Role[] | keyof typeof Role;
+  readonly companyId: string;
+  readonly primaryManagerId: string;
   readonly managerIds?: string[];
-  readonly allowRead?: (string | null)[];
-  readonly allowFull?: (string | null)[];
+  readonly allowRead: string[];
+  readonly allowFull: string[];
   constructor(init: ModelInit<Employee>);
   static copyOf(source: Employee, mutator: (draft: MutableModel<Employee>) => MutableModel<Employee> | void): Employee;
 }

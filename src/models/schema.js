@@ -14,7 +14,7 @@ export const schema = {
                     "name": "username",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "profilePhoto": {
@@ -28,7 +28,7 @@ export const schema = {
                     "name": "email",
                     "isArray": false,
                     "type": "AWSEmail",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "email_2": {
@@ -133,20 +133,20 @@ export const schema = {
                     },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true
+                    "isArrayNullable": false
                 },
                 "companyId": {
                     "name": "companyId",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "primaryManagerId": {
                     "name": "primaryManagerId",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "managerIds": {
@@ -161,17 +161,17 @@ export const schema = {
                     "name": "allowRead",
                     "isArray": true,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true
+                    "isArrayNullable": false
                 },
                 "allowFull": {
                     "name": "allowFull",
                     "isArray": true,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true
+                    "isArrayNullable": false
                 }
             },
             "syncable": true,
@@ -210,13 +210,25 @@ export const schema = {
                                 ]
                             },
                             {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "ForbiddenGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete"
+                                ]
+                            },
+                            {
                                 "provider": "userPools",
                                 "ownerField": "id",
                                 "allow": "owner",
                                 "identityClaim": "eId",
                                 "operations": [
-                                    "read",
-                                    "update"
+                                    "read"
                                 ]
                             },
                             {
@@ -225,7 +237,6 @@ export const schema = {
                                 "allow": "owner",
                                 "identityClaim": "eId",
                                 "operations": [
-                                    "update",
                                     "read"
                                 ]
                             },
@@ -235,7 +246,6 @@ export const schema = {
                                 "allow": "groups",
                                 "groupsField": "managerIds",
                                 "operations": [
-                                    "update",
                                     "read"
                                 ],
                                 "groupField": "groups"
@@ -256,7 +266,6 @@ export const schema = {
                                 "allow": "groups",
                                 "groupsField": "allowFull",
                                 "operations": [
-                                    "update",
                                     "read"
                                 ],
                                 "groupField": "groups"

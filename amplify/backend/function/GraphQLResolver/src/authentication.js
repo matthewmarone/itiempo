@@ -2,11 +2,13 @@ const OWNER_ROLE = "Owner";
 const ADMIN_ROLE = "Admin";
 const MANAGER_ROLE = "Manager";
 const DEFAULT_EMPLOYEE_ROLE = "Employee";
+const ACCOUNTANT_ROLE = "Accountant";
 // eslint-disable-next-line no-unused-vars
 const ROLE_Weight = {
   [OWNER_ROLE]: 4,
   [ADMIN_ROLE]: 3,
   [MANAGER_ROLE]: 2,
+  [ACCOUNTANT_ROLE]: 1,
   [DEFAULT_EMPLOYEE_ROLE]: 1,
 };
 
@@ -93,7 +95,7 @@ const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
 
   // Don't let a user change their own
   if (eId === id) return false;
-  
+
   // Making sure the role of the requester is not beneath the targeted employee
   if (ROLE_Weight[requestorsHighestRole] < ROLE_Weight[employeesHighestRole])
     return false;

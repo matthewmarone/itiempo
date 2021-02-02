@@ -23,12 +23,12 @@ export const syncCompanies = /* GraphQL */ `
         city
         state
         zip
+        country
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
-        country
         allowUpdate
       }
       nextToken
@@ -47,12 +47,12 @@ export const getCompany = /* GraphQL */ `
       city
       state
       zip
+      country
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      country
       allowUpdate
     }
   }
@@ -73,13 +73,99 @@ export const listCompanys = /* GraphQL */ `
         city
         state
         zip
+        country
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
-        country
         allowUpdate
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getEmployee = /* GraphQL */ `
+  query GetEmployee($id: ID!) {
+    getEmployee(id: $id) {
+      id
+      username
+      profilePhoto
+      email
+      email_2
+      firstName
+      lastName
+      phone
+      phone_2
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      jobTitle
+      payRates {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      roles
+      companyId
+      primaryManagerId
+      managerIds
+      allowRead
+      allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listEmployees = /* GraphQL */ `
+  query ListEmployees(
+    $filter: ModelEmployeeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEmployees(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        username
+        profilePhoto
+        email
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        allowRead
+        allowFull
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -105,7 +191,9 @@ export const listEmployeesByEmail = /* GraphQL */ `
     ) {
       items {
         id
+        username
         profilePhoto
+        email
         email_2
         firstName
         lastName
@@ -118,13 +206,6 @@ export const listEmployeesByEmail = /* GraphQL */ `
         zip
         country
         jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
         payRates {
           name
           amount
@@ -137,6 +218,11 @@ export const listEmployeesByEmail = /* GraphQL */ `
         managerIds
         allowRead
         allowFull
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
       }
       nextToken
       startedAt
@@ -158,7 +244,9 @@ export const syncEmployees = /* GraphQL */ `
     ) {
       items {
         id
+        username
         profilePhoto
+        email
         email_2
         firstName
         lastName
@@ -171,13 +259,6 @@ export const syncEmployees = /* GraphQL */ `
         zip
         country
         jobTitle
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        username
-        email
         payRates {
           name
           amount
@@ -190,92 +271,11 @@ export const syncEmployees = /* GraphQL */ `
         managerIds
         allowRead
         allowFull
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getEmployee = /* GraphQL */ `
-  query GetEmployee($id: ID!) {
-    getEmployee(id: $id) {
-      id
-      profilePhoto
-      email_2
-      firstName
-      lastName
-      phone
-      phone_2
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
-      payRates {
-        name
-        amount
-        isHourly
-        isDefault
-      }
-      roles
-      companyId
-      primaryManagerId
-      managerIds
-      allowRead
-      allowFull
-    }
-  }
-`;
-export const listEmployees = /* GraphQL */ `
-  query ListEmployees(
-    $filter: ModelEmployeeFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listEmployees(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        profilePhoto
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
-        username
-        email
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        allowRead
-        allowFull
       }
       nextToken
       startedAt

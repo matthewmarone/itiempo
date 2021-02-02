@@ -57,8 +57,7 @@ type Company
           provider: iam
           operations: [create, update, read, delete]
         }
-        # Allow all with access to read
-        { allow: private, provider: userPools, operations: [read] }
+        # Don't allow users access to modify
         {
           allow: groups
           groups: ["ForbiddenGroup"]
@@ -77,31 +76,33 @@ type Employee
   @auth(
     rules: [
       # Only allow GraphQLResolver (setupNewAccount, addUser) to create
+      { allow: private, provider: iam, operations: [create, update, read] }
+      # All creating, editing and deleting would be done through GraphQLResolver
       {
-        allow: private
-        provider: iam
-        operations: [create, update, read, delete]
+        allow: groups
+        groups: ["ForbiddenGroup"]
+        operations: [create, update, delete]
       }
       {
-        # Allow the employee itself to update and read it's own rec.
+        # Allow the employee itself to read it's own record
         allow: owner
         ownerField: "id"
         identityClaim: "eId"
-        operations: [read, update]
+        operations: [read]
       }
       {
-        # Allow the employee's manager full access
+        # Allow the employee's primary manager to read
         allow: owner
         ownerField: "primaryManagerId"
         identityClaim: "eId"
-        operations: [read, update]
+        operations: [read]
       }
       {
-        # Allow company admins/owners full access
+        # Allow all other managers to read
         allow: groups
         groupClaim: "eId"
         groupsField: "managerIds"
-        operations: [read, update]
+        operations: [read]
       }
       {
         # For future groups like accountant or super manager
@@ -110,49 +111,17 @@ type Employee
         operations: [read]
       }
       {
-        # Allow company admins/owners full access
+        # Allow company admins/owners full access, updates handled through GraphQLResolver
         allow: groups
         groupsField: "allowFull"
-        operations: [read, update]
+        operations: [read]
       }
-      # # Block cognito user from creating and deleting
-      # {
-      #   allow: groups
-      #   groups: ["ForbiddenGroup"]
-      #   operations: [create, delete]
-      # }
     ]
   ) {
   id: ID!
-  username: String
-    @auth(
-      rules: [
-        # This field is set at creation
-        { allow: private, provider: iam, operations: [create, read] }
-        # { allow: private, provider: userPools, operations: [read] }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
+  username: String! # Write once, implemented in GraphQLResolver
   profilePhoto: String
-  email: AWSEmail
-    @auth(
-      rules: [
-        # This field is set at creation
-        { allow: private, provider: iam, operations: [create, update, read] }
-        # { allow: private, provider: userPools, operations: [read] }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
+  email: AWSEmail! # Restricted field, implemented in GraphQLResolver
   email_2: AWSEmail
   firstName: String
   lastName: String
@@ -165,170 +134,13 @@ type Employee
   zip: String
   country: String
   jobTitle: String
-  payRates: [PayRate!]
-    @auth(
-      rules: [
-        # Only allow GraphQLResolver (setupNewAccount, addUser) to create
-        { allow: private, provider: iam, operations: [create, update, read] }
-        # allow anyone with access to read
-        # { allow: private, provider: userPools, operations: [read] }
-        {
-          # Allow the employee's manager to update
-          allow: owner
-          ownerField: "primaryManagerId"
-          identityClaim: "eId"
-          operations: [update]
-        }
-        {
-          # Allow the employee's manager to update
-          allow: groups
-          groupClaim: "eId"
-          groupsField: "managerIds"
-          operations: [update]
-        }
-        {
-          # Allow company admins/owners full access
-          allow: groups
-          groupsField: "allowFull"
-          operations: [update]
-        }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
-  roles: [Role!]
-    @auth(
-      rules: [
-        # Only allow GraphQLResolver to create, read, update
-        { allow: private, provider: iam, operations: [create, update, read] }
-        # Allow all with access to read
-        # { allow: private, provider: userPools, operations: [read] }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
-  companyId: ID
-    @auth(
-      rules: [
-        # This field is set at creation
-        { allow: private, provider: iam, operations: [create, read] }
-        # { allow: private, provider: userPools, operations: [read] }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
-  primaryManagerId: ID
-    @auth(
-      rules: [
-        # Only allow GraphQLResolver (setupNewAccount, addUser) to create
-        { allow: private, provider: iam, operations: [create, update, read] }
-        # allow anyone with access to read
-        # { allow: private, provider: userPools, operations: [read] }
-        {
-          # Allow the employee's manager to update
-          allow: owner
-          ownerField: "primaryManagerId"
-          identityClaim: "eId"
-          operations: [update]
-        }
-        {
-          # Allow the employee's manager to update
-          allow: groups
-          groupClaim: "eId"
-          groupsField: "managerIds"
-          operations: [update]
-        }
-        {
-          # Allow company admins/owners full access
-          allow: groups
-          groupsField: "allowFull"
-          operations: [update]
-        }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
-  managerIds: [ID!]
-    @auth(
-      rules: [
-        # Only allow GraphQLResolver (setupNewAccount, addUser) to create
-        { allow: private, provider: iam, operations: [create, update, read] }
-        # allow anyone with access to read
-        # { allow: private, provider: userPools, operations: [read] }
-        {
-          # Allow the employee's manager to update
-          allow: owner
-          ownerField: "primaryManagerId"
-          identityClaim: "eId"
-          operations: [update]
-        }
-        {
-          # Allow the employee's manager to update
-          allow: groups
-          groupClaim: "eId"
-          groupsField: "managerIds"
-          operations: [update]
-        }
-        {
-          # Allow company admins/owners full access
-          allow: groups
-          groupsField: "allowFull"
-          operations: [update]
-        }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
-  allowRead: [String]
-    @auth(
-      rules: [
-        # Allows it to be set only once through setupNewAccount or createUser
-        { allow: private, provider: iam, operations: [create, read] }
-        # Allow all with access to read
-        # { allow: private, provider: userPools, operations: [read] }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
-  allowFull: [String]
-    @auth(
-      rules: [
-        # Allows it to be set only once through setupNewAccount or createUser
-        { allow: private, provider: iam, operations: [create, read] }
-        # Allow all with access to read
-        # { allow: private, provider: userPools, operations: [read] }
-        # Block cognito users from modifiying
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete]
-        }
-      ]
-    )
+  payRates: [PayRate!] # Restricted field, implemented in GraphQLResolver
+  roles: [Role!]! # Restricted field, implemented in GraphQLResolver
+  companyId: ID! # Write once, implemented in GraphQLResolver
+  primaryManagerId: ID! # Restricted field, implemented in GraphQLResolver
+  managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
+  allowRead: [String!]! # Write once, implemented in GraphQLResolver
+  allowFull: [String!]! # Write once, implemented in GraphQLResolver
 }
 type TimeRecord
   @model(subscriptions: { level: off })

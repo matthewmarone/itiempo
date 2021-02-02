@@ -12,6 +12,7 @@ const {
   OWNER_ROLE,
   ADMIN_ROLE,
   MANAGER_ROLE,
+  ACCOUNTANT_ROLE,
   DEFAULT_EMPLOYEE_ROLE,
   isAuthorizedToUpdateRole,
 } = require("./authentication");
@@ -81,7 +82,7 @@ const resolvers = {
           roles: [OWNER_ROLE],
           companyId: cId,
           primaryManagerId: eId, // They are their own manager at 1st
-          allowRead: [`${MANAGER_ROLE}-${cId}`],
+          allowRead: [`${ACCOUNTANT_ROLE}-${cId}`],
           allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
         },
       };
@@ -277,7 +278,7 @@ const resolvers = {
           companyId: cId,
           primaryManagerId,
           roles,
-          allowRead: [`${MANAGER_ROLE}-${cId}`],
+          allowRead: [`${ACCOUNTANT_ROLE}-${cId}`],
           allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
         },
       });

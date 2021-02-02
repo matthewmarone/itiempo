@@ -5,7 +5,9 @@ export const setupNewAccount = /* GraphQL */ `
   mutation SetupNewAccount {
     setupNewAccount {
       id
+      username
       profilePhoto
+      email
       email_2
       firstName
       lastName
@@ -18,13 +20,6 @@ export const setupNewAccount = /* GraphQL */ `
       zip
       country
       jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
       payRates {
         name
         amount
@@ -37,6 +32,11 @@ export const setupNewAccount = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -44,7 +44,9 @@ export const createUser = /* GraphQL */ `
   mutation CreateUser($input: CreateUserInput!) {
     createUser(input: $input) {
       id
+      username
       profilePhoto
+      email
       email_2
       firstName
       lastName
@@ -57,13 +59,6 @@ export const createUser = /* GraphQL */ `
       zip
       country
       jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
       payRates {
         name
         amount
@@ -76,6 +71,11 @@ export const createUser = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -97,7 +97,9 @@ export const updateUserRole = /* GraphQL */ `
       _version: $_version
     ) {
       id
+      username
       profilePhoto
+      email
       email_2
       firstName
       lastName
@@ -110,13 +112,6 @@ export const updateUserRole = /* GraphQL */ `
       zip
       country
       jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
       payRates {
         name
         amount
@@ -129,6 +124,11 @@ export const updateUserRole = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -139,7 +139,9 @@ export const deleteEmployee = /* GraphQL */ `
   ) {
     deleteEmployee(input: $input, condition: $condition) {
       id
+      username
       profilePhoto
+      email
       email_2
       firstName
       lastName
@@ -152,13 +154,6 @@ export const deleteEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
       payRates {
         name
         amount
@@ -171,6 +166,11 @@ export const deleteEmployee = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -188,12 +188,12 @@ export const createCompany = /* GraphQL */ `
       city
       state
       zip
+      country
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      country
       allowUpdate
     }
   }
@@ -212,12 +212,12 @@ export const updateCompany = /* GraphQL */ `
       city
       state
       zip
+      country
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      country
       allowUpdate
     }
   }
@@ -236,55 +236,13 @@ export const deleteCompany = /* GraphQL */ `
       city
       state
       zip
+      country
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      country
       allowUpdate
-    }
-  }
-`;
-export const updateEmployee = /* GraphQL */ `
-  mutation UpdateEmployee(
-    $input: UpdateEmployeeInput!
-    $condition: ModelEmployeeConditionInput
-  ) {
-    updateEmployee(input: $input, condition: $condition) {
-      id
-      profilePhoto
-      email_2
-      firstName
-      lastName
-      phone
-      phone_2
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
-      payRates {
-        name
-        amount
-        isHourly
-        isDefault
-      }
-      roles
-      companyId
-      primaryManagerId
-      managerIds
-      allowRead
-      allowFull
     }
   }
 `;
@@ -295,7 +253,9 @@ export const createEmployee = /* GraphQL */ `
   ) {
     createEmployee(input: $input, condition: $condition) {
       id
+      username
       profilePhoto
+      email
       email_2
       firstName
       lastName
@@ -308,13 +268,6 @@ export const createEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
       payRates {
         name
         amount
@@ -327,6 +280,53 @@ export const createEmployee = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateEmployee = /* GraphQL */ `
+  mutation UpdateEmployee(
+    $input: UpdateEmployeeInput!
+    $condition: ModelEmployeeConditionInput
+  ) {
+    updateEmployee(input: $input, condition: $condition) {
+      id
+      username
+      profilePhoto
+      email
+      email_2
+      firstName
+      lastName
+      phone
+      phone_2
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      jobTitle
+      payRates {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      roles
+      companyId
+      primaryManagerId
+      managerIds
+      allowRead
+      allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
     }
   }
 `;
