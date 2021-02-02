@@ -23,12 +23,12 @@ export const syncCompanies = /* GraphQL */ `
         city
         state
         zip
-        country
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
+        country
         allowUpdate
       }
       nextToken
@@ -47,12 +47,12 @@ export const getCompany = /* GraphQL */ `
       city
       state
       zip
-      country
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
+      country
       allowUpdate
     }
   }
@@ -73,12 +73,12 @@ export const listCompanys = /* GraphQL */ `
         city
         state
         zip
-        country
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
+        country
         allowUpdate
       }
       nextToken

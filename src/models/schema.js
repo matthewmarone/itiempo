@@ -55,14 +55,14 @@ export const schema = {
                 "phone": {
                     "name": "phone",
                     "isArray": false,
-                    "type": "AWSPhone",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
                 "phone_2": {
                     "name": "phone_2",
                     "isArray": false,
-                    "type": "AWSPhone",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -179,7 +179,11 @@ export const schema = {
             "attributes": [
                 {
                     "type": "model",
-                    "properties": {}
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
                 },
                 {
                     "type": "key",
@@ -342,7 +346,11 @@ export const schema = {
             "attributes": [
                 {
                     "type": "model",
-                    "properties": {}
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
                 },
                 {
                     "type": "auth",
@@ -374,6 +382,18 @@ export const schema = {
                                 "identityClaim": "cId",
                                 "operations": [
                                     "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "ForbiddenGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "delete"
                                 ]
                             }
                         ]
@@ -477,7 +497,11 @@ export const schema = {
             "attributes": [
                 {
                     "type": "model",
-                    "properties": {}
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
                 },
                 {
                     "type": "key",
@@ -577,5 +601,5 @@ export const schema = {
             }
         }
     },
-    "version": "81ebd2ceaeddf9befd47641b548eb580"
+    "version": "27f7ad567e0448dc948cc7b6886da922"
 };

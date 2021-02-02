@@ -132,30 +132,6 @@ export const updateUserRole = /* GraphQL */ `
     }
   }
 `;
-export const deleteCompany = /* GraphQL */ `
-  mutation DeleteCompany(
-    $input: DeleteCompanyInput!
-    $condition: ModelCompanyConditionInput
-  ) {
-    deleteCompany(input: $input, condition: $condition) {
-      id
-      name
-      website
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      allowUpdate
-    }
-  }
-`;
 export const deleteEmployee = /* GraphQL */ `
   mutation DeleteEmployee(
     $input: DeleteEmployeeInput!
@@ -198,30 +174,6 @@ export const deleteEmployee = /* GraphQL */ `
     }
   }
 `;
-export const updateCompany = /* GraphQL */ `
-  mutation UpdateCompany(
-    $input: UpdateCompanyInput!
-    $condition: ModelCompanyConditionInput
-  ) {
-    updateCompany(input: $input, condition: $condition) {
-      id
-      name
-      website
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      allowUpdate
-    }
-  }
-`;
 export const createCompany = /* GraphQL */ `
   mutation CreateCompany(
     $input: CreateCompanyInput!
@@ -236,12 +188,60 @@ export const createCompany = /* GraphQL */ `
       city
       state
       zip
-      country
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
+      country
+      allowUpdate
+    }
+  }
+`;
+export const updateCompany = /* GraphQL */ `
+  mutation UpdateCompany(
+    $input: UpdateCompanyInput!
+    $condition: ModelCompanyConditionInput
+  ) {
+    updateCompany(input: $input, condition: $condition) {
+      id
+      name
+      website
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      country
+      allowUpdate
+    }
+  }
+`;
+export const deleteCompany = /* GraphQL */ `
+  mutation DeleteCompany(
+    $input: DeleteCompanyInput!
+    $condition: ModelCompanyConditionInput
+  ) {
+    deleteCompany(input: $input, condition: $condition) {
+      id
+      name
+      website
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      country
       allowUpdate
     }
   }

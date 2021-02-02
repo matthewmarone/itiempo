@@ -8,68 +8,13 @@ Amplify Params - DO NOT EDIT */
 const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
-
-const OWNER_ROLE = "Owner";
-const ADMIN_ROLE = "Admin";
-const MANAGER_ROLE = "Manager";
-const DEFAULT_EMPLOYEE_ROLE = "Employee";
-// eslint-disable-next-line no-unused-vars
-const ROLE_Weight = {
-  [OWNER_ROLE]: 4,
-  [ADMIN_ROLE]: 3,
-  [MANAGER_ROLE]: 2,
-  [DEFAULT_EMPLOYEE_ROLE]: 1,
-};
-
-/**
- *
- * @param {*} requestorClaims
- * @param {*} employee
- * @param {*} newRole
- */
-const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
-  const { eId, cId, "cognito:groups": requestorsRoleArr } = requestorClaims;
-  const { roles, primaryManagerId, companyId } = employee;
-
-  // Extract the highest assigned role of the requester (logged in usr)
-  let requestorsRole = DEFAULT_EMPLOYEE_ROLE;
-  requestorsRoleArr.forEach((r) => {
-    // Ex: r = 'Owner-a03dc17c-a10c-437d-84de-35b5f0a675e5'
-    const [rName] = r.split("-");
-    const [, compId] = r.split(`${rName}-`);
-    if (compId === cId) {
-      // Choose the highest weight role
-      if (ROLE_Weight[rName] > ROLE_Weight[requestorsRole]) {
-        requestorsRole = r;
-      }
-    }
-  });
-  // Extract the highest role of the employee record being updated
-  let employeeCurRole = DEFAULT_EMPLOYEE_ROLE;
-  roles.forEach((r) => {
-    // Choose the highest weight role
-    if (ROLE_Weight[r] > ROLE_Weight[employeeCurRole]) {
-      employeeCurRole = r;
-    }
-  });
-
-  // Making sure the requetor is not hacking into another company
-  if (cId !== companyId) return false;
-
-  // Users with Role Employee are never authorized
-  if (requestorsRole === DEFAULT_EMPLOYEE_ROLE) return false;
-
-  // Making sure a manager is only updating their employee
-  if (requestorsRole === MANAGER_ROLE && eId !== primaryManagerId) return false;
-
-  // Making sure the role of the requester is not beneath the targeted employee
-  if (ROLE_Weight[requestorsRole] < ROLE_Weight[employeeCurRole]) return false;
-
-  // Making sure the requeater is not attempting to assign a role higher than its own
-  if (ROLE_Weight[newRole] > ROLE_Weight[requestorsRole]) return false;
-
-  return true;
-};
+const {
+  OWNER_ROLE,
+  ADMIN_ROLE,
+  MANAGER_ROLE,
+  DEFAULT_EMPLOYEE_ROLE,
+  isAuthorizedToUpdateRole,
+} = require("./authentication");
 
 /**
  * Includes cId, eId, and roles
@@ -255,7 +200,7 @@ const resolvers = {
         true
       );
       // Throw violation
-      if (!roleAuthorized) throw new Error("Role authorization error");
+      if (!roleAuthorized) throw new Error("Unauthorized to assign role");
 
       const UserAttributes = [
         { Name: "custom:cId", Value: cId },

@@ -12,7 +12,7 @@ type Mutation {
   ): Employee @function(name: "GraphQLResolver-${env}")
 }
 type Company
-  @model
+  @model(subscriptions: { level: off })
   @auth(
     rules: [
       # Allows creation only through GraphQLResolver (setupNewAccount)
@@ -29,6 +29,11 @@ type Company
         ownerField: "id"
         identityClaim: "cId"
         operations: [read]
+      }
+      {
+        allow: groups
+        groups: ["ForbiddenGroup"]
+        operations: [create, delete]
       }
     ]
   ) {
@@ -47,13 +52,23 @@ type Company
     @auth(
       rules: [
         # Allows it to be set only once through setupNewAccount
-        { allow: private, provider: iam, operations: [create, read] }
-        { allow: private, provider: userPools, operations: [create, read] }
+        {
+          allow: private
+          provider: iam
+          operations: [create, update, read, delete]
+        }
+        # Allow all with access to read
+        { allow: private, provider: userPools, operations: [read] }
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
+        }
       ]
     )
 }
 type Employee
-  @model
+  @model(subscriptions: { level: off })
   @key(
     name: "byCompany"
     fields: ["companyId", "email"]
@@ -62,7 +77,11 @@ type Employee
   @auth(
     rules: [
       # Only allow GraphQLResolver (setupNewAccount, addUser) to create
-      { allow: private, provider: iam, operations: [create, update, read] }
+      {
+        allow: private
+        provider: iam
+        operations: [create, update, read, delete]
+      }
       {
         # Allow the employee itself to update and read it's own rec.
         allow: owner
@@ -75,14 +94,14 @@ type Employee
         allow: owner
         ownerField: "primaryManagerId"
         identityClaim: "eId"
-        operations: [update, read]
+        operations: [read, update]
       }
       {
         # Allow company admins/owners full access
         allow: groups
         groupClaim: "eId"
         groupsField: "managerIds"
-        operations: [update, read]
+        operations: [read, update]
       }
       {
         # For future groups like accountant or super manager
@@ -94,8 +113,14 @@ type Employee
         # Allow company admins/owners full access
         allow: groups
         groupsField: "allowFull"
-        operations: [update, read]
+        operations: [read, update]
       }
+      # # Block cognito user from creating and deleting
+      # {
+      #   allow: groups
+      #   groups: ["ForbiddenGroup"]
+      #   operations: [create, delete]
+      # }
     ]
   ) {
   id: ID!
@@ -104,7 +129,13 @@ type Employee
       rules: [
         # This field is set at creation
         { allow: private, provider: iam, operations: [create, read] }
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
+        }
       ]
     )
   profilePhoto: String
@@ -113,14 +144,20 @@ type Employee
       rules: [
         # This field is set at creation
         { allow: private, provider: iam, operations: [create, update, read] }
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
+        }
       ]
     )
   email_2: AWSEmail
   firstName: String
   lastName: String
-  phone: AWSPhone
-  phone_2: AWSPhone
+  phone: String
+  phone_2: String
   addressLine1: String
   addressLine2: String
   city: String
@@ -134,26 +171,32 @@ type Employee
         # Only allow GraphQLResolver (setupNewAccount, addUser) to create
         { allow: private, provider: iam, operations: [create, update, read] }
         # allow anyone with access to read
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
         {
           # Allow the employee's manager to update
           allow: owner
           ownerField: "primaryManagerId"
           identityClaim: "eId"
-          operations: [update, read]
+          operations: [update]
         }
         {
           # Allow the employee's manager to update
           allow: groups
           groupClaim: "eId"
           groupsField: "managerIds"
-          operations: [update, read]
+          operations: [update]
         }
         {
           # Allow company admins/owners full access
           allow: groups
           groupsField: "allowFull"
-          operations: [update, read]
+          operations: [update]
+        }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
         }
       ]
     )
@@ -163,7 +206,13 @@ type Employee
         # Only allow GraphQLResolver to create, read, update
         { allow: private, provider: iam, operations: [create, update, read] }
         # Allow all with access to read
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
+        }
       ]
     )
   companyId: ID
@@ -171,7 +220,13 @@ type Employee
       rules: [
         # This field is set at creation
         { allow: private, provider: iam, operations: [create, read] }
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
+        }
       ]
     )
   primaryManagerId: ID
@@ -180,26 +235,32 @@ type Employee
         # Only allow GraphQLResolver (setupNewAccount, addUser) to create
         { allow: private, provider: iam, operations: [create, update, read] }
         # allow anyone with access to read
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
         {
           # Allow the employee's manager to update
           allow: owner
           ownerField: "primaryManagerId"
           identityClaim: "eId"
-          operations: [update, read]
+          operations: [update]
         }
         {
           # Allow the employee's manager to update
           allow: groups
           groupClaim: "eId"
           groupsField: "managerIds"
-          operations: [update, read]
+          operations: [update]
         }
         {
           # Allow company admins/owners full access
           allow: groups
           groupsField: "allowFull"
-          operations: [update, read]
+          operations: [update]
+        }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
         }
       ]
     )
@@ -209,26 +270,32 @@ type Employee
         # Only allow GraphQLResolver (setupNewAccount, addUser) to create
         { allow: private, provider: iam, operations: [create, update, read] }
         # allow anyone with access to read
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
         {
           # Allow the employee's manager to update
           allow: owner
           ownerField: "primaryManagerId"
           identityClaim: "eId"
-          operations: [update, read]
+          operations: [update]
         }
         {
           # Allow the employee's manager to update
           allow: groups
           groupClaim: "eId"
           groupsField: "managerIds"
-          operations: [update, read]
+          operations: [update]
         }
         {
           # Allow company admins/owners full access
           allow: groups
           groupsField: "allowFull"
-          operations: [update, read]
+          operations: [update]
+        }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
         }
       ]
     )
@@ -238,7 +305,13 @@ type Employee
         # Allows it to be set only once through setupNewAccount or createUser
         { allow: private, provider: iam, operations: [create, read] }
         # Allow all with access to read
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
+        }
       ]
     )
   allowFull: [String]
@@ -247,12 +320,18 @@ type Employee
         # Allows it to be set only once through setupNewAccount or createUser
         { allow: private, provider: iam, operations: [create, read] }
         # Allow all with access to read
-        { allow: private, provider: userPools, operations: [read] }
+        # { allow: private, provider: userPools, operations: [read] }
+        # Block cognito users from modifiying
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
+        }
       ]
     )
 }
 type TimeRecord
-  @model
+  @model(subscriptions: { level: off })
   @key(
     name: "byEmployeeTimestamp"
     fields: ["employeeId", "timestampIn"]
@@ -301,8 +380,8 @@ input CreateUserInput {
   email_2: AWSEmail
   firstName: String
   lastName: String
-  phone: AWSPhone
-  phone_2: AWSPhone
+  phone: String
+  phone_2: String
   addressLine1: String
   addressLine2: String
   city: String
