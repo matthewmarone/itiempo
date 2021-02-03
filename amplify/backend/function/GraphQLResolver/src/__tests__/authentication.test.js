@@ -35,12 +35,15 @@ const c2_employee = {
 };
 
 test("isAuthorizedToUpdateRole", () => {
+    // TODO (Matt): Review that these tests are complete and acurate
   const employeeC1 = {
+    id: c1_employee.eId,
     roles: [EMPLOYEE_ROLE],
     primaryManagerId: c1_owner.eId, // I guess could happen if user switched accts.
     companyId: c1_employee.cId,
   };
   const employeeC2 = {
+    id: c2_employee.eId,
     roles: [EMPLOYEE_ROLE],
     primaryManagerId: c1_owner.eId, // I guess could happen if user switched accts.
     companyId: c2_employee.cId,
@@ -62,7 +65,7 @@ test("isAuthorizedToUpdateRole", () => {
   expect(
     isAuthorizedToUpdateRole(c1_employee, employeeC1, EMPLOYEE_ROLE)
   ).toBeFalsy();
-  // Testing that a manager only updates their own employee
+//   Testing that a manager only updates their own employee
   expect(
     isAuthorizedToUpdateRole(c1_manager, employeeC1, MANAGER_ROLE)
   ).toBeFalsy();

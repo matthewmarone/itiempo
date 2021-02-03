@@ -10,6 +10,8 @@ type Mutation {
     previousRoles: [Role!]!
     _version: Int!
   ): Employee @function(name: "GraphQLResolver-${env}")
+  updateEmpl(input: emplInput!): Employee
+    @function(name: "GraphQLResolver-${env}")
 }
 type Company
   @model(subscriptions: { level: off })
@@ -201,12 +203,39 @@ input CreateUserInput {
   zip: String
   country: String
   jobTitle: String
-  payRates: [PayRateCreateInput!]
+  payRates: [PayRateUpsertInput!]
   roles: [Role!]!
   companyId: ID!
   primaryManagerId: ID!
+  managerIds: [ID!]
 }
-input PayRateCreateInput {
+input emplInput {
+  id: ID!
+  username: String # Write once, implemented in GraphQLResolver
+  profilePhoto: String
+  email: AWSEmail # Restricted field, implemented in GraphQLResolver
+  email_2: AWSEmail
+  firstName: String
+  lastName: String
+  phone: String
+  phone_2: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  jobTitle: String
+  payRates: [PayRateUpsertInput!] # Restricted field, implemented in GraphQLResolver
+  roles: [Role!]! # Restricted field, implemented in GraphQLResolver
+  companyId: ID! # Write once, implemented in GraphQLResolver
+  primaryManagerId: ID! # Restricted field, implemented in GraphQLResolver
+  managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
+  allowRead: [String!] # Write once, implemented in GraphQLResolver
+  allowFull: [String!] # Write once, implemented in GraphQLResolver
+  _version: Int!
+}
+input PayRateUpsertInput {
   name: String
   amount: Float!
   isHourly: Boolean!

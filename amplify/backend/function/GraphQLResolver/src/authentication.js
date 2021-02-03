@@ -11,6 +11,13 @@ const ROLE_Weight = {
   [ACCOUNTANT_ROLE]: 1,
   [DEFAULT_EMPLOYEE_ROLE]: 1,
 };
+/**
+ * pass in a role Owner, Admin, Accountant...etc.
+ * @param {*} greater
+ * @param {*} lessor
+ */
+const isRoleGreater = (greater, lessor) =>
+  ROLE_Weight[greater] > ROLE_Weight[lessor];
 
 /**
  * Note: this function assumes that the requestorClaims
@@ -21,13 +28,14 @@ const ROLE_Weight = {
  * @returns an object {requestorsHighestRole, employeesHighestRole, authorized}
  *  where the roles are the highest weighted and authorized is false if the user
  *  (requestorClaims) belongs to a
- *  different company, has role employee, or role manager and
+ *  different company, has role employee and is not itself, or role manager and
  *  isn't the primary manager, or one of the employees other managers;
  *  otherwise true
  */
-const _authorizedToUpdate = (requestorClaims, employee) => {
+const isAuthorizedToUpdateEmployee = (requestorClaims, employee) => {
   const { eId, cId, "cognito:groups": requestorsRoleArr } = requestorClaims;
-  const { roles, primaryManagerId, companyId, managerIds = [] } = employee;
+  const { id, roles, primaryManagerId, companyId, managerIds = [] } = employee;
+  if (!(roles && primaryManagerId && companyId)) return { authorized: false };
 
   // Extract the highest assigned role of the requester (logged in usr)
   let requestorsHighestRole = DEFAULT_EMPLOYEE_ROLE;
@@ -57,8 +65,8 @@ const _authorizedToUpdate = (requestorClaims, employee) => {
   // Making sure the requetor is not hacking into another company
   if (cId !== companyId) return { ...retVal, authorized: false };
 
-  // Users with Role Employee are never authorized (in these contexts)
-  if (requestorsHighestRole === DEFAULT_EMPLOYEE_ROLE)
+  // Users with Role Employee can only update themselves
+  if (requestorsHighestRole === DEFAULT_EMPLOYEE_ROLE && eId !== id)
     return { ...retVal, authorized: false };
 
   // Making sure a manager is only updating their employee
@@ -84,23 +92,26 @@ const _authorizedToUpdate = (requestorClaims, employee) => {
  */
 const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
   const { eId } = requestorClaims;
-  const { id } = employee;
+  const { id = eId } = employee;
   const {
     requestorsHighestRole,
     employeesHighestRole,
     authorized,
-  } = _authorizedToUpdate(requestorClaims, employee);
+  } = isAuthorizedToUpdateEmployee(requestorClaims, employee);
 
   if (!authorized) return false;
 
-  // Don't let a user change their own
+  // Don't let a user change their own role
   if (eId === id) return false;
+
+  // Users with Role Employee are never authorized to update role
+  if (requestorsHighestRole === DEFAULT_EMPLOYEE_ROLE) return false;
 
   // Making sure the role of the requester is not beneath the targeted employee
   if (ROLE_Weight[requestorsHighestRole] < ROLE_Weight[employeesHighestRole])
     return false;
 
-  // Making sure the requeater is not attempting to assign a role higher than its own
+  // Making sure the requeater is not attempting to assign a role higher than their own
   if (ROLE_Weight[newRole] > ROLE_Weight[requestorsHighestRole]) return false;
 
   return true;
@@ -111,3 +122,5 @@ exports.ADMIN_ROLE = ADMIN_ROLE;
 exports.MANAGER_ROLE = MANAGER_ROLE;
 exports.DEFAULT_EMPLOYEE_ROLE = DEFAULT_EMPLOYEE_ROLE;
 exports.isAuthorizedToUpdateRole = isAuthorizedToUpdateRole;
+exports.isAuthorizedToUpdateEmployee = isAuthorizedToUpdateEmployee;
+exports.isRoleGreater = isRoleGreater;

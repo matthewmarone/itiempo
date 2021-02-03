@@ -132,6 +132,45 @@ export const updateUserRole = /* GraphQL */ `
     }
   }
 `;
+export const updateEmpl = /* GraphQL */ `
+  mutation UpdateEmpl($input: emplInput) {
+    updateEmpl(input: $input) {
+      id
+      username
+      profilePhoto
+      email
+      email_2
+      firstName
+      lastName
+      phone
+      phone_2
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      jobTitle
+      payRates {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      roles
+      companyId
+      primaryManagerId
+      managerIds
+      allowRead
+      allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const deleteEmployee = /* GraphQL */ `
   mutation DeleteEmployee(
     $input: DeleteEmployeeInput!

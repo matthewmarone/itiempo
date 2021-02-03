@@ -14,7 +14,9 @@ const {
   MANAGER_ROLE,
   ACCOUNTANT_ROLE,
   DEFAULT_EMPLOYEE_ROLE,
+  isAuthorizedToUpdateEmployee,
   isAuthorizedToUpdateRole,
+  isRoleGreater,
 } = require("./authentication");
 
 /**
@@ -288,6 +290,42 @@ const resolvers = {
       } else {
         throw new Error("Failed to create new Employee");
       }
+    },
+    updateEmpl: async (ctx) => {
+      const {
+        identity: { claims },
+        arguments: { input: employeeInput },
+      } = ctx;
+      const {
+        requestorsHighestRole,
+        // employeesHighestRole,
+        authorized,
+      } = isAuthorizedToUpdateEmployee(claims, employeeInput);
+      if (!authorized) throw new Error("Unauthorized to update employee");
+      // GraphQL arguments from client
+      // Remvoe the fields that this resolver shouldn't update
+      // This allowed the client to easily pass all employee fields if it wished
+      const {
+        username,
+        email,
+        roles,
+        companyId,
+        allowRead,
+        allowFull,
+        ...updateFields
+      } = employeeInput;
+      const input = isRoleGreater(requestorsHighestRole, DEFAULT_EMPLOYEE_ROLE)
+        ? updateFields
+        : {
+            ...updateFields,
+            // All these require management level or higher
+            jobTitle: undefined,
+            payRates: undefined,
+            primaryManagerId: undefined,
+            managerIds: undefined,
+          };
+      console.log(JSON.stringify(input, null, 4));
+      return await api.UpdateEmployee({ input });
     },
     updateUserRole: async (ctx) => {
       // GraphQL arguments from client
