@@ -19,6 +19,7 @@ import {
   FormControl,
   Select,
   // Typography,
+  CircularProgress,
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Logger } from "aws-amplify";
@@ -89,7 +90,7 @@ const PayRate = (props) => {
 
 const EmployeeSetup = (props) => {
   const classes = useStyles();
-  const { className, employee, onChange, onSave, ...rest } = props;
+  const { className, employee, onChange, onSave, saving, ...rest } = props;
   const { companyId } = employee;
   const { data } = useListEmployeesByEmail(companyId);
   const {
@@ -230,8 +231,17 @@ const EmployeeSetup = (props) => {
         </CardContent>
         <Divider />
         <CardActions>
-          <Button color="primary" variant="contained" onClick={onSave}>
-            Save details
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={onSave}
+            disabled={saving}
+          >
+            {!saving ? (
+              "Save details"
+            ) : (
+              <CircularProgress color="secondary" size={28} />
+            )}
           </Button>
         </CardActions>
       </form>
@@ -244,6 +254,7 @@ EmployeeSetup.propTypes = {
   employee: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  saving: PropTypes.bool,
 };
 
 export default EmployeeSetup;

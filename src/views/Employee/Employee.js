@@ -32,8 +32,9 @@ const Employee = (props) => {
   const [employeeState, setEmployeeState] = useState(getEmployee);
   const [updatedFields, setUpdatedFields] = useState({});
 
-  const [updateEmployee] = useUpdateEmployee();
-  const [updateRole] = useUpdateUserRole();
+  const [updateEmployee, { loading: updatingEmpl }] = useUpdateEmployee();
+  const [updateRole, { loading: updatingRole }] = useUpdateUserRole();
+  const updating = updatingEmpl || updatingRole;
 
   useEffect(() => {
     // Query for new employee when id changes
@@ -76,10 +77,26 @@ const Employee = (props) => {
    */
   const update = useCallback(
     (currEmployee, updatedFields) => {
-      const { id, _version, username, primaryManagerId, roles } = currEmployee;
+      const {
+        id,
+        _version,
+        username,
+        primaryManagerId,
+        companyId,
+        roles,
+      } = currEmployee;
       const { role, ...changes } = updatedFields;
       if (changes) {
-        const variables = { input: { id, _version, ...changes } };
+        const variables = {
+          input: {
+            id,
+            roles,
+            companyId,
+            primaryManagerId,
+            _version,
+            ...changes,
+          },
+        };
         updateEmployee({ variables });
       }
       if (role)
@@ -137,6 +154,7 @@ const Employee = (props) => {
                   employee={employee}
                   onChange={handleChange}
                   onSave={handleSave}
+                  saving={updating}
                 />
               </Grid>
             </Grid>
@@ -146,6 +164,7 @@ const Employee = (props) => {
                   employee={employee}
                   onChange={handleChange}
                   onSave={handleSave}
+                  saving={updating}
                 />
               </Grid>
             </Grid>

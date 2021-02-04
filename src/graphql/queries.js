@@ -117,6 +117,7 @@ export const getEmployee = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt
@@ -161,6 +162,7 @@ export const listEmployees = /* GraphQL */ `
         managerIds
         allowRead
         allowFull
+        inactive
         _version
         _deleted
         _lastChangedAt
@@ -218,6 +220,7 @@ export const listEmployeesByEmail = /* GraphQL */ `
         managerIds
         allowRead
         allowFull
+        inactive
         _version
         _deleted
         _lastChangedAt
@@ -271,6 +274,7 @@ export const syncEmployees = /* GraphQL */ `
         managerIds
         allowRead
         allowFull
+        inactive
         _version
         _deleted
         _lastChangedAt

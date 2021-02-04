@@ -325,7 +325,24 @@ const resolvers = {
             managerIds: undefined,
           };
       console.log(JSON.stringify(input, null, 4));
-      return await api.UpdateEmployee({ input });
+      const {
+        data: { updateEmployee } = {},
+        errors,
+      } = await api.UpdateEmployee({ input });
+
+      console.log(JSON.stringify({ updateEmployee, errors }, null, 4)); // for testing
+
+      if (errors || !updateEmployee) {
+        console.warn(errors);
+        if (!updateEmployee) {
+          const errorMessage = `Update employee Failed: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+
+      return updateEmployee;
     },
     updateUserRole: async (ctx) => {
       // GraphQL arguments from client

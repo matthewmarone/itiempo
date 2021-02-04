@@ -32,6 +32,7 @@ export const setupNewAccount = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt
@@ -71,6 +72,7 @@ export const createUser = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt
@@ -124,6 +126,7 @@ export const updateUserRole = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt
@@ -133,7 +136,7 @@ export const updateUserRole = /* GraphQL */ `
   }
 `;
 export const updateEmpl = /* GraphQL */ `
-  mutation UpdateEmpl($input: emplInput) {
+  mutation UpdateEmpl($input: emplInput!) {
     updateEmpl(input: $input) {
       id
       username
@@ -163,6 +166,7 @@ export const updateEmpl = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt
@@ -205,6 +209,7 @@ export const deleteEmployee = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt
@@ -319,6 +324,7 @@ export const createEmployee = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt
@@ -361,6 +367,7 @@ export const updateEmployee = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt

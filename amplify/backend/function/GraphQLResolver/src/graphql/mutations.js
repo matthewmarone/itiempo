@@ -1,28 +1,5 @@
 /* eslint-disable */
-const deleteCompany = /* GraphQL */ `
-  mutation DeleteCompany(
-    $input: DeleteCompanyInput!
-    $condition: ModelCompanyConditionInput
-  ) {
-    deleteCompany(input: $input, condition: $condition) {
-      id
-      name
-      website
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      allowUpdate
-    }
-  }
-`;
+
 const deleteEmployee = /* GraphQL */ `
   mutation DeleteEmployee(
     $input: DeleteEmployeeInput!
@@ -30,7 +7,9 @@ const deleteEmployee = /* GraphQL */ `
   ) {
     deleteEmployee(input: $input, condition: $condition) {
       id
+      username
       profilePhoto
+      email
       email_2
       firstName
       lastName
@@ -43,13 +22,6 @@ const deleteEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
       payRates {
         name
         amount
@@ -62,30 +34,12 @@ const deleteEmployee = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
-    }
-  }
-`;
-const updateCompany = /* GraphQL */ `
-  mutation UpdateCompany(
-    $input: UpdateCompanyInput!
-    $condition: ModelCompanyConditionInput
-  ) {
-    updateCompany(input: $input, condition: $condition) {
-      id
-      name
-      website
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
+      inactive
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      allowUpdate
     }
   }
 `;
@@ -113,45 +67,51 @@ const createCompany = /* GraphQL */ `
     }
   }
 `;
-const updateEmployee = /* GraphQL */ `
-  mutation UpdateEmployee(
-    $input: UpdateEmployeeInput!
-    $condition: ModelEmployeeConditionInput
+const updateCompany = /* GraphQL */ `
+  mutation UpdateCompany(
+    $input: UpdateCompanyInput!
+    $condition: ModelCompanyConditionInput
   ) {
-    updateEmployee(input: $input, condition: $condition) {
+    updateCompany(input: $input, condition: $condition) {
       id
-      profilePhoto
-      email_2
-      firstName
-      lastName
-      phone
-      phone_2
+      name
+      website
       addressLine1
       addressLine2
       city
       state
       zip
       country
-      jobTitle
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      username
-      email
-      payRates {
-        name
-        amount
-        isHourly
-        isDefault
-      }
-      roles
-      companyId
-      primaryManagerId
-      managerIds
-      allowRead
-      allowFull
+      allowUpdate
+    }
+  }
+`;
+const deleteCompany = /* GraphQL */ `
+  mutation DeleteCompany(
+    $input: DeleteCompanyInput!
+    $condition: ModelCompanyConditionInput
+  ) {
+    deleteCompany(input: $input, condition: $condition) {
+      id
+      name
+      website
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      allowUpdate
     }
   }
 `;
@@ -162,7 +122,9 @@ const createEmployee = /* GraphQL */ `
   ) {
     createEmployee(input: $input, condition: $condition) {
       id
+      username
       profilePhoto
+      email
       email_2
       firstName
       lastName
@@ -175,13 +137,6 @@ const createEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      username
-      email
       payRates {
         name
         amount
@@ -194,6 +149,55 @@ const createEmployee = /* GraphQL */ `
       managerIds
       allowRead
       allowFull
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+const updateEmployee = /* GraphQL */ `
+  mutation UpdateEmployee(
+    $input: UpdateEmployeeInput!
+    $condition: ModelEmployeeConditionInput
+  ) {
+    updateEmployee(input: $input, condition: $condition) {
+      id
+      username
+      profilePhoto
+      email
+      email_2
+      firstName
+      lastName
+      phone
+      phone_2
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      jobTitle
+      payRates {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      roles
+      companyId
+      primaryManagerId
+      managerIds
+      allowRead
+      allowFull
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
     }
   }
 `;

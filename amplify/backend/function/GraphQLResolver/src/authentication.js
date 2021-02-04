@@ -120,6 +120,7 @@ const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
 exports.OWNER_ROLE = OWNER_ROLE;
 exports.ADMIN_ROLE = ADMIN_ROLE;
 exports.MANAGER_ROLE = MANAGER_ROLE;
+exports.ACCOUNTANT_ROLE = ACCOUNTANT_ROLE;
 exports.DEFAULT_EMPLOYEE_ROLE = DEFAULT_EMPLOYEE_ROLE;
 exports.isAuthorizedToUpdateRole = isAuthorizedToUpdateRole;
 exports.isAuthorizedToUpdateEmployee = isAuthorizedToUpdateEmployee;

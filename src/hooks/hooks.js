@@ -10,7 +10,7 @@ import {
   createTimeRecord as createTimeRecordGQL,
   updateTimeRecord as updateTimeRecordGQL,
   createUser as createUserGQL,
-  updateEmployee as updateEmployeeGQL,
+  updateEmpl as updateEmployeeGQL,
   updateUserRole as updateUserRoleGQL,
 } from "graphql/mutations";
 import { Logger } from "aws-amplify";
