@@ -3,7 +3,7 @@ const ADMIN_ROLE = "Admin";
 const MANAGER_ROLE = "Manager";
 const DEFAULT_EMPLOYEE_ROLE = "Employee";
 const ACCOUNTANT_ROLE = "Accountant";
-// eslint-disable-next-line no-unused-vars
+
 const ROLE_Weight = {
   [OWNER_ROLE]: 4,
   [ADMIN_ROLE]: 3,
@@ -35,7 +35,8 @@ const isRoleGreater = (greater, lessor) =>
 const isAuthorizedToUpdateEmployee = (requestorClaims, employee) => {
   const { eId, cId, "cognito:groups": requestorsRoleArr } = requestorClaims;
   const { id, roles, primaryManagerId, companyId, managerIds = [] } = employee;
-  if (!(roles && primaryManagerId && companyId)) return { authorized: false };
+  if (!(roles && primaryManagerId && companyId))
+    return { authorized: false, reason: "Required fields are not present" };
 
   // Extract the highest assigned role of the requester (logged in usr)
   let requestorsHighestRole = DEFAULT_EMPLOYEE_ROLE;
@@ -63,23 +64,33 @@ const isAuthorizedToUpdateEmployee = (requestorClaims, employee) => {
   const retVal = { requestorsHighestRole, employeesHighestRole };
 
   // Making sure the requetor is not hacking into another company
-  if (cId !== companyId) return { ...retVal, authorized: false };
-
-  // Users with Role Employee can only update themselves
-  if (requestorsHighestRole === DEFAULT_EMPLOYEE_ROLE && eId !== id)
-    return { ...retVal, authorized: false };
-
-  // Making sure a manager is only updating their employee
-  // Note their employee could also be an admin or owner and this still passes
-  if (
-    requestorsHighestRole === MANAGER_ROLE &&
-    ![primaryManagerId, ...managerIds].includes(eId)
-  )
-    return { ...retVal, authorized: false };
-
-  // Everyone above a manager is authorized
-  // Passed all test
-  return { ...retVal, authorized: true };
+  if (cId === companyId) {
+    if (
+      // Employees can make some updates to themselves, and
+      eId === id ||
+      // Admins and owners can always update
+      isRoleGreater(requestorsHighestRole, MANAGER_ROLE) ||
+      // Or they are a manager that manages this employee
+      (requestorsHighestRole === MANAGER_ROLE &&
+        [primaryManagerId, ...managerIds].includes(eId))
+    ) {
+      return { ...retVal, authorized: true };
+    } else {
+      return {
+        ...retVal,
+        authorized: false,
+        reason:
+          "User a is unauthorized to update employee b: " +
+          JSON.stringify({ a: requestorClaims, b: employee }, null, 4),
+      };
+    }
+  } else {
+    return {
+      ...retVal,
+      authorized: false,
+      reason: "User belongs to another company",
+    };
+  }
 };
 
 /**
@@ -91,6 +102,8 @@ const isAuthorizedToUpdateEmployee = (requestorClaims, employee) => {
  * @param {*} newRole - enum ["Owner", "Admin", "Manager", "Employee",]
  */
 const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
+  // Check that the roles is legit
+  if (!ROLE_Weight[newRole]) return false;
   const { eId } = requestorClaims;
   const { id = eId } = employee;
   const {

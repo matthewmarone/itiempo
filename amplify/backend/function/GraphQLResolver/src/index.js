@@ -301,7 +301,10 @@ const resolvers = {
         // employeesHighestRole,
         authorized,
       } = isAuthorizedToUpdateEmployee(claims, employeeInput);
-      if (!authorized) throw new Error("Unauthorized to update employee");
+      if (!authorized) {
+        console.warn("Unauthorized to update employee", JSON.stringify(ctx, null, 4))
+        throw new Error("Unauthorized to update employee");
+      }
       // GraphQL arguments from client
       // Remvoe the fields that this resolver shouldn't update
       // This allowed the client to easily pass all employee fields if it wished
@@ -330,7 +333,7 @@ const resolvers = {
         errors,
       } = await api.UpdateEmployee({ input });
 
-      console.log(JSON.stringify({ updateEmployee, errors }, null, 4)); // for testing
+      // console.log(JSON.stringify({ updateEmployee, errors }, null, 4)); // for testing
 
       if (errors || !updateEmployee) {
         console.warn(errors);
