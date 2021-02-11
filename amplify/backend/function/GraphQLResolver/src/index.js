@@ -302,7 +302,10 @@ const resolvers = {
         authorized,
       } = isAuthorizedToUpdateEmployee(claims, employeeInput);
       if (!authorized) {
-        console.warn("Unauthorized to update employee", JSON.stringify(ctx, null, 4))
+        console.warn(
+          "Unauthorized to update employee",
+          JSON.stringify(ctx, null, 4)
+        );
         throw new Error("Unauthorized to update employee");
       }
       // GraphQL arguments from client
@@ -312,6 +315,7 @@ const resolvers = {
         username,
         email,
         roles,
+        updateRoles,
         companyId,
         allowRead,
         allowFull,
@@ -327,11 +331,43 @@ const resolvers = {
             primaryManagerId: undefined,
             managerIds: undefined,
           };
-      console.log(JSON.stringify(input, null, 4));
+
+      const doRoleUpdate =
+        updateRoles &&
+        updateRoles.reduce(
+          (accum, role) =>
+            accum && isAuthorizedToUpdateRole(claims, employeeInput, role),
+          true
+        );
+
+      if (doRoleUpdate) input.roles = updateRoles;
+
+      const { cId, eId } = claims;
+      const condition = {
+        and: [
+          { username: { eq: username } },
+          { companyId: { eq: cId } },
+          ...roles.map((r) => {
+            return { roles: { contains: r } };
+          }),
+        ],
+      };
+      // Add a check for the manager if the requestor is a manager
+      if (requestorsHighestRole === MANAGER_ROLE) {
+        condition.and[condition.and.length] = {
+          or: [
+            { primaryManagerId: { eq: eId } },
+            { managerIds: { contains: eId } },
+          ],
+        };
+      }
+
+      console.log(JSON.stringify({ input, condition }, null, 4));
+
       const {
         data: { updateEmployee } = {},
         errors,
-      } = await api.UpdateEmployee({ input });
+      } = await api.UpdateEmployee({ input, condition });
 
       // console.log(JSON.stringify({ updateEmployee, errors }, null, 4)); // for testing
 
@@ -343,6 +379,31 @@ const resolvers = {
           }`;
           throw new Error(errorMessage);
         }
+      }
+
+      if (doRoleUpdate) {
+        // Update the cognito user as well
+        const Value = updateRoles.reduce((a, c) => `${a},${c}`);
+        const UserAttributes = [
+          // Transform roles array to comma seperated list of roles
+          {
+            Name: "custom:roles",
+            Value,
+          },
+        ];
+
+        // Update Cognito User
+        user
+          .updateUserAttributes(username, UserAttributes)
+          .then(() => user.globalSignOut(username))
+          .catch(
+            (e) =>
+              console.error(
+                `Failed to update user role (${username}) to ${Value}`,
+                e
+              )
+            // TODO (Matt) reset roles on employee record
+          );
       }
 
       return updateEmployee;

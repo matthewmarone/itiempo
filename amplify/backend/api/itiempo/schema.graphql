@@ -212,7 +212,7 @@ input CreateUserInput {
 }
 input emplInput {
   id: ID!
-  username: String # Write once, implemented in GraphQLResolver
+  username: String! # Write once, implemented in GraphQLResolver
   profilePhoto: String
   email: AWSEmail # Restricted field, implemented in GraphQLResolver
   email_2: AWSEmail
@@ -229,6 +229,7 @@ input emplInput {
   jobTitle: String
   payRates: [PayRateUpsertInput!] # Restricted field, implemented in GraphQLResolver
   roles: [Role!]! # Restricted field, implemented in GraphQLResolver
+  updateRoles:[Role!]
   companyId: ID! # Write once, implemented in GraphQLResolver
   primaryManagerId: ID! # Restricted field, implemented in GraphQLResolver
   managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
