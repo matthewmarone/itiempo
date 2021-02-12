@@ -319,6 +319,11 @@ const resolvers = {
         companyId,
         allowRead,
         allowFull,
+        inactive,
+        _deleted,
+        _lastChangedAt,
+        createdAt,
+        updatedAt,
         ...updateFields
       } = employeeInput;
       const input = isRoleGreater(requestorsHighestRole, DEFAULT_EMPLOYEE_ROLE)
@@ -407,89 +412,6 @@ const resolvers = {
       }
 
       return updateEmployee;
-    },
-    updateUserRole: async (ctx) => {
-      // GraphQL arguments from client
-      const {
-        username,
-        employeeId,
-        managerIds,
-        roles,
-        previousRoles,
-        _version,
-      } = ctx.arguments;
-      // The requesters signed identity claims
-      const { cId } = ctx.identity.claims;
-
-      // Loop through the role being asigned and make sure
-      // the requestor is authorized to assign each role
-      const mockEmployee = {
-        roles: previousRoles,
-        primaryManagerId: managerIds[0],
-        companyId: cId,
-      };
-      const roleAuthorized = roles.reduce(
-        (accum, role) =>
-          accum &&
-          isAuthorizedToUpdateRole(ctx.identity.claims, mockEmployee, role),
-        true
-      );
-      // Throw violation
-      if (!roleAuthorized) throw new Error("Role authorization error");
-
-      const UserAttributes = [
-        // Transform roles array to comma seperated list of roles
-        { Name: "custom:roles", Value: roles.reduce((a, c) => `${a},${c}`) },
-      ];
-
-      // Update Cognito User
-      const updateUserPromise = user.updateUserAttributes(
-        username,
-        UserAttributes
-      );
-      // Update Employee Record
-      const updateEmployeePromise = api.UpdateEmployee({
-        input: {
-          id: employeeId,
-          roles,
-          _version,
-        },
-        condition: {
-          and: [
-            { username: { eq: username } },
-            { companyId: { eq: cId } },
-            ...previousRoles.map((r) => {
-              return { roles: { contains: r } };
-            }),
-            // TODO: Add managers
-          ],
-        },
-      });
-      // Asynchronously update User and Employee role
-      const [userRes, employeeRes] = await Promise.all([
-        updateUserPromise.catch((error) => {
-          console.error(error);
-          return null;
-        }),
-        updateEmployeePromise.catch((error) => {
-          console.error(error);
-          return null;
-        }),
-      ]);
-
-      // TODO (Matthew): Can we handle these (allbeit rare) errors better?
-      if (!userRes) throw new Error("Could not update user");
-      if (!employeeRes || (employeeRes && !employeeRes.data.updateEmployee)) {
-        const { errors } = employeeRes || {};
-        if (errors && errors[0] && errors[0].message) {
-          throw new Error(errors[0].message);
-        } else {
-          throw new Error("Could not update Employee");
-        }
-      }
-      console.log(JSON.stringify(employeeRes.data, null, 4)); // for testing
-
-      return employeeRes.data.updateEmployee;
     },
   },
 };

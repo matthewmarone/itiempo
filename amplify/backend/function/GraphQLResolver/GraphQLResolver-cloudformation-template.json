@@ -25,6 +25,12 @@
     "functioniTiempoModulesArn": {
       "Type": "String",
       "Default": "functioniTiempoModulesArn"
+    },
+    "deploymentBucketName": {
+      "Type": "String"
+    },
+    "s3Key": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -97,8 +103,12 @@
         ],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-itiempo-tempdev-102053-deployment",
-          "S3Key": "amplify-builds/GraphQLResolver-7251704776506c515858-build.zip"
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": {
+            "Ref": "s3Key"
+          }
         }
       }
     },

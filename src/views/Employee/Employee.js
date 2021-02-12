@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Grid } from "@material-ui/core";
 import { EmployeeProfile, EmployeeDetails, EmployeeSetup } from "./components";
 import { Logger } from "aws-amplify";
-import { useGetEmployee, useUpdateEmployee, useUpdateUserRole } from "hooks";
+import { useGetEmployee, useUpdateEmployee } from "hooks";
 
 // eslint-disable-next-line no-unused-vars
 const logger = new Logger("Employee.js", "ERROR");
@@ -17,51 +17,28 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(4),
   },
 }));
+/**
+ *
+ * @param {*} props
+ */
+const LoadingView = (props) => "Loading...";
 
-const Loading = (props) => "Loading...";
-
-const Employee = (props) => {
-  const classes = useStyles();
-
-  const { match } = props;
-  const { id: employeeId } = match && match.params ? match.params : {};
-
-  const [setId, { loading, error, data }] = useGetEmployee(employeeId);
-  const { getEmployee } = data || {};
-
-  const [employeeState, setEmployeeState] = useState(getEmployee);
+const EmployeeView = (props) => {
+  const { employee } = props;
+  const [employeeState, setEmployeeState] = useState(employee);
   const [updatedFields, setUpdatedFields] = useState({});
+  const [updateEmployee, { loading: updating, error }] = useUpdateEmployee();
+  if (error) logger.warn(error);
 
-  const [updateEmployee, { loading: updatingEmpl }] = useUpdateEmployee();
-  const [updateRole, { loading: updatingRole }] = useUpdateUserRole();
-  const updating = updatingEmpl || updatingRole;
-
+  /**
+   *
+   */
   useEffect(() => {
-    // Query for new employee when id changes
-    if (employeeId) setId(employeeId);
-  }, [employeeId, setId]);
-
-  useEffect(() => {
-    if (getEmployee && !employeeState) {
-      // Set the employee the 1st time
-      setEmployeeState(getEmployee);
-    } else if (getEmployee && employeeState) {
-      const { id } = getEmployee;
-      const { id: existingId } = employeeState;
-      if (id !== existingId) {
-        // Display new Employee
-        setEmployeeState(getEmployee);
-        setUpdatedFields({});
-      } else {
-        setEmployeeState(getEmployee);
-      }
-    } else if (!getEmployee && employeeState) {
-      logger.warn(
-        "Unimplemented case, there was probably an error updating the employee or usr navigated to non-existant employee page."
-      );
-    }
-    // Else still loading or error on 1st load
-  }, [employeeState, getEmployee]);
+    setEmployeeState((preEmpl) => {
+      if (preEmpl.id !== employee.id) setUpdatedFields({});
+      return employee;
+    });
+  }, [employee]);
 
   /**
    *
@@ -73,45 +50,24 @@ const Employee = (props) => {
   }, []);
 
   /**
-   *
+   * Called by handleSave or handlePhotoSave
    */
   const update = useCallback(
     (currEmployee, updatedFields) => {
-      const {
-        id,
-        _version,
-        username,
-        primaryManagerId,
-        companyId,
-        roles,
-      } = currEmployee;
-      const { role, ...changes } = updatedFields;
+      const { roles: updateRoles, ...changes } = updatedFields;
       if (changes) {
         const variables = {
           input: {
-            id,
-            roles,
-            companyId,
-            primaryManagerId,
-            _version,
+            ...currEmployee,
             ...changes,
+            updateRoles,
+            __typename: undefined,
           },
         };
         updateEmployee({ variables });
       }
-      if (role)
-        updateRole({
-          variables: {
-            username,
-            employeeId: id,
-            managerIds: [primaryManagerId],
-            roles: [role],
-            previousRoles: roles,
-            _version: !changes ? _version : _version + 1,
-          },
-        });
     },
-    [updateEmployee, updateRole]
+    [updateEmployee]
   );
 
   /**
@@ -130,47 +86,64 @@ const Employee = (props) => {
     [employeeState, update]
   );
 
-  const employee = useMemo(() => {
-    return { ...(employeeState || {}), ...updatedFields };
+  // The employee data to render
+  const employeeModal = useMemo(() => {
+    return { ...employeeState, ...updatedFields };
   }, [employeeState, updatedFields]);
 
-  if (error) logger.error(error);
+  return (
+    <Grid container spacing={4}>
+      <Grid container item xl={4} lg={4} md={6} xs={12} spacing={4}>
+        <Grid item xs={12}>
+          <EmployeeProfile
+            employee={employeeModal}
+            onPhotoSave={handlePhotoSave}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <EmployeeSetup
+            employee={employeeModal}
+            onChange={handleChange}
+            onSave={handleSave}
+            saving={updating}
+          />
+        </Grid>
+      </Grid>
+      <Grid container item xl={8} lg={8} md={6} xs={12} spacing={4}>
+        <Grid item xs={12}>
+          <EmployeeDetails
+            employee={employeeModal}
+            onChange={handleChange}
+            onSave={handleSave}
+            saving={updating}
+          />
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+};
+EmployeeView.propTypes = {
+  employee: PropTypes.object.isRequired,
+};
+
+/**
+ *
+ * @param {*} props
+ */
+const Employee = (props) => {
+  const classes = useStyles();
+  const { match: { params: { id: employeeId } = {} } = {} } = props;
+  const [setId, { error, data }] = useGetEmployee(employeeId);
+  if (error) logger.warn(error);
+  const { getEmployee: employee } = data || {};
+
+  useEffect(() => {
+    if (employeeId) setId(employeeId);
+  }, [employeeId, setId]);
+
   return (
     <div className={classes.root}>
-      {loading ? (
-        <Loading />
-      ) : (
-        !employeeState || (
-          <Grid container spacing={4}>
-            <Grid container item xl={4} lg={4} md={6} xs={12} spacing={4}>
-              <Grid item xs={12}>
-                <EmployeeProfile
-                  employee={employee}
-                  onPhotoSave={handlePhotoSave}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <EmployeeSetup
-                  employee={employee}
-                  onChange={handleChange}
-                  onSave={handleSave}
-                  saving={updating}
-                />
-              </Grid>
-            </Grid>
-            <Grid container item xl={8} lg={8} md={6} xs={12} spacing={4}>
-              <Grid item xs={12}>
-                <EmployeeDetails
-                  employee={employee}
-                  onChange={handleChange}
-                  onSave={handleSave}
-                  saving={updating}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        )
-      )}
+      {!employee ? <LoadingView /> : <EmployeeView employee={employee} />}
     </div>
   );
 };

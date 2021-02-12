@@ -114,7 +114,10 @@
       "function": {
         "authPreSignup": {},
         "authPreTokenGeneration": {},
-        "GraphQLResolver": {},
+        "GraphQLResolver": {
+          "deploymentBucketName": "amplify-itiempo-tempdev-102053-deployment",
+          "s3Key": "amplify-builds/GraphQLResolver-46443433796143647974-build.zip"
+        },
         "iTiempoModules": {
           "deploymentBucketName": "amplify-itiempo-tempdev-102053-deployment",
           "s3Key": "amplify-builds/iTiempoModules-build.zip"

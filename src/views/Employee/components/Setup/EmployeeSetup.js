@@ -96,17 +96,12 @@ const EmployeeSetup = (props) => {
   const {
     listEmployeesByEmail: { items: employees = [] },
   } = data || { listEmployeesByEmail: {} };
-  const {
-    primaryManagerId,
-    jobTitle,
-    payRates = [],
-    roles,
-    role: r, // Role is not a real employee field
-  } = employee;
-  const role = r || (roles && roles[0] ? roles[0] : "Employee");
+  const { primaryManagerId, jobTitle, payRates = [], roles } = employee;
+  const role = roles && roles[0] ? roles[0] : "Employee";
 
-  const handleChange = (e) => {
-    onChange({ [e.target.name]: e.target.value });
+  const handleChange = ({ target: { name, value } }) => {
+    const role = name === "role";
+    onChange({ [role ? "roles" : name]: role ? [value] : value });
   };
 
   const validRate = (rate) => {

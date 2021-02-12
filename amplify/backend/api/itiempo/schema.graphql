@@ -2,14 +2,6 @@ type Mutation {
   setupNewAccount: Employee! @function(name: "GraphQLResolver-${env}")
   createUser(input: CreateUserInput!): Employee
     @function(name: "GraphQLResolver-${env}")
-  updateUserRole(
-    username: ID!
-    employeeId: ID!
-    managerIds: [String!]!
-    roles: [Role!]!
-    previousRoles: [Role!]!
-    _version: Int!
-  ): Employee @function(name: "GraphQLResolver-${env}")
   updateEmpl(input: emplInput!): Employee
     @function(name: "GraphQLResolver-${env}")
 }
@@ -235,7 +227,12 @@ input emplInput {
   managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
   allowRead: [String!] # Write once, implemented in GraphQLResolver
   allowFull: [String!] # Write once, implemented in GraphQLResolver
+  inactive: Boolean
   _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
 }
 input PayRateUpsertInput {
   name: String

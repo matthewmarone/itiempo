@@ -172,6 +172,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
+                },
+                "inactive": {
+                    "name": "inactive",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -610,5 +617,5 @@ export const schema = {
             }
         }
     },
-    "version": "27f7ad567e0448dc948cc7b6886da922"
+    "version": "1abe409e571cf71b5d756d653de19037"
 };
