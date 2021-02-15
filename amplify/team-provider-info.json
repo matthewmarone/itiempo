@@ -21,7 +21,8 @@
         "iTiempoModules": {
           "deploymentBucketName": "amplify-itiempo-prod-123019-deployment",
           "s3Key": "amplify-builds/iTiempoModules-build.zip"
-        }
+        },
+        "GraphQLResolver": {}
       },
       "hosting": {
         "amplifyhosting": {
@@ -41,54 +42,6 @@
                 }
               ],
               "hash": "3JaQYrLTNg+YBOV9G6XU+tbNqd4sIgXLMKslnNjxXy4="
-            }
-          }
-        }
-      }
-    }
-  },
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-itiempo-dev-123613-authRole",
-      "UnauthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-dev-123613-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-dev-123613-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-itiempo-dev-123613-deployment",
-      "UnauthRoleName": "amplify-itiempo-dev-123613-unauthRole",
-      "StackName": "amplify-itiempo-dev-123613",
-      "StackId": "arn:aws:cloudformation:us-east-1:388597641926:stack/amplify-itiempo-dev-123613/27f7ae50-56a8-11eb-ad6a-0a9564c9a859",
-      "AmplifyAppId": "d1gvlkpw4nf2kk"
-    },
-    "categories": {
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d1gvlkpw4nf2kk",
-          "type": "cicd"
-        }
-      },
-      "function": {
-        "iTiempoModules": {
-          "deploymentBucketName": "amplify-itiempo-dev-123613-deployment",
-          "s3Key": "amplify-builds/iTiempoModules-build.zip"
-        },
-        "authPreSignup": {},
-        "authPreTokenGeneration": {}
-      },
-      "auth": {
-        "auth": {}
-      }
-    },
-    "nonCFNdata": {
-      "function": {
-        "iTiempoModules": {
-          "layerVersionMap": {
-            "1": {
-              "permissions": [
-                {
-                  "type": "private"
-                }
-              ],
-              "hash": "LV7BVHQSGVwZSbdUll/4eK8PXgT1gl3vLrhEiSNOH+o="
             }
           }
         }
