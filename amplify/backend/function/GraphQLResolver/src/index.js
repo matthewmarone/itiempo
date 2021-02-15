@@ -396,19 +396,20 @@ const resolvers = {
             Value,
           },
         ];
-
         // Update Cognito User
-        user
-          .updateUserAttributes(username, UserAttributes)
-          .then(() => user.globalSignOut(username))
-          .catch(
-            (e) =>
-              console.error(
-                `Failed to update user role (${username}) to ${Value}`,
-                e
-              )
-            // TODO (Matt) reset roles on employee record
+        try {
+          const roleP = user.updateUserAttributes(username, UserAttributes);
+          const singoutP = user.globalSignOut(username);
+          // const [roleResp, singoutResp] =
+          await Promise.all([roleP, singoutP.catch((e) => e)]);
+          // console.log(JSON.stringify({ roleResp, singoutResp }, null, 4));
+        } catch (e) {
+          console.error(
+            `Failed to update user (${username}) role to "${Value}"`,
+            e
           );
+          // TODO: reset the employee role back to the original
+        }
       }
 
       return updateEmployee;
