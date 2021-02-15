@@ -90,7 +90,7 @@ const TimeTableFilter = (props) => {
                 <TextField
                   {...params}
                   label={
-                    selectedEmployees.length > 0 ? "Employee" : "All Employees"
+                    selectedEmployees.length > 0 ? "Employee" : "Select Employee(s)"
                   }
                   variant="outlined"
                   placeholder="Select employees to include"

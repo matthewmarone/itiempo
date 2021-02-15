@@ -9,7 +9,6 @@ export {
   useListEmployeesByEmail,
   useCreateEmployee,
   useUpdateEmployee,
-  useUpdateUserRole,
   useListEmployeeTimeRecord,
   useListCompanyTimeRecord,
   useSetupNewAccount,

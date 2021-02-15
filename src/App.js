@@ -151,31 +151,6 @@ const client = new ApolloClient({
   },
 });
 
-// export const awsAppSyncClient = new AWSAppSyncClient({
-//   url: awsconfig.aws_appsync_graphqlEndpoint,
-//   region: awsconfig.aws_appsync_region,
-//   auth: {
-//     type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
-//     jwtToken: async () =>
-//       (await Auth.currentSession()).getIdToken().getJwtToken(),
-//   },
-//   complexObjectsCredentials: () => Auth.currentCredentials(),
-//   cacheOptions: {
-//     cacheRedirects: {
-//       Query: {
-//         getEmployee: (_, args, { getCacheKey }) => {
-//           return getCacheKey({ __typename: "Employee", id: args.id });
-//         },
-//       },
-//     },
-//     onError: (errorObj) => {
-//       logger.error("Appsync Client Error", errorObj);
-//       const { response } = errorObj;
-//       if (errorObj) response.errors = null;
-//     },
-//   },
-// });
-
 const App = () => {
   return (
     <AppStateProvider>

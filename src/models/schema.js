@@ -55,14 +55,14 @@ export const schema = {
                 "phone": {
                     "name": "phone",
                     "isArray": false,
-                    "type": "AWSPhone",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
                 "phone_2": {
                     "name": "phone_2",
                     "isArray": false,
-                    "type": "AWSPhone",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -133,55 +133,52 @@ export const schema = {
                     },
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true
+                    "isArrayNullable": false
                 },
-                "company": {
-                    "name": "company",
+                "companyId": {
+                    "name": "companyId",
                     "isArray": false,
-                    "type": {
-                        "model": "Company"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "companyId"
-                    }
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
-                "timeRecords": {
-                    "name": "timeRecords",
+                "primaryManagerId": {
+                    "name": "primaryManagerId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "managerIds": {
+                    "name": "managerIds",
                     "isArray": true,
-                    "type": {
-                        "model": "TimeRecord"
-                    },
+                    "type": "ID",
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "employee"
-                    }
+                    "isArrayNullable": true
                 },
-                "primaryManager": {
-                    "name": "primaryManager",
-                    "isArray": false,
-                    "type": {
-                        "model": "Employee"
-                    },
-                    "isRequired": false,
+                "allowRead": {
+                    "name": "allowRead",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": true,
                     "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "primaryManagerId"
-                    }
+                    "isArrayNullable": false
                 },
                 "allowFull": {
                     "name": "allowFull",
                     "isArray": true,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true
+                    "isArrayNullable": false
+                },
+                "inactive": {
+                    "name": "inactive",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -189,7 +186,11 @@ export const schema = {
             "attributes": [
                 {
                     "type": "model",
-                    "properties": {}
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
                 },
                 {
                     "type": "key",
@@ -216,13 +217,25 @@ export const schema = {
                                 ]
                             },
                             {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "ForbiddenGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete"
+                                ]
+                            },
+                            {
                                 "provider": "userPools",
                                 "ownerField": "id",
                                 "allow": "owner",
                                 "identityClaim": "eId",
                                 "operations": [
-                                    "read",
-                                    "update"
+                                    "read"
                                 ]
                             },
                             {
@@ -231,10 +244,28 @@ export const schema = {
                                 "allow": "owner",
                                 "identityClaim": "eId",
                                 "operations": [
-                                    "update",
-                                    "delete",
                                     "read"
                                 ]
+                            },
+                            {
+                                "groupClaim": "eId",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groupsField": "managerIds",
+                                "operations": [
+                                    "read"
+                                ],
+                                "groupField": "groups"
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groupsField": "allowRead",
+                                "operations": [
+                                    "read"
+                                ],
+                                "groupField": "groups"
                             },
                             {
                                 "groupClaim": "cognito:groups",
@@ -242,8 +273,6 @@ export const schema = {
                                 "allow": "groups",
                                 "groupsField": "allowFull",
                                 "operations": [
-                                    "update",
-                                    "delete",
                                     "read"
                                 ],
                                 "groupField": "groups"
@@ -319,34 +348,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "employees": {
-                    "name": "employees",
-                    "isArray": true,
-                    "type": {
-                        "model": "Employee"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "company"
-                    }
-                },
-                "timeRecords": {
-                    "name": "timeRecords",
-                    "isArray": true,
-                    "type": {
-                        "model": "TimeRecord"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "company"
-                    }
-                },
                 "allowUpdate": {
                     "name": "allowUpdate",
                     "isArray": true,
@@ -361,7 +362,11 @@ export const schema = {
             "attributes": [
                 {
                     "type": "model",
-                    "properties": {}
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
                 },
                 {
                     "type": "auth",
@@ -394,6 +399,18 @@ export const schema = {
                                 "operations": [
                                     "read"
                                 ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "ForbiddenGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "delete"
+                                ]
                             }
                         ]
                     }
@@ -410,44 +427,34 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "company": {
-                    "name": "company",
+                "employeeId": {
+                    "name": "employeeId",
                     "isArray": false,
-                    "type": {
-                        "model": "Company"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "companyId"
-                    }
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
-                "employee": {
-                    "name": "employee",
+                "companyId": {
+                    "name": "companyId",
                     "isArray": false,
-                    "type": {
-                        "model": "Employee"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "employeeId"
-                    }
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
-                "primaryManage": {
-                    "name": "primaryManage",
+                "primaryManagerId": {
+                    "name": "primaryManagerId",
                     "isArray": false,
-                    "type": {
-                        "model": "Employee"
-                    },
-                    "isRequired": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "managerIds": {
+                    "name": "managerIds",
+                    "isArray": true,
+                    "type": "ID",
+                    "isRequired": true,
                     "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "primaryManagerId"
-                    }
+                    "isArrayNullable": true
                 },
                 "timestampIn": {
                     "name": "timestampIn",
@@ -506,26 +513,10 @@ export const schema = {
             "attributes": [
                 {
                     "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
                     "properties": {
-                        "name": "byCompany",
-                        "fields": [
-                            "companyId",
-                            "employeeId"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byEmployee",
-                        "fields": [
-                            "employeeId",
-                            "companyId"
-                        ]
+                        "subscriptions": {
+                            "level": "off"
+                        }
                     }
                 },
                 {
@@ -626,5 +617,5 @@ export const schema = {
             }
         }
     },
-    "version": "1bf77c098280b852510923d9a88f8d88"
+    "version": "1abe409e571cf71b5d756d653de19037"
 };

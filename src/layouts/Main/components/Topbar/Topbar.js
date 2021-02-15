@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   signOutButton: {
     marginLeft: theme.spacing(1),
   },
+  image: {
+    height: "1.175em",
+  },
 }));
 
 const Topbar = (props) => {
@@ -34,7 +37,11 @@ const Topbar = (props) => {
     <AppBar {...rest} className={clsx(classes.root, className)}>
       <Toolbar>
         <RouterLink to="/">
-          <img alt="Logo" src="/images/logos/iTiempo - White.svg" />
+          <img
+            alt="Logo"
+            src="/images/logos/iTiempo - White.svg"
+            className={classes.image}
+          />
         </RouterLink>
         <div className={classes.flexGrow} />
         {/* <Hidden mdDown>

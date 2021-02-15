@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const getCompany = /* GraphQL */ `
   query GetCompany($id: ID!) {
     getCompany(id: $id) {
@@ -44,15 +46,18 @@ const getEmployee = /* GraphQL */ `
         isHourly
         isDefault
       }
+      roles
       companyId
       primaryManagerId
+      managerIds
+      allowRead
+      allowFull
+      inactive
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      roles
-      allowFull
     }
   }
 `;

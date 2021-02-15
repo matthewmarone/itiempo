@@ -104,7 +104,7 @@ const Sidebar = (props) => {
       <div {...rest} className={clsx(classes.root, className)}>
         <Profile
           profileName={
-            !employee ? undefined : `${employee.firstName} ${employee.lastName}`
+            !employee ? "First Last Name" : `${employee.firstName} ${employee.lastName}`
           }
           profileURL={profileURL}
           avatarURL={avatarURL}

@@ -2,17 +2,11 @@ type Mutation {
   setupNewAccount: Employee! @function(name: "GraphQLResolver-${env}")
   createUser(input: CreateUserInput!): Employee
     @function(name: "GraphQLResolver-${env}")
-  updateUserRole(
-    username: ID!
-    employeeId: ID!
-    managerIds: [String!]!
-    roles: [Role!]!
-    previousRoles: [Role!]!
-    _version: Int!
-  ): Employee @function(name: "GraphQLResolver-${env}")
+  updateEmpl(input: emplInput!): Employee
+    @function(name: "GraphQLResolver-${env}")
 }
 type Company
-  @model
+  @model(subscriptions: { level: off })
   @auth(
     rules: [
       # Allows creation only through GraphQLResolver (setupNewAccount)
@@ -30,6 +24,11 @@ type Company
         identityClaim: "cId"
         operations: [read]
       }
+      {
+        allow: groups
+        groups: ["ForbiddenGroup"]
+        operations: [create, delete]
+      }
     ]
   ) {
   id: ID!
@@ -41,27 +40,28 @@ type Company
   state: String
   zip: String
   country: String
-  employees: [Employee!] @connection(keyName: "byCompany", fields: ["id"])
-  timeRecords: [TimeRecord!] @connection(keyName: "byCompany", fields: ["id"])
   # allowUpdate is populated dynamically through the resolver to include:
   # Owener-${cId} and Admin-${cId}
   allowUpdate: [String]
     @auth(
       rules: [
         # Allows it to be set only once through setupNewAccount
-        { allow: private, provider: iam, operations: [create, read] }
         {
-          # Allow all memebers of a company to read
-          allow: owner
-          ownerField: "id"
-          identityClaim: "cId"
-          operations: [read]
+          allow: private
+          provider: iam
+          operations: [create, update, read, delete]
+        }
+        # Don't allow users access to modify
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete]
         }
       ]
     )
 }
 type Employee
-  @model
+  @model(subscriptions: { level: off })
   @key(
     name: "byCompany"
     fields: ["companyId", "email"]
@@ -71,37 +71,56 @@ type Employee
     rules: [
       # Only allow GraphQLResolver (setupNewAccount, addUser) to create
       { allow: private, provider: iam, operations: [create, update, read] }
+      # All creating, editing and deleting would be done through GraphQLResolver
       {
-        # Allow the employee itself to update and read it's own rec.
+        allow: groups
+        groups: ["ForbiddenGroup"]
+        operations: [create, update, delete]
+      }
+      {
+        # Allow the employee itself to read it's own record
         allow: owner
         ownerField: "id"
         identityClaim: "eId"
-        operations: [read, update]
+        operations: [read]
       }
       {
-        # Allow the employee's manager full access
+        # Allow the employee's primary manager to read
         allow: owner
         ownerField: "primaryManagerId"
         identityClaim: "eId"
-        operations: [update, delete, read]
+        operations: [read]
       }
       {
-        # Allow company admins/owners full access
+        # Allow all other managers to read
+        allow: groups
+        groupClaim: "eId"
+        groupsField: "managerIds"
+        operations: [read]
+      }
+      {
+        # For future groups like accountant or super manager
+        allow: groups
+        groupsField: "allowRead"
+        operations: [read]
+      }
+      {
+        # Allow company admins/owners full access, updates handled through GraphQLResolver
         allow: groups
         groupsField: "allowFull"
-        operations: [update, delete, read]
+        operations: [read]
       }
     ]
   ) {
   id: ID!
-  username: String!
+  username: String! # Write once, implemented in GraphQLResolver
   profilePhoto: String
-  email: AWSEmail!
+  email: AWSEmail! # Restricted field, implemented in GraphQLResolver
   email_2: AWSEmail
   firstName: String
   lastName: String
-  phone: AWSPhone
-  phone_2: AWSPhone
+  phone: String
+  phone_2: String
   addressLine1: String
   addressLine2: String
   city: String
@@ -109,35 +128,17 @@ type Employee
   zip: String
   country: String
   jobTitle: String
-  payRates: [PayRate!]
-  roles: [Role!]
-    @auth(
-      rules: [
-        # Allow all with access to read
-        { allow: private, provider: userPools, operations: [read] }
-        # Only allow GraphQLResolver to create, read, update
-        { allow: private, provider: iam, operations: [create, update, read] }
-      ]
-    )
-  companyId: ID!
-  company: Company @connection(fields: ["companyId"])
-  timeRecords: [TimeRecord!] @connection(keyName: "byEmployee", fields: ["id"])
-  primaryManagerId: ID!
-  primaryManager: Employee @connection(fields: ["primaryManagerId"])
-  allowFull: [String]
-    @auth(
-      rules: [
-        # Allow all with access to read
-        { allow: private, provider: userPools, operations: [read] }
-        # Allows it to be set only once through setupNewAccount or createUser
-        { allow: private, provider: iam, operations: [create, read] }
-      ]
-    )
+  payRates: [PayRate!] # Restricted field, implemented in GraphQLResolver
+  roles: [Role!]! # Restricted field, implemented in GraphQLResolver
+  companyId: ID! # Write once, implemented in GraphQLResolver
+  primaryManagerId: ID! # Restricted field, implemented in GraphQLResolver
+  managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
+  allowRead: [String!]! # Write once, implemented in GraphQLResolver
+  allowFull: [String!]! # Write once, implemented in GraphQLResolver
+  inactive: Boolean
 }
 type TimeRecord
-  @model
-  @key(name: "byCompany", fields: ["companyId", "employeeId"])
-  @key(name: "byEmployee", fields: ["employeeId", "companyId"])
+  @model(subscriptions: { level: off })
   @key(
     name: "byEmployeeTimestamp"
     fields: ["employeeId", "timestampIn"]
@@ -155,12 +156,10 @@ type TimeRecord
     ]
   ) {
   id: ID!
-  companyId: ID!
-  company: Company @connection(fields: ["companyId"])
   employeeId: ID!
-  employee: Employee @connection(fields: ["employeeId"])
+  companyId: ID!
   primaryManagerId: ID!
-  primaryManage: Employee @connection(fields: ["primaryManagerId"])
+  managerIds: [ID!]
   timestampIn: AWSTimestamp!
   timestampOut: AWSTimestamp
   photoIn: String
@@ -188,8 +187,8 @@ input CreateUserInput {
   email_2: AWSEmail
   firstName: String
   lastName: String
-  phone: AWSPhone
-  phone_2: AWSPhone
+  phone: String
+  phone_2: String
   addressLine1: String
   addressLine2: String
   city: String
@@ -197,12 +196,45 @@ input CreateUserInput {
   zip: String
   country: String
   jobTitle: String
-  payRates: [PayRateCreateInput!]
+  payRates: [PayRateUpsertInput!]
   roles: [Role!]!
   companyId: ID!
   primaryManagerId: ID!
+  managerIds: [ID!]
 }
-input PayRateCreateInput {
+input emplInput {
+  id: ID!
+  username: String! # Write once, implemented in GraphQLResolver
+  profilePhoto: String
+  email: AWSEmail # Restricted field, implemented in GraphQLResolver
+  email_2: AWSEmail
+  firstName: String
+  lastName: String
+  phone: String
+  phone_2: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  zip: String
+  country: String
+  jobTitle: String
+  payRates: [PayRateUpsertInput!] # Restricted field, implemented in GraphQLResolver
+  roles: [Role!]! # Restricted field, implemented in GraphQLResolver
+  updateRoles:[Role!]
+  companyId: ID! # Write once, implemented in GraphQLResolver
+  primaryManagerId: ID! # Restricted field, implemented in GraphQLResolver
+  managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
+  allowRead: [String!] # Write once, implemented in GraphQLResolver
+  allowFull: [String!] # Write once, implemented in GraphQLResolver
+  inactive: Boolean
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+input PayRateUpsertInput {
   name: String
   amount: Float!
   isHourly: Boolean!

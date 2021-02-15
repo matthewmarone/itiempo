@@ -8,75 +8,23 @@ Amplify Params - DO NOT EDIT */
 const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
-
-const OWNER_ROLE = "Owner";
-const ADMIN_ROLE = "Admin";
-const MANAGER_ROLE = "Manager";
-const DEFAULT_EMPLOYEE_ROLE = "Employee";
-// eslint-disable-next-line no-unused-vars
-const ROLE_Weight = {
-  [OWNER_ROLE]: 4,
-  [ADMIN_ROLE]: 3,
-  [MANAGER_ROLE]: 2,
-  [DEFAULT_EMPLOYEE_ROLE]: 1,
-};
-
-/**
- *
- * @param {*} requestorClaims
- * @param {*} employee
- * @param {*} newRole
- */
-const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
-  const { eId, cId, "cognito:groups": requestorsRoleArr } = requestorClaims;
-  const { roles, primaryManagerId, companyId } = employee;
-
-  // Extract the highest assigned role of the requester (logged in usr)
-  let requestorsRole = DEFAULT_EMPLOYEE_ROLE;
-  requestorsRoleArr.forEach((r) => {
-    // Ex: r = 'Owner-a03dc17c-a10c-437d-84de-35b5f0a675e5'
-    const [rName] = r.split("-");
-    const [, compId] = r.split(`${rName}-`);
-    if (compId === cId) {
-      // Choose the highest weight role
-      if (ROLE_Weight[rName] > ROLE_Weight[requestorsRole]) {
-        requestorsRole = r;
-      }
-    }
-  });
-  // Extract the highest role of the employee record being updated
-  let employeeCurRole = DEFAULT_EMPLOYEE_ROLE;
-  roles.forEach((r) => {
-    // Choose the highest weight role
-    if (ROLE_Weight[r] > ROLE_Weight[employeeCurRole]) {
-      employeeCurRole = r;
-    }
-  });
-
-  // Making sure the requetor is not hacking into another company
-  if (cId !== companyId) return false;
-
-  // Users with Role Employee are never authorized
-  if (requestorsRole === DEFAULT_EMPLOYEE_ROLE) return false;
-
-  // Making sure a manager is only updating their employee
-  if (requestorsRole === MANAGER_ROLE && eId !== primaryManagerId) return false;
-
-  // Making sure the role of the requester is not beneath the targeted employee
-  if (ROLE_Weight[requestorsRole] < ROLE_Weight[employeeCurRole]) return false;
-
-  // Making sure the requeater is not attempting to assign a role higher than its own
-  if (ROLE_Weight[newRole] > ROLE_Weight[requestorsRole]) return false;
-
-  return true;
-};
+const {
+  OWNER_ROLE,
+  ADMIN_ROLE,
+  MANAGER_ROLE,
+  ACCOUNTANT_ROLE,
+  DEFAULT_EMPLOYEE_ROLE,
+  isAuthorizedToUpdateEmployee,
+  isAuthorizedToUpdateRole,
+  isRoleGreater,
+} = require("./authentication");
 
 /**
  * Includes cId, eId, and roles
  */
 const getAppsCustomUserAttributes = () => [
   {
-    AttributeDataType: "string",
+    AttributeDataType: "String",
     DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "cId",
@@ -87,7 +35,7 @@ const getAppsCustomUserAttributes = () => [
     },
   },
   {
-    AttributeDataType: "string",
+    AttributeDataType: "String",
     DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "eId",
@@ -98,7 +46,7 @@ const getAppsCustomUserAttributes = () => [
     },
   },
   {
-    AttributeDataType: "string",
+    AttributeDataType: "String",
     DeveloperOnlyAttribute: false,
     Mutable: true,
     Name: "roles",
@@ -132,10 +80,11 @@ const resolvers = {
         input: {
           id: eId,
           username,
-          email,
+          email, // email should be lower case at signup
           roles: [OWNER_ROLE],
           companyId: cId,
           primaryManagerId: eId, // They are their own manager at 1st
+          allowRead: [`${ACCOUNTANT_ROLE}-${cId}`],
           allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
         },
       };
@@ -154,7 +103,7 @@ const resolvers = {
       // Persist the companyId, employeeId and Role to the Cognito user rec.
       const updateUsr = () =>
         // We wrapped the function call because we may call a 2nd time later
-        user.updateUser(username, [
+        user.updateUserAttributes(username, [
           { Name: "custom:cId", Value: cId },
           { Name: "custom:eId", Value: eId },
           // Assign the user to the Owner group for this new company
@@ -234,11 +183,11 @@ const resolvers = {
       const { cId, eId: pManagerId } = ctx.identity.claims;
       const eId = uuid.v4(); // Will be Employee.id
       const {
-        email,
         roles = [DEFAULT_EMPLOYEE_ROLE],
         // Default current user to be primary manager
         primaryManagerId = pManagerId,
       } = input;
+      const email = input.email.toLowerCase();
 
       // Loop through the role being asigned and make sure
       // the requestor is authorized to assign each role
@@ -254,13 +203,15 @@ const resolvers = {
         true
       );
       // Throw violation
-      if (!roleAuthorized) throw new Error("Role authorization error");
+      if (!roleAuthorized) throw new Error("Unauthorized to assign role");
 
       const UserAttributes = [
         { Name: "custom:cId", Value: cId },
         { Name: "custom:eId", Value: eId },
         // Transform roles array to comma seperated list of roles
         { Name: "custom:roles", Value: roles.reduce((a, c) => `${a},${c}`) },
+        { Name: "email", Value: email },
+        { Name: "email_verified", Value: "true" },
       ];
 
       // Attempt to create the user, the employeeId is also returned here
@@ -276,7 +227,9 @@ const resolvers = {
           if (e.name === "UsernameExistsException") {
             // Let's lookup the user and see for which company it belongs to
             // and if there already is an associated Employee record
-            const { Username, UserAttributes:UA = [] } = await user.getUser(email);
+            const { Username, UserAttributes: UA = [] } = await user.getUser(
+              email
+            );
             const { companyId, employeeId } = UA.reduce(
               (retVal, { Name, Value }) => {
                 switch (Name) {
@@ -307,7 +260,7 @@ const resolvers = {
             user.globalSignOut(Username).catch((e) => console.error(e));
             // This is safe because we already checked the companyId
             // and confirmed that the employee record was not in existance
-            await user.updateUser(Username, UserAttributes);
+            await user.updateUserAttributes(Username, UserAttributes);
             // Return the Username
             return Username;
           } else {
@@ -327,6 +280,7 @@ const resolvers = {
           companyId: cId,
           primaryManagerId,
           roles,
+          allowRead: [`${ACCOUNTANT_ROLE}-${cId}`],
           allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
         },
       });
@@ -337,85 +291,128 @@ const resolvers = {
         throw new Error("Failed to create new Employee");
       }
     },
-    updateUserRole: async (ctx) => {
+    updateEmpl: async (ctx) => {
+      const {
+        identity: { claims },
+        arguments: { input: employeeInput },
+      } = ctx;
+      const {
+        requestorsHighestRole,
+        // employeesHighestRole,
+        authorized,
+      } = isAuthorizedToUpdateEmployee(claims, employeeInput);
+      if (!authorized) {
+        console.warn(
+          "Unauthorized to update employee",
+          JSON.stringify(ctx, null, 4)
+        );
+        throw new Error("Unauthorized to update employee");
+      }
       // GraphQL arguments from client
+      // Remvoe the fields that this resolver shouldn't update
+      // This allowed the client to easily pass all employee fields if it wished
       const {
         username,
-        employeeId,
-        managerIds,
+        email,
         roles,
-        previousRoles,
-        _version,
-      } = ctx.arguments;
-      // The requesters signed identity claims
-      const { cId } = ctx.identity.claims;
+        updateRoles,
+        companyId,
+        allowRead,
+        allowFull,
+        inactive,
+        _deleted,
+        _lastChangedAt,
+        createdAt,
+        updatedAt,
+        ...updateFields
+      } = employeeInput;
+      const input = isRoleGreater(requestorsHighestRole, DEFAULT_EMPLOYEE_ROLE)
+        ? updateFields
+        : {
+            ...updateFields,
+            // All these require management level or higher
+            jobTitle: undefined,
+            payRates: undefined,
+            primaryManagerId: undefined,
+            managerIds: undefined,
+          };
 
-      // Loop through the role being asigned and make sure
-      // the requestor is authorized to assign each role
-      const mockEmployee = {
-        roles: previousRoles,
-        primaryManagerId: managerIds[0],
-        companyId: cId,
+      const doRoleUpdate =
+        updateRoles &&
+        updateRoles.reduce(
+          (accum, role) =>
+            accum && isAuthorizedToUpdateRole(claims, employeeInput, role),
+          true
+        );
+
+      if (doRoleUpdate) input.roles = updateRoles;
+
+      const { cId, eId } = claims;
+      const condition = {
+        and: [
+          { username: { eq: username } },
+          { companyId: { eq: cId } },
+          ...roles.map((r) => {
+            return { roles: { contains: r } };
+          }),
+        ],
       };
-      const roleAuthorized = roles.reduce(
-        (accum, role) =>
-          accum &&
-          isAuthorizedToUpdateRole(ctx.identity.claims, mockEmployee, role),
-        true
-      );
-      // Throw violation
-      if (!roleAuthorized) throw new Error("Role authorization error");
-
-      const UserAttributes = [
-        // Transform roles array to comma seperated list of roles
-        { Name: "custom:roles", Value: roles.reduce((a, c) => `${a},${c}`) },
-      ];
-
-      // Update Cognito User
-      const updateUserPromise = user.updateUser(username, UserAttributes);
-      // Update Employee Record
-      const updateEmployeePromise = api.UpdateEmployee({
-        input: {
-          id: employeeId,
-          roles,
-          _version,
-        },
-        condition: {
-          and: [
-            { username: { eq: username } },
-            { companyId: { eq: cId } },
-            ...previousRoles.map((r) => {
-              return { roles: { contains: r } };
-            }),
-            // TODO: Add managers
+      // Add a check for the manager if the requestor is a manager
+      if (requestorsHighestRole === MANAGER_ROLE) {
+        condition.and[condition.and.length] = {
+          or: [
+            { primaryManagerId: { eq: eId } },
+            { managerIds: { contains: eId } },
           ],
-        },
-      });
-      // Asynchronously update User and Employee role
-      const [userRes, employeeRes] = await Promise.all([
-        updateUserPromise.catch((error) => {
-          console.error(error);
-          return null;
-        }),
-        updateEmployeePromise.catch((error) => {
-          console.error(error);
-          return null;
-        }),
-      ]);
+        };
+      }
 
-      // TODO (Matthew): Can we handle these (allbeit rare) errors better?
-      if (!userRes) throw new Error("Could not update user");
-      if (!employeeRes || (employeeRes && !employeeRes.data.updateEmployee)) {
-        const { errors } = employeeRes || {};
-        if (errors && errors[0] && errors[0].message) {
-          throw new Error(errors[0].message);
-        } else {
-          throw new Error("Could not update Employee");
+      console.log(JSON.stringify({ input, condition }, null, 4));
+
+      const {
+        data: { updateEmployee } = {},
+        errors,
+      } = await api.UpdateEmployee({ input, condition });
+
+      // console.log(JSON.stringify({ updateEmployee, errors }, null, 4)); // for testing
+
+      if (errors || !updateEmployee) {
+        console.warn(errors);
+        if (!updateEmployee) {
+          const errorMessage = `Update employee Failed: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
         }
       }
-      console.log(JSON.stringify(employeeRes.data, null, 4)); // for testing
 
-      return employeeRes.data.updateEmployee;
+      if (doRoleUpdate) {
+        // Update the cognito user as well
+        const Value = updateRoles.reduce((a, c) => `${a},${c}`);
+        const UserAttributes = [
+          // Transform roles array to comma seperated list of roles
+          {
+            Name: "custom:roles",
+            Value,
+          },
+        ];
+        // Update Cognito User
+        try {
+          const roleP = user.updateUserAttributes(username, UserAttributes);
+          const singoutP = user.globalSignOut(username);
+          // const [roleResp, singoutResp] =
+          await Promise.all([roleP, singoutP.catch((e) => e)]);
+          // console.log(JSON.stringify({ roleResp, singoutResp }, null, 4));
+        } catch (e) {
+          console.error(
+            `Failed to update user (${username}) role to "${Value}"`,
+            e
+          );
+          // TODO: reset the employee role back to the original
+        }
+      }
+
+      return updateEmployee;
     },
   },
 };

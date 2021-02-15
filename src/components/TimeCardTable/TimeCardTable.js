@@ -31,7 +31,11 @@ import clsx from "clsx";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { useListEmployeeTimeRecord, useListCompanyTimeRecord } from "hooks";
+import {
+  useListEmployeeTimeRecord,
+  useListCompanyTimeRecord,
+  useGetEmployee,
+} from "hooks";
 
 // eslint-disable-next-line no-unused-vars
 const logger = new Logger("TimeCardTable.js", "ERROR");
@@ -363,6 +367,27 @@ const AddTimeButton = (props) => {
 };
 
 /**
+ *
+ * @param {*} props
+ */
+const EmployeeName = (props) => {
+  const {
+    timeRecord: { employeeId },
+  } = props;
+
+  const [
+    setId,
+    { data: { getEmployee: { firstName = "", lastName = "" } = {} } = {} },
+  ] = useGetEmployee(employeeId);
+
+  useEffect(() => {
+    if (employeeId) setId(employeeId);
+  }, [employeeId, setId]);
+
+  return `${lastName}${firstName ? `,` : ``} ${firstName}`;
+};
+
+/**
  * Expects timeRecords to be grouped by employee and in decending order by timestamp
  * @param {*} props
  */
@@ -385,9 +410,9 @@ const PrivateTimeCardTable = (props) => {
   console.log("timeRecords", timeRecords);
   timeRecords.forEach((value, key) => {
     if (value[0]) {
-      const {
-        employee: { firstName, lastName },
-      } = value[0];
+      // const {
+      //   employee: { firstName, lastName },
+      // } = value[0];
       const open = collapseObj[key] !== undefined ? collapseObj[key] : true;
       const [r, time] = createTimeSheetRow(value, classes.linkIcon);
       totalMinutes += time;
@@ -405,7 +430,7 @@ const PrivateTimeCardTable = (props) => {
             </TableCell>
             <TableCell colSpan={numOfCols - 2}>
               <Typography variant="h6" gutterBottom component="div">
-                {lastName}, {firstName}
+                <EmployeeName timeRecord={value[0]} />
               </Typography>
             </TableCell>
             <TableCell align="right">

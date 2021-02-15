@@ -11,6 +11,7 @@ import {
   Grid,
   Button,
   TextField,
+  CircularProgress,
 } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const EmployeeDetails = (props) => {
-  const { className, employee, onSave, onChange, ...rest } = props;
+  const { className, employee, onSave, onChange, saving, ...rest } = props;
   const classes = useStyles();
 
   const {
@@ -192,8 +193,17 @@ const EmployeeDetails = (props) => {
         </CardContent>
         <Divider />
         <CardActions>
-          <Button color="primary" variant="contained" onClick={onSave}>
-            Save details
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={onSave}
+            disabled={saving}
+          >
+            {!saving ? (
+              "Save details"
+            ) : (
+              <CircularProgress color="secondary" size={28} />
+            )}
           </Button>
         </CardActions>
       </form>
@@ -206,6 +216,7 @@ EmployeeDetails.propTypes = {
   employee: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  saving: PropTypes.bool,
 };
 
 export default EmployeeDetails;

@@ -33,11 +33,13 @@ export declare class Employee {
   readonly country?: string;
   readonly jobTitle?: string;
   readonly payRates?: PayRate[];
-  readonly roles?: Role[] | keyof typeof Role;
-  readonly company?: Company;
-  readonly timeRecords?: TimeRecord[];
-  readonly primaryManager?: Employee;
-  readonly allowFull?: (string | null)[];
+  readonly roles: Role[] | keyof typeof Role;
+  readonly companyId: string;
+  readonly primaryManagerId: string;
+  readonly managerIds?: string[];
+  readonly allowRead: string[];
+  readonly allowFull: string[];
+  readonly inactive?: boolean;
   constructor(init: ModelInit<Employee>);
   static copyOf(source: Employee, mutator: (draft: MutableModel<Employee>) => MutableModel<Employee> | void): Employee;
 }
@@ -52,8 +54,6 @@ export declare class Company {
   readonly state?: string;
   readonly zip?: string;
   readonly country?: string;
-  readonly employees?: Employee[];
-  readonly timeRecords?: TimeRecord[];
   readonly allowUpdate?: (string | null)[];
   constructor(init: ModelInit<Company>);
   static copyOf(source: Company, mutator: (draft: MutableModel<Company>) => MutableModel<Company> | void): Company;
@@ -61,9 +61,10 @@ export declare class Company {
 
 export declare class TimeRecord {
   readonly id: string;
-  readonly company?: Company;
-  readonly employee?: Employee;
-  readonly primaryManage?: Employee;
+  readonly employeeId: string;
+  readonly companyId: string;
+  readonly primaryManagerId: string;
+  readonly managerIds?: string[];
   readonly timestampIn: number;
   readonly timestampOut?: number;
   readonly photoIn?: string;

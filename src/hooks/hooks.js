@@ -10,8 +10,7 @@ import {
   createTimeRecord as createTimeRecordGQL,
   updateTimeRecord as updateTimeRecordGQL,
   createUser as createUserGQL,
-  updateEmployee as updateEmployeeGQL,
-  updateUserRole as updateUserRoleGQL,
+  updateEmpl as updateEmployeeGQL,
 } from "graphql/mutations";
 import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -111,14 +110,9 @@ export const useUploadImage = () => {
 export const useUpdateEmployee = () => useMutation(gql(updateEmployeeGQL));
 
 /**
- * 
+ *
  */
 export const useSetupNewAccount = () => useMutation(gql(setupNewAccountGQL));
-
-/**
- * 
- */
-export const useUpdateUserRole = () => useMutation(gql(updateUserRoleGQL));
 
 /**
  *
