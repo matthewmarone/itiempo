@@ -16,13 +16,22 @@
         "auth": {}
       },
       "function": {
-        "authPreSignup": {},
-        "authPreTokenGeneration": {},
+        "authPreSignup": {
+          "deploymentBucketName": "amplify-itiempo-prod-123019-deployment",
+          "s3Key": "amplify-builds/authPreSignup-49356579787252423955-build.zip"
+        },
+        "authPreTokenGeneration": {
+          "deploymentBucketName": "amplify-itiempo-prod-123019-deployment",
+          "s3Key": "amplify-builds/authPreTokenGeneration-6e6a454f676e522b677a-build.zip"
+        },
         "iTiempoModules": {
           "deploymentBucketName": "amplify-itiempo-prod-123019-deployment",
           "s3Key": "amplify-builds/iTiempoModules-build.zip"
         },
-        "GraphQLResolver": {}
+        "GraphQLResolver": {
+          "deploymentBucketName": "amplify-itiempo-prod-123019-deployment",
+          "s3Key": "amplify-builds/GraphQLResolver-593874447270524b7534-build.zip"
+        }
       },
       "hosting": {
         "amplifyhosting": {
@@ -42,22 +51,30 @@
                 }
               ],
               "hash": "3JaQYrLTNg+YBOV9G6XU+tbNqd4sIgXLMKslnNjxXy4="
+            },
+            "2": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "xTI0Fj6iJVDog4ZMamASPT0N0k35u494wdlJokk+J+c="
             }
           }
         }
       }
     }
   },
-  "tempdev": {
+  "sandbox": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-itiempo-tempdev-102053-authRole",
-      "UnauthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-tempdev-102053-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-tempdev-102053-authRole",
+      "AuthRoleName": "amplify-itiempo-sandbox-141826-authRole",
+      "UnauthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-sandbox-141826-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-sandbox-141826-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-itiempo-tempdev-102053-deployment",
-      "UnauthRoleName": "amplify-itiempo-tempdev-102053-unauthRole",
-      "StackName": "amplify-itiempo-tempdev-102053",
-      "StackId": "arn:aws:cloudformation:us-east-1:388597641926:stack/amplify-itiempo-tempdev-102053/3d6798e0-6003-11eb-a5e0-0a4f97d4255b",
+      "DeploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
+      "UnauthRoleName": "amplify-itiempo-sandbox-141826-unauthRole",
+      "StackName": "amplify-itiempo-sandbox-141826",
+      "StackId": "arn:aws:cloudformation:us-east-1:388597641926:stack/amplify-itiempo-sandbox-141826/bac92f00-6fdb-11eb-bf54-0e1c7f65113d",
       "AmplifyAppId": "d1gvlkpw4nf2kk"
     },
     "categories": {
@@ -65,14 +82,20 @@
         "auth": {}
       },
       "function": {
-        "authPreSignup": {},
-        "authPreTokenGeneration": {},
+        "authPreSignup": {
+          "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
+          "s3Key": "amplify-builds/authPreSignup-49356579787252423955-build.zip"
+        },
+        "authPreTokenGeneration": {
+          "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
+          "s3Key": "amplify-builds/authPreTokenGeneration-6e6a454f676e522b677a-build.zip"
+        },
         "GraphQLResolver": {
-          "deploymentBucketName": "amplify-itiempo-tempdev-102053-deployment",
+          "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
           "s3Key": "amplify-builds/GraphQLResolver-593874447270524b7534-build.zip"
         },
         "iTiempoModules": {
-          "deploymentBucketName": "amplify-itiempo-tempdev-102053-deployment",
+          "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
           "s3Key": "amplify-builds/iTiempoModules-build.zip"
         }
       },

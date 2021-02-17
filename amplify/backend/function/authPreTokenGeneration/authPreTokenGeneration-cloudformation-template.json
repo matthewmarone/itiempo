@@ -37,6 +37,12 @@
     "functioniTiempoModulesArn": {
       "Type": "String",
       "Default": "functioniTiempoModulesArn"
+    },
+    "deploymentBucketName": {
+      "Type": "String"
+    },
+    "s3Key": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -103,8 +109,12 @@
           }
         ],
         "Code": {
-          "S3Bucket": "amplify-itiempo-tempdev-102053-deployment",
-          "S3Key": "amplify-builds/authPreTokenGeneration-6e6a454f676e522b677a-build.zip"
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": {
+            "Ref": "s3Key"
+          }
         }
       }
     },

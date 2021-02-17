@@ -81,60 +81,6 @@ export const createUser = /* GraphQL */ `
     }
   }
 `;
-export const updateUserRole = /* GraphQL */ `
-  mutation UpdateUserRole(
-    $username: ID!
-    $employeeId: ID!
-    $managerIds: [String!]!
-    $roles: [Role!]!
-    $previousRoles: [Role!]!
-    $_version: Int!
-  ) {
-    updateUserRole(
-      username: $username
-      employeeId: $employeeId
-      managerIds: $managerIds
-      roles: $roles
-      previousRoles: $previousRoles
-      _version: $_version
-    ) {
-      id
-      username
-      profilePhoto
-      email
-      email_2
-      firstName
-      lastName
-      phone
-      phone_2
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      jobTitle
-      payRates {
-        name
-        amount
-        isHourly
-        isDefault
-      }
-      roles
-      companyId
-      primaryManagerId
-      managerIds
-      allowRead
-      allowFull
-      inactive
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const updateEmpl = /* GraphQL */ `
   mutation UpdateEmpl($input: emplInput!) {
     updateEmpl(input: $input) {
