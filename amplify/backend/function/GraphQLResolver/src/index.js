@@ -189,17 +189,22 @@ const resolvers = {
       } = input;
       const email = input.email.toLowerCase();
 
-      // Loop through the role being asigned and make sure
-      // the requestor is authorized to assign each role
-      const mockEmployee = {
-        roles: [DEFAULT_EMPLOYEE_ROLE],
-        primaryManagerId,
+      const employeeInput = {
+        ...input,
+        id: eId,
+        // username, set later
+        email,
         companyId: cId,
+        primaryManagerId,
+        roles,
+        allowRead: [`${ACCOUNTANT_ROLE}-${cId}`],
+        allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
       };
+
       const roleAuthorized = roles.reduce(
         (accum, role) =>
           accum &&
-          isAuthorizedToUpdateRole(ctx.identity.claims, mockEmployee, role),
+          isAuthorizedToUpdateRole(ctx.identity.claims, employeeInput, role),
         true
       );
       // Throw violation
@@ -272,17 +277,7 @@ const resolvers = {
 
       // create an employee record linking it to the new user
       const { data } = await api.CreateEmployee({
-        input: {
-          ...input,
-          id: eId,
-          username,
-          email,
-          companyId: cId,
-          primaryManagerId,
-          roles,
-          allowRead: [`${ACCOUNTANT_ROLE}-${cId}`],
-          allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
-        },
+        input: { ...employeeInput, username },
       });
 
       if (data && data.createEmployee) {
