@@ -106,13 +106,13 @@ const WelcomeNewAccount = (props) => {
   useEffect(() => {
     if (calledAcct && !loadingAcct && !errorAcct && dataAcct && name) {
       logger.debug("dataAcct", dataAcct);
-      const { setupNewAccount } = dataAcct || {};
-      if (setupNewAccount && setupNewAccount.id) {
+      const { setupNewAccount: { __typename, ...reqFields } = {} } = dataAcct;
+      if (reqFields) {
         const { firstName, lastName } = name;
         updateEmployee({
           variables: {
             input: {
-              ...setupNewAccount,
+              ...reqFields,
               firstName,
               lastName,
             },
