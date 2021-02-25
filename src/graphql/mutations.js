@@ -30,9 +30,10 @@ export const setupNewAccount = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -70,9 +71,10 @@ export const createUser = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -82,7 +84,7 @@ export const createUser = /* GraphQL */ `
   }
 `;
 export const updateEmpl = /* GraphQL */ `
-  mutation UpdateEmpl($input: emplInput!) {
+  mutation UpdateEmpl($input: UpdateEmplInput!) {
     updateEmpl(input: $input) {
       id
       username
@@ -110,9 +112,162 @@ export const updateEmpl = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const clockIn = /* GraphQL */ `
+  mutation ClockIn($input: ClockInInput!) {
+    clockIn(input: $input) {
+      id
+      employeeId
+      companyId
+      timestampIn
+      timestampOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      rate {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      approved
+      approvedBy
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const clockOut = /* GraphQL */ `
+  mutation ClockOut($input: ClockOutInput!) {
+    clockOut(input: $input) {
+      id
+      employeeId
+      companyId
+      timestampIn
+      timestampOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      rate {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      approved
+      approvedBy
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTimeRec = /* GraphQL */ `
+  mutation CreateTimeRec($input: CreateTimeRecInput!) {
+    createTimeRec(input: $input) {
+      id
+      employeeId
+      companyId
+      timestampIn
+      timestampOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      rate {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      approved
+      approvedBy
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTimeRec = /* GraphQL */ `
+  mutation UpdateTimeRec($input: UpdateTimeRecInput!) {
+    updateTimeRec(input: $input) {
+      id
+      employeeId
+      companyId
+      timestampIn
+      timestampOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      rate {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      approved
+      approvedBy
       _version
       _deleted
       _lastChangedAt
@@ -153,9 +308,10 @@ export const deleteEmployee = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -268,9 +424,10 @@ export const createEmployee = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -311,9 +468,10 @@ export const updateEmployee = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -331,20 +489,30 @@ export const createTimeRecord = /* GraphQL */ `
       id
       employeeId
       companyId
-      primaryManagerId
-      managerIds
       timestampIn
       timestampOut
-      photoIn
-      photoOut
-      noteIn
-      noteOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
       rate {
         name
         amount
         isHourly
         isDefault
       }
+      approved
+      approvedBy
       _version
       _deleted
       _lastChangedAt
@@ -362,20 +530,30 @@ export const updateTimeRecord = /* GraphQL */ `
       id
       employeeId
       companyId
-      primaryManagerId
-      managerIds
       timestampIn
       timestampOut
-      photoIn
-      photoOut
-      noteIn
-      noteOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
       rate {
         name
         amount
         isHourly
         isDefault
       }
+      approved
+      approvedBy
       _version
       _deleted
       _lastChangedAt
@@ -393,20 +571,30 @@ export const deleteTimeRecord = /* GraphQL */ `
       id
       employeeId
       companyId
-      primaryManagerId
-      managerIds
       timestampIn
       timestampOut
-      photoIn
-      photoOut
-      noteIn
-      noteOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
       rate {
         name
         amount
         isHourly
         isDefault
       }
+      approved
+      approvedBy
       _version
       _deleted
       _lastChangedAt

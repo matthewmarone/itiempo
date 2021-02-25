@@ -58,12 +58,120 @@ const getAppsCustomUserAttributes = () => [
   },
 ];
 
+const PunchMethod = {
+  TimeClock: "TimeClock",
+  Manual: "Manual",
+};
+
 /**
  * Using this as the entry point,
  * you can use a single function to handle many resolvers.
  */
 const resolvers = {
+  Query: {
+    timeRecordReport: async (ctx) => {
+      return null;
+    },
+  },
   Mutation: {
+    clockIn: async (ctx) => {
+      const {
+        identity: {
+          claims: { eId: employeeId, cId: companyId },
+          sourceIp,
+        },
+        arguments: {
+          input: { photo, note, rate },
+        },
+      } = ctx;
+      const timestampIn = Math.round(new Date().getTime() / 1000);
+      const clockInDetails = {
+        punchMethod: PunchMethod.TimeClock,
+        createdBy: employeeId,
+        photo,
+        note,
+        ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
+      };
+      const input = {
+        employeeId,
+        companyId,
+        timestampIn,
+        clockInDetails,
+        rate,
+      };
+
+      console.log(JSON.stringify(input, null, 4));
+
+      const { data, errors } = (await api.CreateTimeRecord({ input })) || {};
+      const { createTimeRecord } = data || {};
+      if (errors || !createTimeRecord) {
+        console.warn(errors);
+        if (!createTimeRecord) {
+          const errorMessage = `Clock-in failed: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+
+      return createTimeRecord;
+    },
+    clockOut: async (ctx) => {
+      const {
+        identity: {
+          claims: { eId: employeeId, cId: companyId },
+          sourceIp,
+        },
+        arguments: {
+          input: { id, photo, note, _version },
+        },
+      } = ctx;
+      const timestampOut = Math.round(new Date().getTime() / 1000);
+      const clockOutDetails = {
+        punchMethod: PunchMethod.TimeClock,
+        createdBy: employeeId,
+        photo,
+        note,
+        ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
+      };
+      const input = {
+        id,
+        timestampOut,
+        clockOutDetails,
+        _version,
+      };
+      const condition = { companyId: { eq: companyId } };
+      console.log(JSON.stringify({ input, condition }, null, 4));
+
+      const { data, errors } =
+        (await api.UpdateTimeRecord({ input, condition })) || {};
+      const { updateTimeRecord } = data || {};
+      if (errors || !updateTimeRecord) {
+        console.warn(errors);
+        if (!updateTimeRecord) {
+          const errorMessage = `Clock-out failed: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+
+      return updateTimeRecord;
+    },
+    createTimeRec: async (ctx) => {
+      const {
+        identity: { claims },
+        arguments: { input },
+      } = ctx;
+      return null;
+    },
+    updateTimeRec: async (ctx) => {
+      const {
+        identity: { claims },
+        arguments: { input },
+      } = ctx;
+      return null;
+    },
     setupNewAccount: async (ctx) => {
       const { claims } = ctx.identity;
       const { cId, eId, email, username: u1 } = claims;
@@ -84,6 +192,7 @@ const resolvers = {
           roles: [OWNER_ROLE],
           companyId: cId,
           primaryManagerId: eId, // They are their own manager at 1st
+          managers: [eId],
           allowRead: [`${ACCOUNTANT_ROLE}-${cId}`],
           allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
         },
@@ -197,6 +306,7 @@ const resolvers = {
         companyId: cId,
         primaryManagerId,
         roles,
+        managers: [primaryManagerId],
         allowRead: [`${ACCOUNTANT_ROLE}-${cId}`],
         allowFull: [`${OWNER_ROLE}-${cId}`, `${ADMIN_ROLE}-${cId}`],
       };
@@ -291,6 +401,7 @@ const resolvers = {
         identity: { claims },
         arguments: { input: employeeInput },
       } = ctx;
+      const { cId, eId } = claims;
       const {
         requestorsHighestRole,
         // employeesHighestRole,
@@ -312,6 +423,7 @@ const resolvers = {
         roles,
         updateRoles,
         companyId,
+        managers: curManagers,
         allowRead,
         allowFull,
         inactive,
@@ -319,18 +431,28 @@ const resolvers = {
         _lastChangedAt,
         createdAt,
         updatedAt,
+        primaryManagerId, // Will add back in if authorized
+        managerIds, // Will add back in if authorized
         ...updateFields
       } = employeeInput;
-      const input = isRoleGreater(requestorsHighestRole, DEFAULT_EMPLOYEE_ROLE)
-        ? updateFields
-        : {
-            ...updateFields,
-            // All these require management level or higher
-            jobTitle: undefined,
-            payRates: undefined,
-            primaryManagerId: undefined,
-            managerIds: undefined,
-          };
+      const isManager = curManagers.includes(eId);
+      const input =
+        isRoleGreater(requestorsHighestRole, MANAGER_ROLE) || isManager
+          ? {
+              ...updateFields,
+              primaryManagerId,
+              managerIds,
+              // primaryManagerId is a required GraphQL field
+              managers: [primaryManagerId, ...(managerIds || [])],
+            }
+          : {
+              ...updateFields,
+              // All these require management level or higher
+              jobTitle: undefined,
+              payRates: undefined,
+              primaryManagerId: undefined,
+              managerIds: undefined,
+            };
 
       const doRoleUpdate =
         updateRoles &&
@@ -340,26 +462,23 @@ const resolvers = {
           true
         );
 
-      if (doRoleUpdate) input.roles = updateRoles;
+      if (updateRoles && !doRoleUpdate)
+        throw new Error("Unauthorized Role Update:");
 
-      const { cId, eId } = claims;
+      if (doRoleUpdate) input.roles = updateRoles;
+      // This check confirms that the companyId and the employees roles
+      // were not spoofed
       const condition = {
         and: [
-          { username: { eq: username } },
           { companyId: { eq: cId } },
           ...roles.map((r) => {
             return { roles: { contains: r } };
           }),
         ],
       };
-      // Add a check for the manager if the requestor is a manager
-      if (requestorsHighestRole === MANAGER_ROLE) {
-        condition.and[condition.and.length] = {
-          or: [
-            { primaryManagerId: { eq: eId } },
-            { managerIds: { contains: eId } },
-          ],
-        };
+      // Make sure claim to manage the record is not spoofed
+      if (isManager) {
+        condition.and[condition.and.length] = { managers: { contains: eId } };
       }
 
       console.log(JSON.stringify({ input, condition }, null, 4));

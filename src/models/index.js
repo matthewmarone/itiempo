@@ -2,6 +2,11 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
+const PunchMethod = {
+  "TIME_CLOCK": "TimeClock",
+  "MANUAL": "Manual"
+};
+
 const Role = {
   "OWNER": "Owner",
   "ADMIN": "Admin",
@@ -9,12 +14,15 @@ const Role = {
   "EMPLOYEE": "Employee"
 };
 
-const { Employee, Company, TimeRecord, PayRate } = initSchema(schema);
+const { TimeRecord, Employee, Company, ModelTimeRecConnection, PunchCardDetails, PayRate } = initSchema(schema);
 
 export {
+  TimeRecord,
   Employee,
   Company,
-  TimeRecord,
+  PunchMethod,
   Role,
+  ModelTimeRecConnection,
+  PunchCardDetails,
   PayRate
 };

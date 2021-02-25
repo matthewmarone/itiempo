@@ -1,6 +1,52 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const timeRecordReport = /* GraphQL */ `
+  query TimeRecordReport(
+    $filter: TimeRecordReportFilterInput!
+    $limit: Int
+    $nextToken: String
+  ) {
+    timeRecordReport(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        employeeId
+        companyId
+        timestampIn
+        timestampOut
+        clockInDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        clockOutDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        rate {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        approved
+        approvedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const syncCompanies = /* GraphQL */ `
   query SyncCompanies(
     $filter: ModelCompanyFilterInput
@@ -115,9 +161,10 @@ export const getEmployee = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -160,9 +207,10 @@ export const listEmployees = /* GraphQL */ `
         companyId
         primaryManagerId
         managerIds
+        inactive
+        managers
         allowRead
         allowFull
-        inactive
         _version
         _deleted
         _lastChangedAt
@@ -218,9 +266,10 @@ export const listEmployeesByEmail = /* GraphQL */ `
         companyId
         primaryManagerId
         managerIds
+        inactive
+        managers
         allowRead
         allowFull
-        inactive
         _version
         _deleted
         _lastChangedAt
@@ -272,9 +321,10 @@ export const syncEmployees = /* GraphQL */ `
         companyId
         primaryManagerId
         managerIds
+        inactive
+        managers
         allowRead
         allowFull
-        inactive
         _version
         _deleted
         _lastChangedAt
@@ -292,20 +342,30 @@ export const getTimeRecord = /* GraphQL */ `
       id
       employeeId
       companyId
-      primaryManagerId
-      managerIds
       timestampIn
       timestampOut
-      photoIn
-      photoOut
-      noteIn
-      noteOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
       rate {
         name
         amount
         isHourly
         isDefault
       }
+      approved
+      approvedBy
       _version
       _deleted
       _lastChangedAt
@@ -325,20 +385,30 @@ export const listTimeRecords = /* GraphQL */ `
         id
         employeeId
         companyId
-        primaryManagerId
-        managerIds
         timestampIn
         timestampOut
-        photoIn
-        photoOut
-        noteIn
-        noteOut
+        clockInDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        clockOutDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
         rate {
           name
           amount
           isHourly
           isDefault
         }
+        approved
+        approvedBy
         _version
         _deleted
         _lastChangedAt
@@ -371,20 +441,30 @@ export const listEmployeeTimeRecords = /* GraphQL */ `
         id
         employeeId
         companyId
-        primaryManagerId
-        managerIds
         timestampIn
         timestampOut
-        photoIn
-        photoOut
-        noteIn
-        noteOut
+        clockInDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        clockOutDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
         rate {
           name
           amount
           isHourly
           isDefault
         }
+        approved
+        approvedBy
         _version
         _deleted
         _lastChangedAt
@@ -417,20 +497,30 @@ export const listCompanyTimeRecords = /* GraphQL */ `
         id
         employeeId
         companyId
-        primaryManagerId
-        managerIds
         timestampIn
         timestampOut
-        photoIn
-        photoOut
-        noteIn
-        noteOut
+        clockInDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        clockOutDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
         rate {
           name
           amount
           isHourly
           isDefault
         }
+        approved
+        approvedBy
         _version
         _deleted
         _lastChangedAt
@@ -459,20 +549,30 @@ export const syncTimeRecords = /* GraphQL */ `
         id
         employeeId
         companyId
-        primaryManagerId
-        managerIds
         timestampIn
         timestampOut
-        photoIn
-        photoOut
-        noteIn
-        noteOut
+        clockInDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        clockOutDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
         rate {
           name
           amount
           isHourly
           isDefault
         }
+        approved
+        approvedBy
         _version
         _deleted
         _lastChangedAt

@@ -1,4 +1,5 @@
 /* eslint-disable */
+// this is an auto generated file. This will be overwritten
 
 const getCompany = /* GraphQL */ `
   query GetCompany($id: ID!) {
@@ -50,9 +51,10 @@ const getEmployee = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -61,6 +63,162 @@ const getEmployee = /* GraphQL */ `
     }
   }
 `;
+const listEmployeesByEmail = /* GraphQL */ `
+  query ListEmployeesByEmail(
+    $companyId: ID
+    $email: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEmployeeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEmployeesByEmail(
+      companyId: $companyId
+      email: $email
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        username
+        profilePhoto
+        email
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        payRates {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        inactive
+        managers
+        allowRead
+        allowFull
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+const getTimeRecord = /* GraphQL */ `
+  query GetTimeRecord($id: ID!) {
+    getTimeRecord(id: $id) {
+      id
+      employeeId
+      companyId
+      timestampIn
+      timestampOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      rate {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      approved
+      approvedBy
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+const listCompanyTimeRecords = /* GraphQL */ `
+  query ListCompanyTimeRecords(
+    $companyId: ID
+    $timestampIn: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTimeRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCompanyTimeRecords(
+      companyId: $companyId
+      timestampIn: $timestampIn
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        employeeId
+        companyId
+        timestampIn
+        timestampOut
+        clockInDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        clockOutDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        rate {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        approved
+        approvedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 
+exports.listCompanyTimeRecords = listCompanyTimeRecords;
+exports.getTimeRecord = getTimeRecord;
 exports.getEmployee = getEmployee;
+exports.listEmployeesByEmail = listEmployeesByEmail;
 exports.getCompany = getCompany;

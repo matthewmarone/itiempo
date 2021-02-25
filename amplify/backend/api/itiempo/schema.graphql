@@ -2,9 +2,32 @@ type Mutation {
   setupNewAccount: Employee! @function(name: "GraphQLResolver-${env}")
   createUser(input: CreateUserInput!): Employee
     @function(name: "GraphQLResolver-${env}")
-  updateEmpl(input: emplInput!): Employee
+  updateEmpl(input: UpdateEmplInput!): Employee
+    @function(name: "GraphQLResolver-${env}")
+  clockIn(input: ClockInInput!): TimeRecord
+    @function(name: "GraphQLResolver-${env}")
+  clockOut(input: ClockOutInput!): TimeRecord
+    @function(name: "GraphQLResolver-${env}")
+  createTimeRec(input: CreateTimeRecInput!): TimeRecord
+    @function(name: "GraphQLResolver-${env}")
+  updateTimeRec(input: UpdateTimeRecInput!): TimeRecord
     @function(name: "GraphQLResolver-${env}")
 }
+
+type Query {
+  timeRecordReport(
+    filter: TimeRecordReportFilterInput!
+    limit: Int
+    nextToken: String
+  ): ModelTimeRecConnection @function(name: "GraphQLResolver-${env}")
+}
+
+type ModelTimeRecConnection {
+  items: [TimeRecord]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
 type Company
   @model(subscriptions: { level: off })
   @auth(
@@ -133,9 +156,10 @@ type Employee
   companyId: ID! # Write once, implemented in GraphQLResolver
   primaryManagerId: ID! # Restricted field, implemented in GraphQLResolver
   managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
+  inactive: Boolean
+  managers: [ID!]!
   allowRead: [String!]! # Write once, implemented in GraphQLResolver
   allowFull: [String!]! # Write once, implemented in GraphQLResolver
-  inactive: Boolean
 }
 type TimeRecord
   @model(subscriptions: { level: off })
@@ -151,28 +175,55 @@ type TimeRecord
   )
   @auth(
     rules: [
-      { allow: private, provider: iam }
-      { allow: private, provider: userPools }
+      # Only allow GraphQLResolver to modify
+      {
+        allow: private
+        provider: iam
+        operations: [create, update, read, delete]
+      }
+      # All creating, editing and deleting would be done through GraphQLResolver
+      {
+        allow: groups
+        groups: ["ForbiddenGroup"]
+        operations: [create, update, delete]
+      }
+      {
+        # Allow the employee itself to read it's own record
+        # All other reads will be handled through GraphQLResolver
+        allow: owner
+        ownerField: "employeeId"
+        identityClaim: "eId"
+        operations: [read]
+      }
     ]
   ) {
   id: ID!
   employeeId: ID!
   companyId: ID!
-  primaryManagerId: ID!
-  managerIds: [ID!]
   timestampIn: AWSTimestamp!
   timestampOut: AWSTimestamp
-  photoIn: String
-  photoOut: String
-  noteIn: String
-  noteOut: String
+  clockInDetails: PunchCardDetails!
+  clockOutDetails: PunchCardDetails
   rate: PayRate
+  approved: Boolean
+  approvedBy: ID
+}
+type PunchCardDetails {
+  punchMethod: PunchMethod!
+  createdBy: ID!
+  photo: String
+  note: String
+  ipAddress: String
 }
 type PayRate {
   name: String
   amount: Float!
   isHourly: Boolean!
   isDefault: Boolean!
+}
+enum PunchMethod {
+  TimeClock
+  Manual
 }
 enum Role {
   Owner
@@ -202,7 +253,7 @@ input CreateUserInput {
   primaryManagerId: ID!
   managerIds: [ID!]
 }
-input emplInput {
+input UpdateEmplInput {
   id: ID!
   username: String! # Write once, implemented in GraphQLResolver
   profilePhoto: String
@@ -221,13 +272,14 @@ input emplInput {
   jobTitle: String
   payRates: [PayRateUpsertInput!] # Restricted field, implemented in GraphQLResolver
   roles: [Role!]! # Restricted field, implemented in GraphQLResolver
-  updateRoles:[Role!]
+  updateRoles: [Role!]
   companyId: ID! # Write once, implemented in GraphQLResolver
   primaryManagerId: ID! # Restricted field, implemented in GraphQLResolver
   managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
+  inactive: Boolean
+  managers: [ID!]! # Restricted field, implemented in GraphQLResolver
   allowRead: [String!] # Write once, implemented in GraphQLResolver
   allowFull: [String!] # Write once, implemented in GraphQLResolver
-  inactive: Boolean
   _version: Int!
   _deleted: Boolean
   _lastChangedAt: AWSTimestamp
@@ -239,4 +291,56 @@ input PayRateUpsertInput {
   amount: Float!
   isHourly: Boolean!
   isDefault: Boolean!
+}
+input TimeRecordReportFilterInput {
+  from: AWSTimestamp!
+  to: AWSTimestamp!
+  limitByEmployeeId: [ID!] # leaving blank includes all
+}
+input ClockInInput {
+  photo: String
+  note: String
+  rate: PayRateUpsertInput
+}
+input ClockOutInput {
+  id: ID!
+  photo: String
+  note: String
+  _version: Int!
+}
+input CreateTimeRecInput {
+  id: ID!
+  employeeId: ID!
+  companyId: ID!
+  timestampIn: AWSTimestamp!
+  timestampOut: AWSTimestamp
+  clockInDetails: PunchCardDetailsInput!
+  clockOutDetails: PunchCardDetailsInput
+  rate: PayRateUpsertInput
+  approved: Boolean
+  approvedBy: ID
+}
+input UpdateTimeRecInput {
+  id: ID!
+  employeeId: ID!
+  companyId: ID!
+  timestampIn: AWSTimestamp!
+  timestampOut: AWSTimestamp
+  clockInDetails: PunchCardDetailsInput!
+  clockOutDetails: PunchCardDetailsInput
+  rate: PayRateUpsertInput
+  approved: Boolean
+  approvedBy: ID
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+input PunchCardDetailsInput {
+  punchMethod: PunchMethod!
+  createdBy: ID!
+  photo: String
+  note: String
+  ipAddress: String
 }

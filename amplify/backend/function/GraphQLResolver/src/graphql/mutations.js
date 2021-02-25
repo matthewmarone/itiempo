@@ -1,4 +1,5 @@
 /* eslint-disable */
+// this is an auto generated file. This will be overwritten
 
 const deleteEmployee = /* GraphQL */ `
   mutation DeleteEmployee(
@@ -32,9 +33,10 @@ const deleteEmployee = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -147,9 +149,10 @@ const createEmployee = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -190,9 +193,10 @@ const updateEmployee = /* GraphQL */ `
       companyId
       primaryManagerId
       managerIds
+      inactive
+      managers
       allowRead
       allowFull
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -210,20 +214,30 @@ const createTimeRecord = /* GraphQL */ `
       id
       employeeId
       companyId
-      primaryManagerId
-      managerIds
       timestampIn
       timestampOut
-      photoIn
-      photoOut
-      noteIn
-      noteOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
       rate {
         name
         amount
         isHourly
         isDefault
       }
+      approved
+      approvedBy
       _version
       _deleted
       _lastChangedAt
@@ -241,20 +255,30 @@ const updateTimeRecord = /* GraphQL */ `
       id
       employeeId
       companyId
-      primaryManagerId
-      managerIds
       timestampIn
       timestampOut
-      photoIn
-      photoOut
-      noteIn
-      noteOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
       rate {
         name
         amount
         isHourly
         isDefault
       }
+      approved
+      approvedBy
       _version
       _deleted
       _lastChangedAt
@@ -272,20 +296,30 @@ const deleteTimeRecord = /* GraphQL */ `
       id
       employeeId
       companyId
-      primaryManagerId
-      managerIds
       timestampIn
       timestampOut
-      photoIn
-      photoOut
-      noteIn
-      noteOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
       rate {
         name
         amount
         isHourly
         isDefault
       }
+      approved
+      approvedBy
       _version
       _deleted
       _lastChangedAt

@@ -1,5 +1,159 @@
 export const schema = {
     "models": {
+        "TimeRecord": {
+            "name": "TimeRecord",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "employeeId": {
+                    "name": "employeeId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "companyId": {
+                    "name": "companyId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "timestampIn": {
+                    "name": "timestampIn",
+                    "isArray": false,
+                    "type": "AWSTimestamp",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "timestampOut": {
+                    "name": "timestampOut",
+                    "isArray": false,
+                    "type": "AWSTimestamp",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "clockInDetails": {
+                    "name": "clockInDetails",
+                    "isArray": false,
+                    "type": {
+                        "nonModel": "PunchCardDetails"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "clockOutDetails": {
+                    "name": "clockOutDetails",
+                    "isArray": false,
+                    "type": {
+                        "nonModel": "PunchCardDetails"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "rate": {
+                    "name": "rate",
+                    "isArray": false,
+                    "type": {
+                        "nonModel": "PayRate"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "approved": {
+                    "name": "approved",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "approvedBy": {
+                    "name": "approvedBy",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "TimeRecords",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmployeeTimestamp",
+                        "fields": [
+                            "employeeId",
+                            "timestampIn"
+                        ],
+                        "queryField": "listEmployeeTimeRecords"
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCompanyTimestamp",
+                        "fields": [
+                            "companyId",
+                            "timestampIn"
+                        ],
+                        "queryField": "listCompanyTimeRecords"
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "private",
+                                "provider": "iam",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "read",
+                                    "delete"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "ForbiddenGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete"
+                                ]
+                            },
+                            {
+                                "provider": "userPools",
+                                "ownerField": "employeeId",
+                                "allow": "owner",
+                                "identityClaim": "eId",
+                                "operations": [
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Employee": {
             "name": "Employee",
             "fields": {
@@ -157,28 +311,36 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
-                "allowRead": {
-                    "name": "allowRead",
-                    "isArray": true,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": [],
-                    "isArrayNullable": false
-                },
-                "allowFull": {
-                    "name": "allowFull",
-                    "isArray": true,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": [],
-                    "isArrayNullable": false
-                },
                 "inactive": {
                     "name": "inactive",
                     "isArray": false,
                     "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
+                },
+                "_managers": {
+                    "name": "_managers",
+                    "isArray": true,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "_allowRead": {
+                    "name": "_allowRead",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
+                },
+                "_allowFull": {
+                    "name": "_allowFull",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
                 }
             },
             "syncable": true,
@@ -261,7 +423,7 @@ export const schema = {
                                 "groupClaim": "cognito:groups",
                                 "provider": "userPools",
                                 "allow": "groups",
-                                "groupsField": "allowRead",
+                                "groupsField": "_allowRead",
                                 "operations": [
                                     "read"
                                 ],
@@ -271,7 +433,7 @@ export const schema = {
                                 "groupClaim": "cognito:groups",
                                 "provider": "userPools",
                                 "allow": "groups",
-                                "groupsField": "allowFull",
+                                "groupsField": "_allowFull",
                                 "operations": [
                                     "read"
                                 ],
@@ -348,8 +510,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "allowUpdate": {
-                    "name": "allowUpdate",
+                "_allowUpdate": {
+                    "name": "_allowUpdate",
                     "isArray": true,
                     "type": "String",
                     "isRequired": false,
@@ -385,7 +547,7 @@ export const schema = {
                                 "groupClaim": "cognito:groups",
                                 "provider": "userPools",
                                 "allow": "groups",
-                                "groupsField": "allowUpdate",
+                                "groupsField": "_allowUpdate",
                                 "operations": [
                                     "update"
                                 ],
@@ -416,162 +578,16 @@ export const schema = {
                     }
                 }
             ]
-        },
-        "TimeRecord": {
-            "name": "TimeRecord",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "employeeId": {
-                    "name": "employeeId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "companyId": {
-                    "name": "companyId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "primaryManagerId": {
-                    "name": "primaryManagerId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "managerIds": {
-                    "name": "managerIds",
-                    "isArray": true,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": [],
-                    "isArrayNullable": true
-                },
-                "timestampIn": {
-                    "name": "timestampIn",
-                    "isArray": false,
-                    "type": "AWSTimestamp",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "timestampOut": {
-                    "name": "timestampOut",
-                    "isArray": false,
-                    "type": "AWSTimestamp",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "photoIn": {
-                    "name": "photoIn",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "photoOut": {
-                    "name": "photoOut",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "noteIn": {
-                    "name": "noteIn",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "noteOut": {
-                    "name": "noteOut",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "rate": {
-                    "name": "rate",
-                    "isArray": false,
-                    "type": {
-                        "nonModel": "PayRate"
-                    },
-                    "isRequired": false,
-                    "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "TimeRecords",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {
-                        "subscriptions": {
-                            "level": "off"
-                        }
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byEmployeeTimestamp",
-                        "fields": [
-                            "employeeId",
-                            "timestampIn"
-                        ],
-                        "queryField": "listEmployeeTimeRecords"
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byCompanyTimestamp",
-                        "fields": [
-                            "companyId",
-                            "timestampIn"
-                        ],
-                        "queryField": "listCompanyTimeRecords"
-                    }
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "private",
-                                "provider": "iam",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            },
-                            {
-                                "allow": "private",
-                                "provider": "userPools",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
         }
     },
     "enums": {
+        "PunchMethod": {
+            "name": "PunchMethod",
+            "values": [
+                "TimeClock",
+                "Manual"
+            ]
+        },
         "Role": {
             "name": "Role",
             "values": [
@@ -583,6 +599,77 @@ export const schema = {
         }
     },
     "nonModels": {
+        "ModelTimeRecConnection": {
+            "name": "ModelTimeRecConnection",
+            "fields": {
+                "items": {
+                    "name": "items",
+                    "isArray": true,
+                    "type": {
+                        "model": "TimeRecord"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "nextToken": {
+                    "name": "nextToken",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "startedAt": {
+                    "name": "startedAt",
+                    "isArray": false,
+                    "type": "AWSTimestamp",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
+        },
+        "PunchCardDetails": {
+            "name": "PunchCardDetails",
+            "fields": {
+                "punchMethod": {
+                    "name": "punchMethod",
+                    "isArray": false,
+                    "type": {
+                        "enum": "PunchMethod"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdBy": {
+                    "name": "createdBy",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "photo": {
+                    "name": "photo",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "note": {
+                    "name": "note",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ipAddress": {
+                    "name": "ipAddress",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
+        },
         "PayRate": {
             "name": "PayRate",
             "fields": {
@@ -617,5 +704,5 @@ export const schema = {
             }
         }
     },
-    "version": "1abe409e571cf71b5d756d653de19037"
+    "version": "985d3b6a9abedff3c7fc92a625f22075"
 };
