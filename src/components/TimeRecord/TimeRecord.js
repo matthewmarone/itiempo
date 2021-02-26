@@ -33,7 +33,14 @@ const TimeRecord = (props) => {
     onChange,
   } = props;
   const classes = useStyles();
-  const { photoIn, photoOut, timestampIn, timestampOut, noteIn, noteOut } = record;
+  const { timestampIn, timestampOut, clockInDetails, clockOutDetails } = record;
+  const {
+    photo: photoIn,
+    note: noteIn,
+    ipAddress: ipAddressIn,
+  } = clockInDetails;
+  const { photo: photoOut, note: noteOut, ipAddress: ipAddressOut } =
+    clockOutDetails || {};
   const [setClockInImageVars, { data: clockInImage }] = useDownloadImage();
   const [setClockOutImageVars, { data: clockOutImage }] = useDownloadImage();
 
@@ -167,7 +174,7 @@ const TimeRecord = (props) => {
                   label="IP Address @ Clock-in"
                   margin="dense"
                   name="ipAddress_in"
-                  value="192.168.1.1"
+                  value={ipAddressIn}
                   variant="standard"
                 />
               </Grid>
@@ -177,7 +184,7 @@ const TimeRecord = (props) => {
                   label="IP Address @ Clock-out"
                   margin="dense"
                   name="ipAddress_out"
-                  value="192.168.1.1"
+                  value={ipAddressOut}
                   variant="standard"
                 />
               </Grid>
