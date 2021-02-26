@@ -9,11 +9,7 @@ import { DialogTemplate } from "../components";
 import { WebcamCapture, CenterContent } from "components";
 import { getBlobFromDataURI, getEpoch } from "helpers";
 import PropTypes from "prop-types";
-import {
-  useCreateTimeRecord,
-  useUpdateTimeRecord,
-  useUploadImage,
-} from "hooks";
+import { useClockIn, useClockOut, useUploadImage } from "hooks";
 import { v4 as uuidv4 } from "uuid";
 
 import { Logger } from "aws-amplify";
@@ -75,14 +71,14 @@ Saving.propTypes = { message: PropTypes.string };
  */
 const ClockingIn = (props) => {
   const { input, onSuccess, onError = () => {} } = props;
-  const [runQuery, { loading, error, data }] = useCreateTimeRecord();
+  const [runQuery, { loading, error, data }] = useClockIn();
 
   useEffect(() => {
     if (input) runQuery({ variables: { input } });
   }, [input, runQuery]);
 
   useEffect(() => {
-    if (!loading && !error && data) onSuccess(data.createTimeRecord);
+    if (!loading && !error && data) onSuccess(data.clockIn);
   }, [loading, onSuccess, data, error]);
 
   useEffect(() => {
@@ -103,14 +99,14 @@ ClockingIn.propTypes = {
  */
 const ClockingOut = (props) => {
   const { input, onSuccess, onError = () => {} } = props;
-  const [runQuery, { loading, error, data }] = useUpdateTimeRecord();
+  const [runQuery, { loading, error, data }] = useClockOut();
 
   useEffect(() => {
     if (input) runQuery({ variables: { input } });
   }, [input, runQuery]);
 
   useEffect(() => {
-    if (!loading && !error && data) onSuccess(data.createTimeRecord);
+    if (!loading && !error && data) onSuccess(data.clockOut);
   }, [loading, onSuccess, data, error]);
 
   useEffect(() => {
@@ -203,12 +199,7 @@ const ClockinDialog = (props) => {
    * handles clock in or out
    */
   const handleClick = useCallback(() => {
-    const {
-      companyId,
-      id: employeeId,
-      primaryManagerId,
-      payRates = [{}],
-    } = employee;
+    const { companyId, payRates = [{}] } = employee;
     const [rate] = payRates || [{}];
     const { __typename, ...rest } = rate;
     const imgDataURI = webcamRef.current.getScreenshot();
@@ -217,17 +208,11 @@ const ClockinDialog = (props) => {
     const fileName = `accts/${companyId}/time-imgs/${uuidv4()}.png`;
     const imgName = !imgBlob ? undefined : fileName;
     const input = {
+      photo: imgName,
+      note: formState.note,
+      rate: !isClockedIn && __typename ? rest : undefined,
       id: !isClockedIn ? undefined : latestRecord.id,
       _version: !isClockedIn ? undefined : latestRecord._version,
-      companyId,
-      employeeId,
-      primaryManagerId,
-      timestampIn: isClockedIn ? undefined : getEpoch(),
-      timestampOut: !isClockedIn ? undefined : getEpoch(),
-      photoIn: isClockedIn ? undefined : imgName,
-      photoOut: !isClockedIn ? undefined : imgName,
-      [!isClockedIn ? "noteIn" : "noteOut"]: formState.note,
-      rate: !isClockedIn && __typename ? rest : undefined,
     };
     if (imgName) setImageVars({ fileName, imgBlob });
     setTimerecordInput(input); // This will cause SavingTimeRecord to launch

@@ -11,6 +11,8 @@ import {
   updateTimeRecord as updateTimeRecordGQL,
   createUser as createUserGQL,
   updateEmpl as updateEmployeeGQL,
+  clockIn as clockInGQL,
+  clockOut as clockOutGQL,
 } from "graphql/mutations";
 import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -207,6 +209,14 @@ export const useCreateTimeRecord = () =>
  *
  */
 export const useUpdateTimeRecord = () => useMutation(gql(updateTimeRecordGQL));
+/**
+ *
+ */
+export const useClockIn = () => useMutation(gql(clockInGQL));
+/**
+ *
+ */
+export const useClockOut = () => useMutation(gql(clockOutGQL));
 
 export const CLOCK_IN_STATE = {
   IN: "in",

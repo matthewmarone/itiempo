@@ -32,7 +32,7 @@ const ClockInButton = (props) => {
         className={className}
         color="primary"
         variant="contained"
-        disabled={!employee}
+        disabled={!employee || clockedIn === CLOCK_IN_STATE.UNKNOWN}
         startIcon={<AccessTimeIcon />}
         onClick={() => setOpen(true)}
       >
