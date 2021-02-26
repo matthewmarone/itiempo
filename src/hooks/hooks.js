@@ -165,54 +165,66 @@ export const useCreateEmployee = () =>
  */
 export const useCreateTimeRecord = () =>
   useMutation(gql(createTimeRecordGQL), {
-    update(cache, { data: { createTimeRecord: newRecord } }) {
-      if (newRecord) {
-        // Variables needed for modifying cache
-        const { employeeId } = newRecord;
-        const query = gql(listEmployeeTimeRecordsGQL);
-        const variables = {
-          limit: CONSTS.LIMIT_DEFAULT,
-          sortDirection: CONSTS.DESC,
-          employeeId,
-        };
-        // Get the current list from the cache
-        const {
-          listEmployeeTimeRecords: { items: prevRecords },
-        } = cache.readQuery({ query, variables }) || {
-          listEmployeeTimeRecords: {},
-        };
-        // Create a new list from the existing cached data,
-        // but adding in the new record where is should be
-        // timerecords are allways querried and stored in desc order of timestampIn
-        const mergedItems = mergeSortedLists(
-          [newRecord],
-          prevRecords || [],
-          ({ timestampIn: t1 }, { timestampIn: t2 }) =>
-            t1 === t2 ? 0 : t1 < t2 ? -1 : 1,
-          false
-        );
-        // Write the updated list w the new record to the cache
-        cache.writeQuery({
-          query,
-          variables,
-          data: {
-            listEmployeeTimeRecords: {
-              items: mergedItems,
-            },
-          },
-        });
-      }
-    },
+    update: (cache, { data: { createTimeRecord } }) =>
+      updateListEmployeeTimeRecords(cache, createTimeRecord),
   });
 
 /**
  *
  */
 export const useUpdateTimeRecord = () => useMutation(gql(updateTimeRecordGQL));
+
+/**
+ *
+ * @param {*} cache
+ * @param {*} newRecord
+ */
+const updateListEmployeeTimeRecords = (cache, newRecord) => {
+  if (newRecord) {
+    // Variables needed for modifying cache
+    const { employeeId } = newRecord;
+    const query = gql(listEmployeeTimeRecordsGQL);
+    const variables = {
+      limit: CONSTS.LIMIT_DEFAULT,
+      sortDirection: CONSTS.DESC,
+      employeeId,
+    };
+    // Get the current list from the cache
+    const {
+      listEmployeeTimeRecords: { items: prevRecords },
+    } = cache.readQuery({ query, variables }) || {
+      listEmployeeTimeRecords: {},
+    };
+    // Create a new list from the existing cached data,
+    // but adding in the new record where is should be
+    // timerecords are allways querried and stored in desc order of timestampIn
+    const mergedItems = mergeSortedLists(
+      [newRecord],
+      prevRecords || [],
+      ({ timestampIn: t1 }, { timestampIn: t2 }) =>
+        t1 === t2 ? 0 : t1 < t2 ? -1 : 1,
+      false
+    );
+    // Write the updated list w the new record to the cache
+    cache.writeQuery({
+      query,
+      variables,
+      data: {
+        listEmployeeTimeRecords: {
+          items: mergedItems,
+        },
+      },
+    });
+  }
+};
 /**
  *
  */
-export const useClockIn = () => useMutation(gql(clockInGQL));
+export const useClockIn = () =>
+  useMutation(gql(clockInGQL), {
+    update: (cache, { data: { clockIn } }) =>
+      updateListEmployeeTimeRecords(cache, clockIn),
+  });
 /**
  *
  */
