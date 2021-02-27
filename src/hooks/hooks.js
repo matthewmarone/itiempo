@@ -7,8 +7,8 @@ import {
 } from "graphql/queries";
 import {
   setupNewAccount as setupNewAccountGQL,
-  createTimeRecord as createTimeRecordGQL,
-  updateTimeRecord as updateTimeRecordGQL,
+  createTimeRec as createTimeRecordGQL,
+  updateTimeRec as updateTimeRecordGQL,
   createUser as createUserGQL,
   updateEmpl as updateEmployeeGQL,
   clockIn as clockInGQL,
@@ -165,8 +165,8 @@ export const useCreateEmployee = () =>
  */
 export const useCreateTimeRecord = () =>
   useMutation(gql(createTimeRecordGQL), {
-    update: (cache, { data: { createTimeRecord } }) =>
-      updateListEmployeeTimeRecords(cache, createTimeRecord),
+    update: (cache, { data: { createTimeRec } }) =>
+      updateListEmployeeTimeRecords(cache, createTimeRec),
   });
 
 /**

@@ -15,5 +15,8 @@ export { default as SearchInput } from "./SearchInput";
 export { default as TimeCardTable } from "./TimeCardTable";
 export { default as TimeTableFilter } from "./TimeTableFilter";
 export { default as TimeRecord } from "./TimeRecord";
+export { default as TimeRecordEdit } from "./TimeRecordEdit";
 export { default as WebcamCapture } from "./WebcamCapture";
 export { default as ZoomSlider } from "./ZoomSlider";
+export { default as AddTimeButton } from "./AddTimeButton";
+export { default as SingleEmployeeSelect } from "./SingleEmployeeSelect";

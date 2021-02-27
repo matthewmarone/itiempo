@@ -318,24 +318,24 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "_managers": {
-                    "name": "_managers",
+                "managers": {
+                    "name": "managers",
                     "isArray": true,
                     "type": "ID",
                     "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true
+                    "isArrayNullable": false
                 },
-                "_allowRead": {
-                    "name": "_allowRead",
+                "allowRead": {
+                    "name": "allowRead",
                     "isArray": true,
                     "type": "String",
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
                 },
-                "_allowFull": {
-                    "name": "_allowFull",
+                "allowFull": {
+                    "name": "allowFull",
                     "isArray": true,
                     "type": "String",
                     "isRequired": true,
@@ -423,7 +423,7 @@ export const schema = {
                                 "groupClaim": "cognito:groups",
                                 "provider": "userPools",
                                 "allow": "groups",
-                                "groupsField": "_allowRead",
+                                "groupsField": "allowRead",
                                 "operations": [
                                     "read"
                                 ],
@@ -433,7 +433,7 @@ export const schema = {
                                 "groupClaim": "cognito:groups",
                                 "provider": "userPools",
                                 "allow": "groups",
-                                "groupsField": "_allowFull",
+                                "groupsField": "allowFull",
                                 "operations": [
                                     "read"
                                 ],
@@ -510,8 +510,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "_allowUpdate": {
-                    "name": "_allowUpdate",
+                "allowUpdate": {
+                    "name": "allowUpdate",
                     "isArray": true,
                     "type": "String",
                     "isRequired": false,
@@ -547,7 +547,7 @@ export const schema = {
                                 "groupClaim": "cognito:groups",
                                 "provider": "userPools",
                                 "allow": "groups",
-                                "groupsField": "_allowUpdate",
+                                "groupsField": "allowUpdate",
                                 "operations": [
                                     "update"
                                 ],
@@ -704,5 +704,5 @@ export const schema = {
             }
         }
     },
-    "version": "985d3b6a9abedff3c7fc92a625f22075"
+    "version": "3fa7f416f51b44450b7105bfa82c0e0c"
 };

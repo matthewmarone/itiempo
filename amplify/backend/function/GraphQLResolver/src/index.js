@@ -160,10 +160,57 @@ const resolvers = {
     },
     createTimeRec: async (ctx) => {
       const {
-        identity: { claims },
-        arguments: { input },
+        identity: { claims, sourceIp },
+        arguments: { input: userInput },
       } = ctx;
-      return null;
+
+      const { eId, cId } = claims;
+      const {
+        timestampIn,
+        timestampOut,
+        clockInDetails: clockInDetailsUsrInput = {},
+        clockOutDetails: clockOutDetailsUsrInput = {},
+      } = userInput;
+
+      if (timestampOut && timestampOut <= timestampIn)
+        throw new Error("Time in is not before time out:");
+
+      const ipAddress =
+        sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined;
+      const clockInDetails = {
+        ...clockInDetailsUsrInput,
+        punchMethod: PunchMethod.Manual,
+        createdBy: eId,
+        ipAddress,
+      };
+      const clockOutDetails = {
+        ...clockOutDetailsUsrInput,
+        punchMethod: PunchMethod.Manual,
+        createdBy: eId,
+        ipAddress,
+      };
+
+      const input = {
+        ...userInput,
+        companyId: cId,
+        clockInDetails,
+        clockOutDetails,
+      };
+      console.log(JSON.stringify(input, null, 4));
+
+      const { data, errors } = (await api.CreateTimeRecord({ input })) || {};
+      const { createTimeRecord } = data || {};
+      if (errors || !createTimeRecord) {
+        console.warn(errors);
+        if (!createTimeRecord) {
+          const errorMessage = `CreateTimeRecord failed: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+
+      return createTimeRecord;
     },
     updateTimeRec: async (ctx) => {
       const {

@@ -74,9 +74,9 @@ export declare class Employee {
   readonly primaryManagerId: string;
   readonly managerIds?: string[];
   readonly inactive?: boolean;
-  readonly _managers?: string[];
-  readonly _allowRead: string[];
-  readonly _allowFull: string[];
+  readonly managers: string[];
+  readonly allowRead: string[];
+  readonly allowFull: string[];
   constructor(init: ModelInit<Employee>);
   static copyOf(source: Employee, mutator: (draft: MutableModel<Employee>) => MutableModel<Employee> | void): Employee;
 }
@@ -91,7 +91,7 @@ export declare class Company {
   readonly state?: string;
   readonly zip?: string;
   readonly country?: string;
-  readonly _allowUpdate?: (string | null)[];
+  readonly allowUpdate?: (string | null)[];
   constructor(init: ModelInit<Company>);
   static copyOf(source: Company, mutator: (draft: MutableModel<Company>) => MutableModel<Company> | void): Company;
 }

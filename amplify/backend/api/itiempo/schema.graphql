@@ -309,25 +309,25 @@ input ClockOutInput {
   _version: Int!
 }
 input CreateTimeRecInput {
-  id: ID!
+  id: ID
   employeeId: ID!
-  companyId: ID!
+  companyId: ID
   timestampIn: AWSTimestamp!
   timestampOut: AWSTimestamp
-  clockInDetails: PunchCardDetailsInput!
-  clockOutDetails: PunchCardDetailsInput
+  clockInDetails: PunchCardDetsInput
+  clockOutDetails: PunchCardDetsInput
   rate: PayRateUpsertInput
   approved: Boolean
   approvedBy: ID
 }
 input UpdateTimeRecInput {
   id: ID!
-  employeeId: ID!
-  companyId: ID!
-  timestampIn: AWSTimestamp!
+  employeeId: ID
+  companyId: ID
+  timestampIn: AWSTimestamp
   timestampOut: AWSTimestamp
-  clockInDetails: PunchCardDetailsInput!
-  clockOutDetails: PunchCardDetailsInput
+  clockInDetails: PunchCardDetsInput
+  clockOutDetails: PunchCardDetsInput
   rate: PayRateUpsertInput
   approved: Boolean
   approvedBy: ID
@@ -337,10 +337,7 @@ input UpdateTimeRecInput {
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
 }
-input PunchCardDetailsInput {
-  punchMethod: PunchMethod!
-  createdBy: ID!
+input PunchCardDetsInput {
   photo: String
   note: String
-  ipAddress: String
 }

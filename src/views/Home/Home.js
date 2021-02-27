@@ -8,9 +8,15 @@ import {
   CardContent,
   CardActions,
   Divider,
+  Button,
 } from "@material-ui/core";
 import { Logger } from "aws-amplify";
-import { TimeCardTable, ClockInButton, DateFilter } from "components";
+import {
+  TimeCardTable,
+  ClockInButton,
+  DateFilter,
+  AddTimeButton,
+} from "components";
 import { getWorkWeek, formateDate } from "helpers";
 
 // eslint-disable-next-line no-unused-vars
@@ -36,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   tableContainer: {
     marginTop: theme.spacing(2),
   },
+  addTimeButton: {
+    marginRight: theme.spacing(2),
+  },
 }));
 
 /**
@@ -46,6 +55,7 @@ const Home = () => {
   const [{ user }] = useContext(Context);
   const { companyId, employeeId } = user || {};
   logger.debug("Context.user", user, companyId, employeeId);
+  const [openAddTime, setOpenAddTime] = useState(false);
 
   const [{ fromDate, toDate }, setFilterState] = useState({
     fromDate: formateDate(getWorkWeek().fromDate),
@@ -96,6 +106,19 @@ const Home = () => {
             <Divider />
             <CardActions style={{ textAlign: "right" }}>
               <ClockInButton employeeId={employeeId} />
+              <AddTimeButton
+                open={openAddTime}
+                onClose={() => setOpenAddTime(false)}
+              >
+                <Button
+                  className={classes.addTimeButton}
+                  color="primary"
+                  variant="text"
+                  onClick={() => setOpenAddTime(true)}
+                >
+                  Add Time
+                </Button>
+              </AddTimeButton>
             </CardActions>
           </Card>
         </Grid>
