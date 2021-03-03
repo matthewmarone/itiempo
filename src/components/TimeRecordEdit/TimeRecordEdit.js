@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import { Context } from "Store";
 import {
   Grid,
@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { DialogTemplate } from "components/Dialogs/components";
 import { default as SingleEmployeeSelect } from "../SingleEmployeeSelect";
+import { default as EmployeeName } from "../EmployeeName";
 import {
   getDateLocal,
   getFormatedTime,
@@ -35,10 +36,21 @@ const getInitialState = (record, eId) => {
     employeeId = eId,
     timestampIn,
     timestampOut,
-    clockInDetails: { note: noteIn } = {},
-    clockOutDetails: { note: noteOut } = {},
+    clockInDetails,
+    clockOutDetails,
+    _version,
   } = record || {};
-  return { id, employeeId, timestampIn, timestampOut, noteIn, noteOut };
+  const { note: noteIn } = clockInDetails || {};
+  const { note: noteOut } = clockOutDetails || {};
+  return {
+    id,
+    employeeId,
+    timestampIn,
+    timestampOut,
+    noteIn,
+    noteOut,
+    _version,
+  };
 };
 
 /**
@@ -63,6 +75,15 @@ const CreateRecord = (props) => {
     const input = { ...rest, clockInDetails, clockOutDetails };
     create({ variables: { input } });
   }, [create, formState]);
+
+  useEffect(() => {
+    onSaving(loading);
+  }, [loading, onSaving]);
+
+  useEffect(() => {
+    if (!loading && !error && data && data.createTimeRec) onClose();
+  }, [data, error, loading, onClose]);
+
   return (
     <TimeRecordForm
       {...formState}
@@ -85,11 +106,42 @@ CreateRecord.propTypes = {
  * @param {*} props
  */
 const UpdateRecord = (props) => {
-  const {
-    formState: { id, employeeId, timestampIn, timestampOut, noteIn, noteOut },
-  } = props;
+  const { initialState, open, onClose, onSaving } = props;
+  const [formState, setFormState] = useState({ ...initialState });
   const [update, { loading, error, data }] = useUpdateTimeRecord();
-  return <TimeRecordForm />;
+  const handleChange = useCallback(
+    (fv) =>
+      setFormState((c) => {
+        return { ...c, ...fv };
+      }),
+    []
+  );
+  const handleSave = useCallback(() => {
+    const { noteIn, noteOut, ...rest } = formState;
+    const clockInDetails = { note: noteIn };
+    const clockOutDetails = { note: noteOut };
+    const input = { ...rest, clockInDetails, clockOutDetails };
+    update({ variables: { input } });
+  }, [update, formState]);
+
+  useEffect(() => {
+    onSaving(loading);
+  }, [loading, onSaving]);
+
+  useEffect(() => {
+    if (!loading && !error && data && data.updateTimeRec) onClose();
+  }, [data, error, loading, onClose]);
+
+  return (
+    <TimeRecordForm
+      {...formState}
+      onChange={handleChange}
+      onSave={handleSave}
+      onClose={onClose}
+      open={open}
+      saving={loading}
+    />
+  );
 };
 UpdateRecord.propTypes = {
   initialState: PropTypes.object.isRequired,
@@ -105,6 +157,7 @@ UpdateRecord.propTypes = {
 const TimeRecordForm = (props) => {
   const classes = useStyles();
   const {
+    id,
     employeeId,
     timestampIn,
     timestampOut,
@@ -163,11 +216,15 @@ const TimeRecordForm = (props) => {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <SingleEmployeeSelect
-              onChange={handleEmployeeIdChange}
-              employeeId={employeeId}
-              classes={{ root: classes.selectRoot }}
-            />
+            {!id ? (
+              <SingleEmployeeSelect
+                onChange={handleEmployeeIdChange}
+                employeeId={employeeId}
+                classes={{ root: classes.selectRoot }}
+              />
+            ) : (
+              <EmployeeName employeeId={employeeId} />
+            )}
           </Grid>
           <Grid item sm={6} xs={12}>
             <TextField
@@ -266,7 +323,7 @@ const TimeRecordForm = (props) => {
  * @param {*} props
  */
 const TimeRecordEdit = (props) => {
-  const { record, open, onClose, onSaving } = props;
+  const { record, open, onClose, onSaving = () => {} } = props;
   const [{ user }] = useContext(Context);
   const { employeeId: eId } = user || {};
   const formState = getInitialState(record, eId);
@@ -279,7 +336,12 @@ const TimeRecordEdit = (props) => {
       onSaving={onSaving}
     />
   ) : (
-    <UpdateRecord />
+    <UpdateRecord
+      initialState={formState}
+      open={open}
+      onClose={onClose}
+      onSaving={onSaving}
+    />
   );
 };
 

@@ -92,7 +92,7 @@
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-314c4170703077494e36-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-304b6b687441394e6e6d-build.zip"
         },
         "iTiempoModules": {
           "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
@@ -117,6 +117,14 @@
                 }
               ],
               "hash": "/A+RnTwWPnJ6+CRkX9xdgJkzuUFRfqDCFcYAvYqGAVc="
+            },
+            "2": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "zdCv4IA5DHpuiTy/rjSHiLFxPpWtGaqrXtlFgYnaFFs="
             }
           }
         }

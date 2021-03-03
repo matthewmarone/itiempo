@@ -5,7 +5,6 @@ import {
   CardContent,
   Grid,
   Typography,
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -102,7 +101,6 @@ const TimeRecordRow = (props) => {
   const [open, setOpen] = useState(false);
   const { timestampIn: tIn, timestampOut: tOut = tIn } = record;
   const formatedTime = getFormatedTime(getTimeDifference(tIn, tOut));
-  const isSaving = false;
 
   const handleClick = React.useCallback(() => {
     setOpen(true);
@@ -111,21 +109,11 @@ const TimeRecordRow = (props) => {
     setOpen(false);
   }, []);
 
-  const handleOnChange = React.useCallback(() => {}, []);
-  const handleSave = React.useCallback(() => {}, []);
-
   return (
     <TableRow hover>
       <TableCell padding="checkbox" align="center">
         <EditIcon className={iconClassName} onClick={handleClick} />
-        <TimeRecord
-          record={record}
-          open={open}
-          saving={isSaving}
-          onChange={handleOnChange}
-          onClose={handleClose}
-          onSave={handleSave}
-        />
+        <TimeRecord record={record} open={open} onClose={handleClose} />
       </TableCell>
       <TableCell>
         <DateLocal epochSeconds={tIn} local="es" format="l" />
@@ -270,102 +258,6 @@ const TimeCardTableSingle = (props) => {
     />
   );
 };
-
-// TODO Implement
-const useCreateTimeRecord = () => [false, () => {}];
-
-// eslint-disable-next-line no-unused-vars
-const AddTimeButton = (props) => {
-  const { containerClass, buttonClassOverrides, employee } = props;
-  const { companyId, employeeId, primaryManagerId } = employee;
-  console.log(
-    "Check out my melody!",
-    employee,
-    companyId,
-    employeeId,
-    primaryManagerId
-  );
-  const [open, setOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [clockIn, setClockIn] = useState({});
-  const [clockOut, setClockOut] = useState({});
-  const [isSavingClockIn, setClockInArgs] = useCreateTimeRecord();
-  const [isSavingClockOut, setClockOutArgs] = useCreateTimeRecord();
-
-  useEffect(() => {
-    if (isSaving && !isSavingClockIn && !isSavingClockOut) {
-      setOpen(false);
-    }
-  }, [isSaving, isSavingClockIn, isSavingClockOut]);
-
-  const handleAddTimeClick = React.useCallback(() => {
-    setClockIn({ timestamp: Math.round(new Date().getTime() / 1000) });
-    setClockOut({});
-    setOpen(true);
-  }, []);
-  const handleClockInChange = React.useCallback(
-    (f, v) => {
-      setClockIn({ ...clockIn, [f]: v });
-    },
-    [clockIn]
-  );
-  const handleClockOutChange = React.useCallback(
-    (f, v) => {
-      setClockOut({ ...clockOut, [f]: v });
-    },
-    [clockOut]
-  );
-  const handleClose = React.useCallback(() => {
-    setOpen(false);
-  }, []);
-
-  const handleSave = React.useCallback(() => {
-    if (clockIn && clockIn.timestamp) {
-      setIsSaving(true);
-      setClockInArgs({ ...clockIn, companyId, employeeId, primaryManagerId });
-      if (clockOut && clockOut.timestamp) {
-        setClockOutArgs({
-          ...clockOut,
-          companyId,
-          employeeId,
-          primaryManagerId,
-        });
-      }
-    }
-  }, [
-    clockIn,
-    clockOut,
-    companyId,
-    employeeId,
-    primaryManagerId,
-    setClockInArgs,
-    setClockOutArgs,
-  ]);
-  return (
-    <div className={containerClass}>
-      <Button
-        classes={buttonClassOverrides}
-        color="primary"
-        variant="text"
-        onClick={handleAddTimeClick}
-      >
-        Add Time
-      </Button>
-      <TimeRecord
-        newTimesheet
-        clockIn={clockIn}
-        clockOut={clockOut}
-        open={open}
-        saving={isSaving}
-        onClockInChange={handleClockInChange}
-        onClockOutChange={handleClockOutChange}
-        onClose={handleClose}
-        onSave={handleSave}
-      />
-    </div>
-  );
-};
-
 /**
  *
  * @param {*} props

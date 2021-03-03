@@ -20,3 +20,4 @@ export { default as WebcamCapture } from "./WebcamCapture";
 export { default as ZoomSlider } from "./ZoomSlider";
 export { default as AddTimeButton } from "./AddTimeButton";
 export { default as SingleEmployeeSelect } from "./SingleEmployeeSelect";
+export { default as EmployeeName } from "./EmployeeName";
