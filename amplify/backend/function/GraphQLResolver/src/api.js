@@ -62,6 +62,24 @@ const GetEmployee = async (id) => {
 };
 /**
  *
+ * @param {*} variables
+ */
+const ListCompanyTimeRecords = async (variables = {}) => {
+  const operationName = "ListCompanyTimeRecords";
+  const graphQL = Queries.listCompanyTimeRecords;
+  return await query(operationName, graphQL, { ...variables });
+};
+/**
+ *
+ * @param {*} variables
+ */
+const ListEmployeesByEmail = async (variables = {}) => {
+  const operationName = "ListEmployeesByEmail";
+  const graphQL = Queries.listEmployeesByEmail;
+  return await query(operationName, graphQL, { ...variables });
+};
+/**
+ *
  * @param {*} id
  */
 const GetCompany = async (id) => {
@@ -104,3 +122,5 @@ exports.GetEmployee = GetEmployee;
 exports.GetCompany = GetCompany;
 exports.CreateTimeRecord = CreateTimeRecord;
 exports.UpdateTimeRecord = UpdateTimeRecord;
+exports.ListCompanyTimeRecords = ListCompanyTimeRecords;
+exports.ListEmployeesByEmail = ListEmployeesByEmail;

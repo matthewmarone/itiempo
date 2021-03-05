@@ -30,7 +30,7 @@ const TimeRecord = (props) => {
   const [setClockInImageVars, { data: clockInImage }] = useDownloadImage();
   const [setClockOutImageVars, { data: clockOutImage }] = useDownloadImage();
 
-  const [formatedTotalTime] = React.useMemo(
+  const formatedTotalTime = React.useMemo(
     () => getFormatedTime(getTimeDifference(timestampIn, timestampOut)),
     [timestampIn, timestampOut]
   );
@@ -58,6 +58,15 @@ const TimeRecord = (props) => {
     ],
     []
   );
+  const note = useMemo(() => {
+    const n1 = (noteIn || "").trim();
+    const n2 = (noteOut || "").trim();
+    const t = n1 && n2;
+    return `${t ? "@clock-in: " + n1 : n1} ${
+      t ? "@clock-out: " + n2 : n2
+    }`.trim();
+  }, [noteIn, noteOut]);
+
   const dialogContent = (
     <Grid container spacing={4}>
       {/** Start Row  */}
@@ -111,7 +120,7 @@ const TimeRecord = (props) => {
         <Typography {...leftTxtProps}>Note:</Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography {...rightTxtProps}>{`${noteIn} ${noteOut}`}</Typography>
+        <Typography {...rightTxtProps}>{note}</Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>

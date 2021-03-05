@@ -97,9 +97,9 @@ const CreateRecord = (props) => {
 };
 CreateRecord.propTypes = {
   initialState: PropTypes.object.isRequired,
-  open: PropTypes.object.isRequired,
-  onClose: PropTypes.object.isRequired,
-  onSaving: PropTypes.object.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSaving: PropTypes.func.isRequired,
 };
 /**
  *
@@ -145,9 +145,9 @@ const UpdateRecord = (props) => {
 };
 UpdateRecord.propTypes = {
   initialState: PropTypes.object.isRequired,
-  open: PropTypes.object.isRequired,
-  onClose: PropTypes.object.isRequired,
-  onSaving: PropTypes.object.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSaving: PropTypes.func.isRequired,
 };
 
 /**

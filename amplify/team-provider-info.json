@@ -92,7 +92,7 @@
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-304b6b687441394e6e6d-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-69546578304a7a347647-build.zip"
         },
         "iTiempoModules": {
           "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",

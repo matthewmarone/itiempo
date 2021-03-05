@@ -32,7 +32,7 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   useListEmployeeTimeRecord,
-  useListCompanyTimeRecord,
+  useTimeRecordReport,
   useGetEmployee,
 } from "hooks";
 
@@ -180,24 +180,18 @@ const createTimeSheetRow = (timeRecords, iconClassName) =>
 
 const TimeCardTableMultiple = (props) => {
   const { companyId, fromDate, toDate, employeeIds = [], ...rest } = props;
-  const { loading, data, fetchMore } = useListCompanyTimeRecord(companyId);
-  const { listCompanyTimeRecords: { items } = {} } = data || {};
+  const [runQuery, { loading, data }] = useTimeRecordReport();
+  const { timeRecordReport: { items } = {} } = data || {};
 
   useEffect(() => {
-    if (companyId) {
-      fetchMore({
-        companyId,
-        sortDirection: "DESC",
-        limit: 25,
-        timestamp: {
-          between: [
-            dateToUnixTimestamp(fromDate),
-            dateToUnixTimestamp(toDate) + SECONDS_IN_DAY - 1,
-          ],
-        },
-      });
+    if (fromDate && toDate) {
+      const filter = {
+        from: dateToUnixTimestamp(fromDate),
+        to: dateToUnixTimestamp(toDate) + SECONDS_IN_DAY - 1,
+      };
+      runQuery(filter);
     }
-  }, [companyId, fetchMore, fromDate, toDate]);
+  }, [fromDate, runQuery, toDate]);
 
   const timeRecords = useMemo(() => {
     const recordsMap = new Map();

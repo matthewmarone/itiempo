@@ -20,6 +20,43 @@ const isRoleGreater = (greater, lessor) =>
   ROLE_Weight[greater] > ROLE_Weight[lessor];
 
 /**
+ * Extract the highest assigned role of the requester (logged in usr)
+ * @param {*} cognitoGroup
+ */
+const getHighestGroup = (cognitoGroup = [], cId) => {
+  // Extract the highest assigned role of the requester (logged in usr)
+  let requestorsHighestRole = DEFAULT_EMPLOYEE_ROLE;
+  cognitoGroup.forEach((r) => {
+    // Ex: r = 'Owner-a03dc17c-a10c-437d-84de-35b5f0a675e5'
+    const [rName] = r.split("-");
+    const [, compId] = r.split(`${rName}-`);
+    if (compId === cId) {
+      // Choose the highest weight role
+      if (ROLE_Weight[rName] > ROLE_Weight[requestorsHighestRole]) {
+        requestorsHighestRole = rName;
+      }
+    }
+  });
+  return requestorsHighestRole;
+};
+
+/**
+ * // Extract the highest role of the employee record being updated
+ * @param {*} roleArray
+ */
+const getHighestRole = (roleArray = []) => {
+  // Extract the highest role of the employee record being updated
+  let employeesHighestRole = DEFAULT_EMPLOYEE_ROLE;
+  roleArray.forEach((r) => {
+    // Choose the highest weight role
+    if (ROLE_Weight[r] > ROLE_Weight[employeesHighestRole]) {
+      employeesHighestRole = r;
+    }
+  });
+  return employeesHighestRole;
+};
+
+/**
  * Note: this function assumes that the requestorClaims
  * and employee data is not falsified.
  *
@@ -39,27 +76,10 @@ const isAuthorizedToUpdateEmployee = (requestorClaims, employee) => {
     return { authorized: false, reason: "Required fields are not present" };
 
   // Extract the highest assigned role of the requester (logged in usr)
-  let requestorsHighestRole = DEFAULT_EMPLOYEE_ROLE;
-  requestorsRoleArr.forEach((r) => {
-    // Ex: r = 'Owner-a03dc17c-a10c-437d-84de-35b5f0a675e5'
-    const [rName] = r.split("-");
-    const [, compId] = r.split(`${rName}-`);
-    if (compId === cId) {
-      // Choose the highest weight role
-      if (ROLE_Weight[rName] > ROLE_Weight[requestorsHighestRole]) {
-        requestorsHighestRole = rName;
-      }
-    }
-  });
+  const requestorsHighestRole = getHighestGroup(requestorsRoleArr, cId);
 
   // Extract the highest role of the employee record being updated
-  let employeesHighestRole = DEFAULT_EMPLOYEE_ROLE;
-  roles.forEach((r) => {
-    // Choose the highest weight role
-    if (ROLE_Weight[r] > ROLE_Weight[employeesHighestRole]) {
-      employeesHighestRole = r;
-    }
-  });
+  const employeesHighestRole = getHighestRole(roles);
 
   const retVal = { requestorsHighestRole, employeesHighestRole };
 
@@ -138,3 +158,5 @@ exports.DEFAULT_EMPLOYEE_ROLE = DEFAULT_EMPLOYEE_ROLE;
 exports.isAuthorizedToUpdateRole = isAuthorizedToUpdateRole;
 exports.isAuthorizedToUpdateEmployee = isAuthorizedToUpdateEmployee;
 exports.isRoleGreater = isRoleGreater;
+exports.getHighestGroup = getHighestGroup;
+exports.getHighestRole = getHighestRole;

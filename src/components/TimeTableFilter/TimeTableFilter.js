@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Context } from "Store";
+import { makeStyles } from "@material-ui/styles";
 import {
   Card,
   CardContent,
@@ -11,17 +12,25 @@ import {
   Button,
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { AvatarMenuItem, Avatar } from "components";
+import { AvatarMenuItem, Avatar, AddTimeButton } from "components";
 import { getWorkWeek, formateDate } from "helpers";
 import { DateFilter } from "components";
 import { useListEmployeesByEmail } from "hooks";
+
+const useStyles = makeStyles((theme) => ({
+  addTimeButton: {
+    marginRight: theme.spacing(2),
+  },
+}));
 
 /**
  *
  * @param {*} props
  */
 const TimeTableFilter = (props) => {
+  const classes = useStyles();
   const { onFilterUpdate, initialState = {} } = props;
+  const [openAddTime, setOpenAddTime] = useState(false);
   const {
     selectedEmployees: se = [],
     fromDate: fd = formateDate(getWorkWeek().fromDate),
@@ -90,7 +99,9 @@ const TimeTableFilter = (props) => {
                 <TextField
                   {...params}
                   label={
-                    selectedEmployees.length > 0 ? "Employee" : "Select Employee(s)"
+                    selectedEmployees.length > 0
+                      ? "Employee"
+                      : "Select Employee(s)"
                   }
                   variant="outlined"
                   placeholder="Select employees to include"
@@ -115,6 +126,16 @@ const TimeTableFilter = (props) => {
         >
           Update report
         </Button>
+        <AddTimeButton open={openAddTime} onClose={() => setOpenAddTime(false)}>
+          <Button
+            className={classes.addTimeButton}
+            color="primary"
+            variant="text"
+            onClick={() => setOpenAddTime(true)}
+          >
+            Add Time
+          </Button>
+        </AddTimeButton>
       </CardActions>
     </Card>
   );

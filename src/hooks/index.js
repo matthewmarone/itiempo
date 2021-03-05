@@ -10,7 +10,7 @@ export {
   useCreateEmployee,
   useUpdateEmployee,
   useListEmployeeTimeRecord,
-  useListCompanyTimeRecord,
+  useTimeRecordReport,
   useSetupNewAccount,
   useClockIn,
   useClockOut,

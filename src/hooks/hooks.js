@@ -3,7 +3,7 @@ import {
   listEmployeeTimeRecords as listEmployeeTimeRecordsGQL,
   listEmployeesByEmail as listEmployeesByEmailGQL,
   getEmployee as getEmployeeGQL,
-  listCompanyTimeRecords as listCompanyTimeRecordsGQL,
+  timeRecordReport as timeRecordReportGQL,
 } from "graphql/queries";
 import {
   setupNewAccount as setupNewAccountGQL,
@@ -24,6 +24,7 @@ const logger = new Logger("hooks.js", "ERROR");
 export const CONSTS = {
   LIMIT_DEFAULT: 10,
   LIMIT_25: 25,
+  LIMIT_50: 50,
   ASC: "ASC",
   DESC: "DESC",
 };
@@ -349,15 +350,22 @@ export const useListEmployeesByEmail = (companyId) =>
       sortDirection: CONSTS.ASC,
     },
   });
+
 /**
  *
- * @param {*} companyId
  */
-export const useListCompanyTimeRecord = (companyId) =>
-  useQuery(gql(listCompanyTimeRecordsGQL), {
-    variables: {
-      companyId,
-      limit: CONSTS.LIMIT_25,
-      sortDirection: CONSTS.DESC,
-    },
-  });
+export const useTimeRecordReport = (filter) => {
+  const [runQuery, retVal] = useLazyQuery(gql(timeRecordReportGQL));
+  const [filterState, updateFilter] = useState(filter);
+
+  useEffect(() => {
+    const { from, to } = filterState || {};
+    if (from < to) {
+      runQuery({
+        variables: { filter: filterState, limit: CONSTS.LIMIT_25 },
+      });
+    }
+  }, [filterState, runQuery]);
+
+  return [updateFilter, retVal];
+};

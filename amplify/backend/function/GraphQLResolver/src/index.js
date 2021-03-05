@@ -8,6 +8,7 @@ Amplify Params - DO NOT EDIT */
 const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
+const { EmployeeLookup } = require("./employeeLookup");
 const {
   OWNER_ROLE,
   ADMIN_ROLE,
@@ -17,6 +18,7 @@ const {
   isAuthorizedToUpdateEmployee,
   isAuthorizedToUpdateRole,
   isRoleGreater,
+  getHighestGroup,
 } = require("./authentication");
 
 /**
@@ -70,7 +72,80 @@ const PunchMethod = {
 const resolvers = {
   Query: {
     timeRecordReport: async (ctx) => {
-      return null;
+      const {
+        identity: {
+          claims: { eId, cId: companyId, "cognito:groups": cognitoGroup },
+        },
+        arguments: {
+          filter: { from, to, limitByEmployeeId },
+          limit,
+          nextToken,
+        },
+      } = ctx;
+
+      const role = getHighestGroup(cognitoGroup, companyId);
+      if (!isRoleGreater(role, DEFAULT_EMPLOYEE_ROLE))
+        throw new Error("Unautorized: Requires higher privlages");
+
+      // Filter by employee id, if limitByEmployeeId
+      // TODO (): Is there a dynomo DB limit to the number of id's that can be filtered
+      const filter =
+        (limitByEmployeeId || []).length > 0
+          ? {
+              or: limitByEmployeeId.map((id) => {
+                return { employeeId: { eq: id } };
+              }),
+            }
+          : undefined;
+      const variables = {
+        companyId,
+        filter,
+        limit,
+        nextToken,
+        sortDirection: "DESC",
+        timestampIn: { between: [from, to] },
+      };
+
+      console.log(JSON.stringify(variables, null, 4));
+
+      const { data, errors } =
+        (await api.ListCompanyTimeRecords(variables)) || {};
+      const { listCompanyTimeRecords } = data || {};
+      if (errors || !listCompanyTimeRecords) {
+        console.warn(errors);
+        if (!listCompanyTimeRecords) {
+          const errorMessage = `TimeRecordReport faild: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+      if (!isRoleGreater(role, MANAGER_ROLE) && listCompanyTimeRecords.items) {
+        // We need to filter records down to only the managers's own records and
+        // subordenents' records.
+        const employeeMap = new EmployeeLookup();
+        const filteredItems = [];
+
+        for (const timeRecord of listCompanyTimeRecords.items) {
+          const { employeeId } = timeRecord;
+          const employee = await employeeMap.getEmployee(employeeId);
+          // console.log(employee);
+          const { id, primaryManagerId, managerIds } = employee || {};
+          if ([id, primaryManagerId, ...(managerIds || [])].includes(eId)) {
+            filteredItems[filteredItems.length] = timeRecord;
+          } else if (employee) {
+            // console.log("filtered out employee", employee);
+          } else {
+            throw new Error(
+              "Time Record exisits for non-exisiting employee",
+              employeeId
+            );
+          }
+        }
+
+        listCompanyTimeRecords.items = filteredItems;
+      }
+      return listCompanyTimeRecords;
     },
   },
   Mutation: {
