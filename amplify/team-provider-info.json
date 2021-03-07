@@ -84,15 +84,15 @@
       "function": {
         "authPreSignup": {
           "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
-          "s3Key": "amplify-builds/authPreSignup-312f4c4768345a4e3065-build.zip"
+          "s3Key": "amplify-builds/authPreSignup-49356579787252423955-build.zip"
         },
         "authPreTokenGeneration": {
           "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
-          "s3Key": "amplify-builds/authPreTokenGeneration-2b36537975634d595151-build.zip"
+          "s3Key": "amplify-builds/authPreTokenGeneration-6e6a454f676e522b677a-build.zip"
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-69546578304a7a347647-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-62314b725878316d7661-build.zip"
         },
         "iTiempoModules": {
           "deploymentBucketName": "amplify-itiempo-sandbox-141826-deployment",
@@ -125,6 +125,14 @@
                 }
               ],
               "hash": "zdCv4IA5DHpuiTy/rjSHiLFxPpWtGaqrXtlFgYnaFFs="
+            },
+            "3": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "RmkhETpkLWS+4OnawMwKYbzTYQsDzaxXgCa2npv8XqE="
             }
           }
         }

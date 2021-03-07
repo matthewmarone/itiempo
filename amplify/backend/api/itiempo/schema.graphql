@@ -160,6 +160,22 @@ type Employee
   managers: [ID!]!
   allowRead: [String!]! # Write once, implemented in GraphQLResolver
   allowFull: [String!]! # Write once, implemented in GraphQLResolver
+  ident: String
+    @auth(
+      rules: [
+        # Only allow GraphQLResolver (setupNewAccount, addUser) to create
+        {
+          allow: private
+          provider: iam
+          operations: [create, update, read, delete]
+        }
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete, read]
+        }
+      ]
+    )
 }
 type TimeRecord
   @model(subscriptions: { level: off })

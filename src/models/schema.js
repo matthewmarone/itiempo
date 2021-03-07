@@ -341,6 +341,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
+                },
+                "ident": {
+                    "name": "ident",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -363,6 +370,17 @@ export const schema = {
                             "email"
                         ],
                         "queryField": "listEmployeesByEmail"
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byIdent",
+                        "fields": [
+                            "companyId",
+                            "ident"
+                        ],
+                        "queryField": "listByIdent"
                     }
                 },
                 {
@@ -704,5 +722,5 @@ export const schema = {
             }
         }
     },
-    "version": "3fa7f416f51b44450b7105bfa82c0e0c"
+    "version": "940fdd67fefe35338ed32c333da72c41"
 };

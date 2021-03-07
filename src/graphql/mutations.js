@@ -39,6 +39,7 @@ export const setupNewAccount = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -80,6 +81,7 @@ export const createUser = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -121,6 +123,7 @@ export const updateEmpl = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -276,50 +279,6 @@ export const updateTimeRec = /* GraphQL */ `
     }
   }
 `;
-export const deleteEmployee = /* GraphQL */ `
-  mutation DeleteEmployee(
-    $input: DeleteEmployeeInput!
-    $condition: ModelEmployeeConditionInput
-  ) {
-    deleteEmployee(input: $input, condition: $condition) {
-      id
-      username
-      profilePhoto
-      email
-      email_2
-      firstName
-      lastName
-      phone
-      phone_2
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      jobTitle
-      payRates {
-        name
-        amount
-        isHourly
-        isDefault
-      }
-      roles
-      companyId
-      primaryManagerId
-      managerIds
-      inactive
-      managers
-      allowRead
-      allowFull
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const createCompany = /* GraphQL */ `
   mutation CreateCompany(
     $input: CreateCompanyInput!
@@ -433,6 +392,7 @@ export const createEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -477,6 +437,52 @@ export const updateEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
+    }
+  }
+`;
+export const deleteEmployee = /* GraphQL */ `
+  mutation DeleteEmployee(
+    $input: DeleteEmployeeInput!
+    $condition: ModelEmployeeConditionInput
+  ) {
+    deleteEmployee(input: $input, condition: $condition) {
+      id
+      username
+      profilePhoto
+      email
+      email_2
+      firstName
+      lastName
+      phone
+      phone_2
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      jobTitle
+      payRates {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      roles
+      companyId
+      primaryManagerId
+      managerIds
+      inactive
+      managers
+      allowRead
+      allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
     }
   }
 `;

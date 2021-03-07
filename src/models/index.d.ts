@@ -77,6 +77,7 @@ export declare class Employee {
   readonly managers: string[];
   readonly allowRead: string[];
   readonly allowFull: string[];
+  readonly ident: string;
   constructor(init: ModelInit<Employee>);
   static copyOf(source: Employee, mutator: (draft: MutableModel<Employee>) => MutableModel<Employee> | void): Employee;
 }

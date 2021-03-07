@@ -72,10 +72,13 @@ const ListCompanyTimeRecords = async (variables = {}) => {
 /**
  *
  * @param {*} variables
+ * @param {*} includeIdent
  */
-const ListEmployeesByEmail = async (variables = {}) => {
+const ListEmployeesByEmail = async (variables = {}, includeIdent = false) => {
   const operationName = "ListEmployeesByEmail";
-  const graphQL = Queries.listEmployeesByEmail;
+  const graphQL = !includeIdent
+    ? Queries.listEmployeesByEmail
+    : Queries.listEmployeesByEmailWithIdent;
   return await query(operationName, graphQL, { ...variables });
 };
 /**
