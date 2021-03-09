@@ -14,7 +14,7 @@ const Role = {
   "EMPLOYEE": "Employee"
 };
 
-const { TimeRecord, Employee, Company, ModelTimeRecConnection, PunchCardDetails, PayRate } = initSchema(schema);
+const { TimeRecord, Employee, Company, ModelTimeRecConnection, PunchCardDetails, PayRate, QuickClockIn } = initSchema(schema);
 
 export {
   TimeRecord,
@@ -24,5 +24,6 @@ export {
   Role,
   ModelTimeRecConnection,
   PunchCardDetails,
-  PayRate
+  PayRate,
+  QuickClockIn
 };

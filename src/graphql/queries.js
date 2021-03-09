@@ -47,6 +47,15 @@ export const timeRecordReport = /* GraphQL */ `
     }
   }
 `;
+export const byIdent = /* GraphQL */ `
+  query ByIdent($ident: String!, $companyId: ID!) {
+    byIdent(ident: $ident, companyId: $companyId) {
+      employeeId
+      timeRecordId
+      timestampIn
+    }
+  }
+`;
 export const syncCompanies = /* GraphQL */ `
   query SyncCompanies(
     $filter: ModelCompanyFilterInput
@@ -185,65 +194,6 @@ export const listEmployeesByEmail = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const listByIdent = /* GraphQL */ `
-  query ListByIdent(
-    $companyId: ID
-    $ident: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelEmployeeFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listByIdent(
-      companyId: $companyId
-      ident: $ident
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        inactive
-        managers
-        allowRead
-        allowFull
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
         ident
       }
       nextToken
@@ -300,6 +250,7 @@ export const syncEmployees = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        ident
       }
       nextToken
       startedAt
@@ -344,6 +295,7 @@ export const getEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -390,6 +342,7 @@ export const listEmployees = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        ident
       }
       nextToken
       startedAt

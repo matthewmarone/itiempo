@@ -346,7 +346,7 @@ export const schema = {
                     "name": "ident",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 }
             },
@@ -370,17 +370,6 @@ export const schema = {
                             "email"
                         ],
                         "queryField": "listEmployeesByEmail"
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byIdent",
-                        "fields": [
-                            "companyId",
-                            "ident"
-                        ],
-                        "queryField": "listByIdent"
                     }
                 },
                 {
@@ -720,7 +709,33 @@ export const schema = {
                     "attributes": []
                 }
             }
+        },
+        "QuickClockIn": {
+            "name": "QuickClockIn",
+            "fields": {
+                "employeeId": {
+                    "name": "employeeId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "timeRecordId": {
+                    "name": "timeRecordId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "timestampIn": {
+                    "name": "timestampIn",
+                    "isArray": false,
+                    "type": "AWSTimestamp",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
         }
     },
-    "version": "940fdd67fefe35338ed32c333da72c41"
+    "version": "352fe033795c76fa6a1c2940e1bc362d"
 };

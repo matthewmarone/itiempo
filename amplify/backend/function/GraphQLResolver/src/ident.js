@@ -52,4 +52,8 @@ const getEmployee = async (secret = "", companyId = "") => {
     }
     nextToken = nt;
   } while (nextToken);
+
+  return null;
 };
+
+exports.getEmployee = getEmployee;

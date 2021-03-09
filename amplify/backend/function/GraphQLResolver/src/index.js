@@ -9,6 +9,7 @@ const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
 const { EmployeeLookup } = require("./employeeLookup");
+const { getEmployee: getEmployeeByIdent } = require("./ident");
 const {
   OWNER_ROLE,
   ADMIN_ROLE,
@@ -71,6 +72,13 @@ const PunchMethod = {
  */
 const resolvers = {
   Query: {
+    byIdent: async (ctx) => {
+      const {
+        arguments: { ident, companyId },
+      } = ctx;
+      console.log("ident, companyId", ident, companyId);
+      return await getEmployeeByIdent(ident, companyId);
+    },
     timeRecordReport: async (ctx) => {
       const {
         identity: {

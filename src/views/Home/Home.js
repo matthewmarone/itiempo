@@ -18,7 +18,6 @@ import {
   AddTimeButton,
 } from "components";
 import { getWorkWeek, formateDate } from "helpers";
-import crypto from "crypto";
 
 // eslint-disable-next-line no-unused-vars
 const logger = new Logger("Home.js", "ERROR");
@@ -57,9 +56,6 @@ const Home = () => {
   const { companyId, employeeId } = user || {};
   logger.debug("Context.user", user, companyId, employeeId);
   const [openAddTime, setOpenAddTime] = useState(false);
-  const myString = "5053";
-  const e = btoa(myString);
-  console.log("encoded pin", e);
 
   const [{ fromDate, toDate }, setFilterState] = useState({
     fromDate: formateDate(getWorkWeek().fromDate),

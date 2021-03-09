@@ -1,6 +1,6 @@
 {
     "identityPoolName": "ident",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "itiempf47f4725",
     "userPoolName": "usr",
     "autoVerifiedAttributes": [
@@ -115,5 +115,6 @@
                 "Name"
             ]
         }
-    ]
+    ],
+    "authProviders": []
 }
