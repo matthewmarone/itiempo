@@ -92,6 +92,28 @@ export const schema = {
                     }
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmployeeTimestamp",
+                        "fields": [
+                            "employeeId",
+                            "timestampIn"
+                        ],
+                        "queryField": "listEmployeeTimeRecords"
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCompanyTimestamp",
+                        "fields": [
+                            "companyId",
+                            "timestampIn"
+                        ],
+                        "queryField": "listCompanyTimeRecords"
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -337,6 +359,17 @@ export const schema = {
                         "subscriptions": {
                             "level": "off"
                         }
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCompany",
+                        "fields": [
+                            "companyId",
+                            "email"
+                        ],
+                        "queryField": "listEmployeesByEmail"
                     }
                 },
                 {
@@ -704,5 +737,5 @@ export const schema = {
             }
         }
     },
-    "version": "97c9b639da15c2549dbefa8a8eda7735"
+    "version": "352fe033795c76fa6a1c2940e1bc362d"
 };
