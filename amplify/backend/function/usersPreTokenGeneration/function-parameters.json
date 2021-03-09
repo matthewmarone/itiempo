@@ -13,5 +13,12 @@
   "triggerEventPath": "PreTokenGeneration.event.json",
   "roleName": "usersPreTokenGeneration",
   "skipEdit": true,
-  "enableCors": false
+  "enableCors": false,
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "itiempolayer",
+      "version": 1
+    }
+  ]
 }

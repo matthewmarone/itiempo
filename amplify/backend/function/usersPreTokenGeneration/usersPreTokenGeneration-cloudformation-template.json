@@ -39,6 +39,10 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "functionitiempolayerArn": {
+      "Type": "String",
+      "Default": "functionitiempolayerArn"
     }
   },
   "Conditions": {
@@ -106,7 +110,12 @@
           "S3Key": {
             "Ref": "s3Key"
           }
-        }
+        },
+        "Layers": [
+          {
+            "Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:itiempolayer-prod:1"
+          }
+        ]
       }
     },
     "LambdaExecutionRole": {
