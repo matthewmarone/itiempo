@@ -5,7 +5,6 @@ import {
   CardContent,
   Grid,
   Typography,
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -31,7 +30,11 @@ import clsx from "clsx";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { useListEmployeeTimeRecord, useListCompanyTimeRecord } from "hooks";
+import {
+  useListEmployeeTimeRecord,
+  useTimeRecordReport,
+  useGetEmployee,
+} from "hooks";
 
 // eslint-disable-next-line no-unused-vars
 const logger = new Logger("TimeCardTable.js", "ERROR");
@@ -98,7 +101,6 @@ const TimeRecordRow = (props) => {
   const [open, setOpen] = useState(false);
   const { timestampIn: tIn, timestampOut: tOut = tIn } = record;
   const formatedTime = getFormatedTime(getTimeDifference(tIn, tOut));
-  const isSaving = false;
 
   const handleClick = React.useCallback(() => {
     setOpen(true);
@@ -107,21 +109,11 @@ const TimeRecordRow = (props) => {
     setOpen(false);
   }, []);
 
-  const handleOnChange = React.useCallback(() => {}, []);
-  const handleSave = React.useCallback(() => {}, []);
-
   return (
     <TableRow hover>
       <TableCell padding="checkbox" align="center">
         <EditIcon className={iconClassName} onClick={handleClick} />
-        <TimeRecord
-          record={record}
-          open={open}
-          saving={isSaving}
-          onChange={handleOnChange}
-          onClose={handleClose}
-          onSave={handleSave}
-        />
+        <TimeRecord record={record} open={open} onClose={handleClose} />
       </TableCell>
       <TableCell>
         <DateLocal epochSeconds={tIn} local="es" format="l" />
@@ -188,24 +180,18 @@ const createTimeSheetRow = (timeRecords, iconClassName) =>
 
 const TimeCardTableMultiple = (props) => {
   const { companyId, fromDate, toDate, employeeIds = [], ...rest } = props;
-  const { loading, data, fetchMore } = useListCompanyTimeRecord(companyId);
-  const { listCompanyTimeRecords: { items } = {} } = data || {};
+  const [runQuery, { loading, data }] = useTimeRecordReport();
+  const { timeRecordReport: { items } = {} } = data || {};
 
   useEffect(() => {
-    if (companyId) {
-      fetchMore({
-        companyId,
-        sortDirection: "DESC",
-        limit: 25,
-        timestamp: {
-          between: [
-            dateToUnixTimestamp(fromDate),
-            dateToUnixTimestamp(toDate) + SECONDS_IN_DAY - 1,
-          ],
-        },
-      });
+    if (fromDate && toDate) {
+      const filter = {
+        from: dateToUnixTimestamp(fromDate),
+        to: dateToUnixTimestamp(toDate) + SECONDS_IN_DAY - 1,
+      };
+      runQuery(filter);
     }
-  }, [companyId, fetchMore, fromDate, toDate]);
+  }, [fromDate, runQuery, toDate]);
 
   const timeRecords = useMemo(() => {
     const recordsMap = new Map();
@@ -266,100 +252,25 @@ const TimeCardTableSingle = (props) => {
     />
   );
 };
+/**
+ *
+ * @param {*} props
+ */
+const EmployeeName = (props) => {
+  const {
+    timeRecord: { employeeId },
+  } = props;
 
-// TODO Implement
-const useCreateTimeRecord = () => [false, () => {}];
-
-// eslint-disable-next-line no-unused-vars
-const AddTimeButton = (props) => {
-  const { containerClass, buttonClassOverrides, employee } = props;
-  const { companyId, employeeId, primaryManagerId } = employee;
-  console.log(
-    "Check out my melody!",
-    employee,
-    companyId,
-    employeeId,
-    primaryManagerId
-  );
-  const [open, setOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [clockIn, setClockIn] = useState({});
-  const [clockOut, setClockOut] = useState({});
-  const [isSavingClockIn, setClockInArgs] = useCreateTimeRecord();
-  const [isSavingClockOut, setClockOutArgs] = useCreateTimeRecord();
+  const [
+    setId,
+    { data: { getEmployee: { firstName = "", lastName = "" } = {} } = {} },
+  ] = useGetEmployee(employeeId);
 
   useEffect(() => {
-    if (isSaving && !isSavingClockIn && !isSavingClockOut) {
-      setOpen(false);
-    }
-  }, [isSaving, isSavingClockIn, isSavingClockOut]);
+    if (employeeId) setId(employeeId);
+  }, [employeeId, setId]);
 
-  const handleAddTimeClick = React.useCallback(() => {
-    setClockIn({ timestamp: Math.round(new Date().getTime() / 1000) });
-    setClockOut({});
-    setOpen(true);
-  }, []);
-  const handleClockInChange = React.useCallback(
-    (f, v) => {
-      setClockIn({ ...clockIn, [f]: v });
-    },
-    [clockIn]
-  );
-  const handleClockOutChange = React.useCallback(
-    (f, v) => {
-      setClockOut({ ...clockOut, [f]: v });
-    },
-    [clockOut]
-  );
-  const handleClose = React.useCallback(() => {
-    setOpen(false);
-  }, []);
-
-  const handleSave = React.useCallback(() => {
-    if (clockIn && clockIn.timestamp) {
-      setIsSaving(true);
-      setClockInArgs({ ...clockIn, companyId, employeeId, primaryManagerId });
-      if (clockOut && clockOut.timestamp) {
-        setClockOutArgs({
-          ...clockOut,
-          companyId,
-          employeeId,
-          primaryManagerId,
-        });
-      }
-    }
-  }, [
-    clockIn,
-    clockOut,
-    companyId,
-    employeeId,
-    primaryManagerId,
-    setClockInArgs,
-    setClockOutArgs,
-  ]);
-  return (
-    <div className={containerClass}>
-      <Button
-        classes={buttonClassOverrides}
-        color="primary"
-        variant="text"
-        onClick={handleAddTimeClick}
-      >
-        Add Time
-      </Button>
-      <TimeRecord
-        newTimesheet
-        clockIn={clockIn}
-        clockOut={clockOut}
-        open={open}
-        saving={isSaving}
-        onClockInChange={handleClockInChange}
-        onClockOutChange={handleClockOutChange}
-        onClose={handleClose}
-        onSave={handleSave}
-      />
-    </div>
-  );
+  return `${lastName}${firstName ? `,` : ``} ${firstName}`;
 };
 
 /**
@@ -385,9 +296,9 @@ const PrivateTimeCardTable = (props) => {
   console.log("timeRecords", timeRecords);
   timeRecords.forEach((value, key) => {
     if (value[0]) {
-      const {
-        employee: { firstName, lastName },
-      } = value[0];
+      // const {
+      //   employee: { firstName, lastName },
+      // } = value[0];
       const open = collapseObj[key] !== undefined ? collapseObj[key] : true;
       const [r, time] = createTimeSheetRow(value, classes.linkIcon);
       totalMinutes += time;
@@ -405,7 +316,7 @@ const PrivateTimeCardTable = (props) => {
             </TableCell>
             <TableCell colSpan={numOfCols - 2}>
               <Typography variant="h6" gutterBottom component="div">
-                {lastName}, {firstName}
+                <EmployeeName timeRecord={value[0]} />
               </Typography>
             </TableCell>
             <TableCell align="right">

@@ -3,14 +3,16 @@ import {
   listEmployeeTimeRecords as listEmployeeTimeRecordsGQL,
   listEmployeesByEmail as listEmployeesByEmailGQL,
   getEmployee as getEmployeeGQL,
-  listCompanyTimeRecords as listCompanyTimeRecordsGQL,
+  timeRecordReport as timeRecordReportGQL,
 } from "graphql/queries";
 import {
-  createTimeRecord as createTimeRecordGQL,
-  updateTimeRecord as updateTimeRecordGQL,
+  setupNewAccount as setupNewAccountGQL,
+  createTimeRec as createTimeRecordGQL,
+  updateTimeRec as updateTimeRecordGQL,
   createUser as createUserGQL,
-  updateEmployee as updateEmployeeGQL,
-  updateUserRole as updateUserRoleGQL,
+  updateEmpl as updateEmployeeGQL,
+  clockIn as clockInGQL,
+  clockOut as clockOutGQL,
 } from "graphql/mutations";
 import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -22,6 +24,7 @@ const logger = new Logger("hooks.js", "ERROR");
 export const CONSTS = {
   LIMIT_DEFAULT: 10,
   LIMIT_25: 25,
+  LIMIT_50: 50,
   ASC: "ASC",
   DESC: "DESC",
 };
@@ -110,9 +113,9 @@ export const useUploadImage = () => {
 export const useUpdateEmployee = () => useMutation(gql(updateEmployeeGQL));
 
 /**
- * 
+ *
  */
-export const useUpdateUserRole = () => useMutation(gql(updateUserRoleGQL));
+export const useSetupNewAccount = () => useMutation(gql(setupNewAccountGQL));
 
 /**
  *
@@ -163,50 +166,70 @@ export const useCreateEmployee = () =>
  */
 export const useCreateTimeRecord = () =>
   useMutation(gql(createTimeRecordGQL), {
-    update(cache, { data: { createTimeRecord: newRecord } }) {
-      if (newRecord) {
-        // Variables needed for modifying cache
-        const { employeeId } = newRecord;
-        const query = gql(listEmployeeTimeRecordsGQL);
-        const variables = {
-          limit: CONSTS.LIMIT_DEFAULT,
-          sortDirection: CONSTS.DESC,
-          employeeId,
-        };
-        // Get the current list from the cache
-        const {
-          listEmployeeTimeRecords: { items: prevRecords },
-        } = cache.readQuery({ query, variables }) || {
-          listEmployeeTimeRecords: {},
-        };
-        // Create a new list from the existing cached data,
-        // but adding in the new record where is should be
-        // timerecords are allways querried and stored in desc order of timestampIn
-        const mergedItems = mergeSortedLists(
-          [newRecord],
-          prevRecords || [],
-          ({ timestampIn: t1 }, { timestampIn: t2 }) =>
-            t1 === t2 ? 0 : t1 < t2 ? -1 : 1,
-          false
-        );
-        // Write the updated list w the new record to the cache
-        cache.writeQuery({
-          query,
-          variables,
-          data: {
-            listEmployeeTimeRecords: {
-              items: mergedItems,
-            },
-          },
-        });
-      }
-    },
+    update: (cache, { data: { createTimeRec } }) =>
+      updateListEmployeeTimeRecords(cache, createTimeRec),
   });
 
 /**
  *
  */
 export const useUpdateTimeRecord = () => useMutation(gql(updateTimeRecordGQL));
+
+/**
+ *
+ * @param {*} cache
+ * @param {*} newRecord
+ */
+const updateListEmployeeTimeRecords = (cache, newRecord) => {
+  if (newRecord) {
+    // Variables needed for modifying cache
+    const { employeeId } = newRecord;
+    const query = gql(listEmployeeTimeRecordsGQL);
+    const variables = {
+      limit: CONSTS.LIMIT_DEFAULT,
+      sortDirection: CONSTS.DESC,
+      employeeId,
+    };
+    // Get the current list from the cache
+    const {
+      listEmployeeTimeRecords: { items: prevRecords },
+    } = cache.readQuery({ query, variables }) || {
+      listEmployeeTimeRecords: {},
+    };
+    // Create a new list from the existing cached data,
+    // but adding in the new record where is should be
+    // timerecords are allways querried and stored in desc order of timestampIn
+    const mergedItems = mergeSortedLists(
+      [newRecord],
+      prevRecords || [],
+      ({ timestampIn: t1 }, { timestampIn: t2 }) =>
+        t1 === t2 ? 0 : t1 < t2 ? -1 : 1,
+      false
+    );
+    // Write the updated list w the new record to the cache
+    cache.writeQuery({
+      query,
+      variables,
+      data: {
+        listEmployeeTimeRecords: {
+          items: mergedItems,
+        },
+      },
+    });
+  }
+};
+/**
+ *
+ */
+export const useClockIn = () =>
+  useMutation(gql(clockInGQL), {
+    update: (cache, { data: { clockIn } }) =>
+      updateListEmployeeTimeRecords(cache, clockIn),
+  });
+/**
+ *
+ */
+export const useClockOut = () => useMutation(gql(clockOutGQL));
 
 export const CLOCK_IN_STATE = {
   IN: "in",
@@ -327,15 +350,22 @@ export const useListEmployeesByEmail = (companyId) =>
       sortDirection: CONSTS.ASC,
     },
   });
+
 /**
  *
- * @param {*} companyId
  */
-export const useListCompanyTimeRecord = (companyId) =>
-  useQuery(gql(listCompanyTimeRecordsGQL), {
-    variables: {
-      companyId,
-      limit: CONSTS.LIMIT_25,
-      sortDirection: CONSTS.DESC,
-    },
-  });
+export const useTimeRecordReport = (filter) => {
+  const [runQuery, retVal] = useLazyQuery(gql(timeRecordReportGQL));
+  const [filterState, updateFilter] = useState(filter);
+
+  useEffect(() => {
+    const { from, to } = filterState || {};
+    if (from < to) {
+      runQuery({
+        variables: { filter: filterState, limit: CONSTS.LIMIT_25 },
+      });
+    }
+  }, [filterState, runQuery]);
+
+  return [updateFilter, retVal];
+};

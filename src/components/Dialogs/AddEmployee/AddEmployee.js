@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Context } from "Store";
 import { DialogTemplate } from "../components";
 import PropTypes from "prop-types";
@@ -17,6 +17,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { makeStyles } from "@material-ui/styles";
 import { useCreateEmployee } from "hooks";
+import validate from "validate.js";
 
 // eslint-disable-next-line
 const logger = new Logger("AddEmployee.js", "ERROR");
@@ -27,36 +28,156 @@ const useStyles = makeStyles(() => ({
   hidden: { display: "none", visibility: "hidden" },
   error: { color: "#de0000" },
 }));
+// Form schema
+const schema = {
+  email: {
+    presence: { allowEmpty: false, message: "is required" },
+    email: true,
+    length: {
+      maximum: 64,
+    },
+  },
+  firstName: {
+    presence: { allowEmpty: false, message: "is required" },
+    length: {
+      maximum: 128,
+    },
+  },
+  lastName: {
+    presence: { allowEmpty: false, message: "is required" },
+    length: {
+      maximum: 128,
+    },
+  },
+  role: {
+    presence: { allowEmpty: false, message: "is required" },
+  },
+};
+/**
+ *
+ * @param {*} props
+ */
+const MySaveBtn = (props) => {
+  const { input, onError, onData } = props;
+  const [createEmployee, { loading, error, data }] = useCreateEmployee();
+  useEffect(() => {
+    if (input)
+      createEmployee({
+        variables: {
+          input,
+        },
+      });
+  }, [createEmployee, input]);
 
+  useEffect(() => {
+    if (!loading) {
+      if (error) {
+        onError(error);
+      } else if (data) {
+        onData(data);
+      }
+    }
+  }, [data, error, loading, onData, onError]);
+
+  return (
+    <Button color="primary" disabled>
+      Saving...
+    </Button>
+  );
+};
+
+/**
+ *
+ * @param {*} props
+ */
 const AddEmployee = (props) => {
   const { open, onClose } = props;
   const classes = useStyles();
-  const [state, setState] = useState({});
-  const [createEmployee, { loading, error }] = useCreateEmployee();
+  const [input, setInput] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
+  const [formState, setFormState] = useState({
+    isValid: false,
+    values: {},
+    touched: {},
+    errors: {},
+  });
   const [{ user }] = useContext(Context);
   const { companyId, employeeId: primaryManagerId } = user || {};
   const {
     firstName = "",
     lastName = "",
     email = "",
-    role = "Employee",
-  } = state;
+    role = "",
+  } = formState.values;
+
+  const reset = useCallback(() => {
+    setFormState({
+      isValid: false,
+      values: {},
+      touched: {},
+      errors: {},
+    });
+    setInput(null);
+    setLoading(false);
+    setError(null);
+  }, []);
 
   useEffect(() => {
     if (open) {
-      // Resets form onOpen
-      setState({});
+      reset();
     }
-  }, [open]);
+  }, [open, reset]);
 
-  const validateAndSave = () => {
-    const { role, ...rest } = state;
-    createEmployee({
-      variables: {
-        input: { ...rest, roles: [role], companyId, primaryManagerId },
+  useEffect(() => {
+    const errors = validate(formState.values, schema);
+
+    setFormState((formState) => ({
+      ...formState,
+      isValid: errors ? false : true,
+      errors: errors || {},
+    }));
+  }, [formState.values]);
+
+  const handleChange = (event) => {
+    event.persist();
+
+    setFormState((formState) => ({
+      ...formState,
+      values: {
+        ...formState.values,
+        [event.target.name]:
+          event.target.type === "checkbox"
+            ? event.target.checked
+              ? true
+              : undefined
+            : event.target.value,
       },
-    });
+      touched: {
+        ...formState.touched,
+        [event.target.name]: true,
+      },
+    }));
   };
+
+  const handleSave = () => {
+    const { role, ...rest } = formState.values;
+    setLoading(true);
+    setError(null);
+    setInput({ ...rest, roles: [role], companyId, primaryManagerId });
+  };
+
+  const hasError = (field) =>
+    formState.touched[field] && formState.errors[field] ? true : false;
+
+  const handleOnError = useCallback((e) => {
+    setLoading(false);
+    setError(e);
+  }, []);
+  const handleOnData = useCallback(() => {
+    reset();
+    onClose();
+  }, [onClose, reset]);
 
   const actions = [
     <Button
@@ -68,18 +189,24 @@ const AddEmployee = (props) => {
     >
       Cancel
     </Button>,
-    <Button
-      key="add"
-      onClick={validateAndSave}
-      color="primary"
-      disabled={loading}
-    >
-      {loading ? "Saving..." : "Add"}
-    </Button>,
+    !loading ? (
+      <Button
+        key="add"
+        onClick={handleSave}
+        color="primary"
+        disabled={!formState.isValid}
+      >Add</Button>
+    ) : (
+      <MySaveBtn
+        key="add"
+        input={input}
+        onError={handleOnError}
+        onData={handleOnData}
+      />
+    ),
   ];
 
-  const handleChange = (e) =>
-    setState({ ...state, [e.target.name]: e.target.value });
+  if (error) console.log("error", error);
 
   const dialogContent = (
     <form autoComplete="off" noValidate>
@@ -90,6 +217,9 @@ const AddEmployee = (props) => {
             label="First name"
             margin="dense"
             name="firstName"
+            helperText={
+              hasError("firstName") ? formState.errors.firstName[0] : null
+            }
             onChange={handleChange}
             required
             value={firstName}
@@ -102,6 +232,9 @@ const AddEmployee = (props) => {
             label="Last name"
             margin="dense"
             name="lastName"
+            helperText={
+              hasError("lastName") ? formState.errors.lastName[0] : null
+            }
             onChange={handleChange}
             required
             value={lastName}
@@ -114,6 +247,7 @@ const AddEmployee = (props) => {
             label="Email Address"
             margin="dense"
             name="email"
+            helperText={hasError("email") ? formState.errors.email[0] : null}
             onChange={handleChange}
             required
             value={email}
@@ -121,7 +255,7 @@ const AddEmployee = (props) => {
           />
         </Grid>
         <Grid item md={4} xs={12}>
-          <FormControl variant="outlined" className={""} fullWidth>
+          <FormControl variant="outlined" className={""} required fullWidth>
             <InputLabel id="role-select-label">Role</InputLabel>
             <Select
               labelId="role-select"
@@ -130,6 +264,7 @@ const AddEmployee = (props) => {
               onChange={handleChange}
               label="Role"
               name="role"
+              helperText={hasError("role") ? formState.errors.role[0] : null}
             >
               <MenuItem value={"Owner"}>Owner</MenuItem>
               <MenuItem value={"Admin"}>Admin</MenuItem>
@@ -174,8 +309,11 @@ const AddEmployee = (props) => {
             className={error ? classes.error : classes.hidden}
             variant="body1"
           >
-            {/* {error} */}
-            Error
+            {!error || error.message === "Account already exists"
+              ? "Account already exists, please use a different email."
+              : error.message === "Employee already exists"
+              ? "Employee already exists, please ask your admin to make you their manager."
+              : "Oh no, something went wrong"}
           </Typography>
         </Grid>
       </Grid>

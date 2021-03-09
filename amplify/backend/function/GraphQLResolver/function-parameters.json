@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "auth": {
+      "auth": [
+        "create",
+        "read",
+        "update"
+      ]
+    },
+    "api": {
+      "itiempo": [
+        "create",
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "iTiempoModules",
+      "version": 3
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Context } from "Store";
 import { AppActions } from "Reducer";
 import { Hub, Logger, Auth } from "aws-amplify";
+import { useApolloClient } from "@apollo/client";
 import {
   SignIn,
   SignUp,
@@ -46,7 +47,9 @@ const UIAuthState = {
 const AppAuthenticator = ({ children }) => {
   const [authState, setAuthState] = useState(UIAuthState.Loading);
   const [authData, setAuthData] = useState({});
+  const [authorized, setAuthorized] = useState(false);
   const [{ user }, dispatch] = useContext(Context);
+  const client = useApolloClient();
   /**
    *
    * @param {*} param0
@@ -174,9 +177,41 @@ const AppAuthenticator = ({ children }) => {
 
   logger.debug("(authState, user) => ", authState, user);
 
-  return authState === UIAuthState.SignedIn && user
-    ? children
-    : viewSwitch(authState);
+  const isAuthorized = authState === UIAuthState.SignedIn && user;
+  useEffect(() => {
+    if (isAuthorized) {
+      // Check that it's the same user as last time
+      // Otherwise reset the store, fresh for the new user,
+      // and set this user to the last logged in user
+      const key = "preuser";
+      const { username } = user;
+      const preUsername = localStorage.getItem(key);
+      if (preUsername !== username) {
+        client
+          .resetStore()
+          .then(logger.info("Reset Store for new user"))
+          .catch((e) => logger.error(e))
+          .finally(() => setAuthorized(true));
+        try {
+          localStorage.setItem(key, username);
+        } catch (e) {
+          logger.error(e);
+        }
+      } else {
+        setAuthorized(true);
+      }
+    } else {
+      setAuthorized(false);
+    }
+  }, [isAuthorized, client, user]);
+
+  return authorized ? (
+    children
+  ) : !isAuthorized ? (
+    viewSwitch(authState)
+  ) : (
+    <AuthNLoading />
+  );
 };
 
 export { UIAuthState };

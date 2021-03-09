@@ -8,6 +8,9 @@ const useStyles = makeStyles(() => ({
   root: {
     boxShadow: "none",
   },
+  image: {
+    height: "1.175em",
+  },
 }));
 
 const Topbar = (props) => {
@@ -23,7 +26,11 @@ const Topbar = (props) => {
       position="fixed"
     >
       <Toolbar>
-        <img alt="Logo" src="/images/logos/iTiempo - White.svg" />
+        <img
+          alt="Logo"
+          src="/images/logos/iTiempo - White.svg"
+          className={classes.image}
+        />
       </Toolbar>
     </AppBar>
   );

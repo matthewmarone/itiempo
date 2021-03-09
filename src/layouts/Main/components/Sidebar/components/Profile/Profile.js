@@ -4,6 +4,7 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { Avatar, Typography } from "@material-ui/core";
+import { getInitials } from "helpers";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 /**
- * 
- * @param {*} props 
+ *
+ * @param {*} props
  */
 const Profile = (props) => {
   const classes = useStyles();
@@ -42,17 +43,19 @@ const Profile = (props) => {
     ...rest
   } = props;
   const subtext = `Clocked ${clockedIn ? `In` : `Out`}`;
-
+  console.log("profile", profileName);
   return (
     <div {...rest} className={clsx(classes.root, className)}>
       <Avatar
-        alt="Person"
+        alt="Profile Photo"
         className={classes.avatar}
         component={RouterLink}
         src={avatarURL}
         to={profileURL}
         onClick={onClose}
-      />
+      >
+        {getInitials(profileName)}
+      </Avatar>
       <Typography
         className={profileName ? classes.name : classes.nameHidden}
         variant="h4"
@@ -72,7 +75,7 @@ const Profile = (props) => {
 
 Profile.propTypes = {
   className: PropTypes.string,
-  profileName: PropTypes.string,
+  profileName: PropTypes.string.isRequired,
   profileURL: PropTypes.string,
   avatarURL: PropTypes.string,
   clockedIn: PropTypes.bool,

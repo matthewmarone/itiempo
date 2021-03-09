@@ -51,10 +51,9 @@ const EmployeeProfile = (props) => {
     lastName,
     jobTitle,
     roles,
-    role: r, // Role is not a real employee field
     profilePhoto,
   } = employee;
-  const role = r || (roles && roles[0] ? roles[0] : "Employee");
+  const role = roles && roles[0] ? roles[0] : "Employee";
 
   const [upload, { loading, error, response }] = useUploadImage();
   const [setPhotoVars, { data: avatarUrl }] = useDownloadImage({

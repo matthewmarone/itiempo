@@ -19,6 +19,7 @@ import {
   FormControl,
   Select,
   // Typography,
+  CircularProgress,
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Logger } from "aws-amplify";
@@ -89,23 +90,18 @@ const PayRate = (props) => {
 
 const EmployeeSetup = (props) => {
   const classes = useStyles();
-  const { className, employee, onChange, onSave, ...rest } = props;
+  const { className, employee, onChange, onSave, saving, ...rest } = props;
   const { companyId } = employee;
   const { data } = useListEmployeesByEmail(companyId);
   const {
     listEmployeesByEmail: { items: employees = [] },
   } = data || { listEmployeesByEmail: {} };
-  const {
-    primaryManagerId,
-    jobTitle,
-    payRates = [],
-    roles,
-    role: r, // Role is not a real employee field
-  } = employee;
-  const role = r || (roles && roles[0] ? roles[0] : "Employee");
+  const { primaryManagerId, jobTitle, payRates = [], roles } = employee;
+  const role = roles && roles[0] ? roles[0] : "Employee";
 
-  const handleChange = (e) => {
-    onChange({ [e.target.name]: e.target.value });
+  const handleChange = ({ target: { name, value } }) => {
+    const role = name === "role";
+    onChange({ [role ? "roles" : name]: role ? [value] : value });
   };
 
   const validRate = (rate) => {
@@ -230,8 +226,17 @@ const EmployeeSetup = (props) => {
         </CardContent>
         <Divider />
         <CardActions>
-          <Button color="primary" variant="contained" onClick={onSave}>
-            Save details
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={onSave}
+            disabled={saving}
+          >
+            {!saving ? (
+              "Save details"
+            ) : (
+              <CircularProgress color="secondary" size={28} />
+            )}
           </Button>
         </CardActions>
       </form>
@@ -244,6 +249,7 @@ EmployeeSetup.propTypes = {
   employee: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  saving: PropTypes.bool,
 };
 
 export default EmployeeSetup;

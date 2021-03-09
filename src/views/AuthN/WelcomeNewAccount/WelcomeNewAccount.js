@@ -14,11 +14,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { parseFullName } from "helpers";
-import { gql, useMutation } from "@apollo/client";
-import {
-  setupNewAccount as setupNewAccountGQL,
-  updateEmployee as updateEmployeeGQL,
-} from "graphql/mutations";
+import { useUpdateEmployee, useSetupNewAccount } from "hooks";
 // eslint-disable-next-line
 const logger = new Logger("WelcomeNewAccount.js", "ERROR");
 
@@ -82,7 +78,7 @@ const WelcomeNewAccount = (props) => {
       error: errorAcct,
       called: calledAcct,
     },
-  ] = useMutation(gql(setupNewAccountGQL));
+  ] = useSetupNewAccount();
   const [
     updateEmployee,
     {
@@ -91,8 +87,7 @@ const WelcomeNewAccount = (props) => {
       error: errorEmpl,
       called: calledEmpl,
     },
-  ] = useMutation(gql(updateEmployeeGQL));
-
+  ] = useUpdateEmployee();
   const { onAuthStateChange } = props;
   const [formState, setFormState] = useState({
     isValid: false,
@@ -100,6 +95,32 @@ const WelcomeNewAccount = (props) => {
     touched: {},
     errors: {},
   });
+
+  // Setup account on load, and return the new employee record
+  // server will also return the employee record if account is already setup
+  useEffect(() => {
+    if (!calledAcct) createAccount();
+  }, [calledAcct, createAccount]);
+
+  // Update employee after account setup, and name form is submitted
+  useEffect(() => {
+    if (calledAcct && !loadingAcct && !errorAcct && dataAcct && name) {
+      logger.debug("dataAcct", dataAcct);
+      const { setupNewAccount: { __typename, ...reqFields } = {} } = dataAcct;
+      if (reqFields) {
+        const { firstName, lastName } = name;
+        updateEmployee({
+          variables: {
+            input: {
+              ...reqFields,
+              firstName,
+              lastName,
+            },
+          },
+        });
+      }
+    }
+  }, [calledAcct, dataAcct, errorAcct, loadingAcct, name, updateEmployee]);
 
   // Runs after successfull employee update response
   // We dispatch to the context the fact that the account has been setup
@@ -118,27 +139,6 @@ const WelcomeNewAccount = (props) => {
   useEffect(() => {
     if (userLocalAppData.accountSetup) onAuthStateChange(UIAuthState.SignedIn);
   }, [onAuthStateChange, userLocalAppData.accountSetup]);
-
-  // Setup account on load
-  useEffect(() => {
-    if (!calledAcct) createAccount();
-  }, [calledAcct, createAccount]);
-
-  // Update employee after account setup and name is submitted
-  useEffect(() => {
-    if (calledAcct && !loadingAcct && !errorAcct && dataAcct && name) {
-      logger.debug("dataAcct", dataAcct);
-      const {
-        setupNewAccount: { id },
-      } = dataAcct || { setupNewAccount: {} };
-      if (id) {
-        const { firstName, lastName } = name;
-        updateEmployee({
-          variables: { input: { id, firstName, lastName } },
-        });
-      }
-    }
-  }, [calledAcct, dataAcct, errorAcct, loadingAcct, name, updateEmployee]);
 
   // Checks for errors on from change
   useEffect(() => {
@@ -214,7 +214,7 @@ const WelcomeNewAccount = (props) => {
           Account created
         </Typography>
         <Typography color="textSecondary" gutterBottom>
-          Tell us your name to get started
+          One last step, please tell us your name to get started
         </Typography>
         <TextField
           autoFocus
