@@ -103,7 +103,11 @@
         },
         "Runtime": "nodejs12.x",
         "Timeout": "25",
-        "Layers": [],
+        "Layers": [
+          {
+            "Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:iTiempoModules-sandbox:3"
+          }
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "deploymentBucketName"

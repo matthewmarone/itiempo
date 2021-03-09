@@ -13,6 +13,12 @@
   "roleName": "authPreTokenGeneration",
   "skipEdit": true,
   "enableCors": false,
-  "lambdaLayers": [],
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "iTiempoModules",
+      "version": 3
+    }
+  ],
   "triggerEventPath": "PreTokenGeneration.event.json"
 }

@@ -15,5 +15,11 @@
       ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "iTiempoModules",
+      "version": 3
+    }
+  ]
 }
