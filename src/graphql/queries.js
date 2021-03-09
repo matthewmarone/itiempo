@@ -14,26 +14,6 @@ export const timeRecordReport = /* GraphQL */ `
         companyId
         timestampIn
         timestampOut
-        clockInDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        clockOutDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        rate {
-          name
-          amount
-          isHourly
-          isDefault
-        }
         approved
         approvedBy
         _version
@@ -141,6 +121,59 @@ export const listCompanys = /* GraphQL */ `
     }
   }
 `;
+export const listEmployeesByEmail = /* GraphQL */ `
+  query ListEmployeesByEmail(
+    $companyId: ID
+    $email: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEmployeeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEmployeesByEmail(
+      companyId: $companyId
+      email: $email
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        username
+        profilePhoto
+        email
+        email_2
+        firstName
+        lastName
+        phone
+        phone_2
+        addressLine1
+        addressLine2
+        city
+        state
+        zip
+        country
+        jobTitle
+        roles
+        companyId
+        primaryManagerId
+        managerIds
+        inactive
+        managers
+        allowRead
+        allowFull
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const syncEmployees = /* GraphQL */ `
   query SyncEmployees(
     $filter: ModelEmployeeFilterInput
@@ -171,12 +204,6 @@ export const syncEmployees = /* GraphQL */ `
         zip
         country
         jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
         roles
         companyId
         primaryManagerId
@@ -190,7 +217,6 @@ export const syncEmployees = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        ident
       }
       nextToken
       startedAt
@@ -235,7 +261,6 @@ export const getEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -263,12 +288,6 @@ export const listEmployees = /* GraphQL */ `
         zip
         country
         jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
         roles
         companyId
         primaryManagerId
@@ -282,7 +301,6 @@ export const listEmployees = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        ident
       }
       nextToken
       startedAt
@@ -340,26 +358,78 @@ export const listTimeRecords = /* GraphQL */ `
         companyId
         timestampIn
         timestampOut
-        clockInDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        clockOutDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        rate {
-          name
-          amount
-          isHourly
-          isDefault
-        }
+        approved
+        approvedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const listEmployeeTimeRecords = /* GraphQL */ `
+  query ListEmployeeTimeRecords(
+    $employeeId: ID
+    $timestampIn: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTimeRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEmployeeTimeRecords(
+      employeeId: $employeeId
+      timestampIn: $timestampIn
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        employeeId
+        companyId
+        timestampIn
+        timestampOut
+        approved
+        approvedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const listCompanyTimeRecords = /* GraphQL */ `
+  query ListCompanyTimeRecords(
+    $companyId: ID
+    $timestampIn: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTimeRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCompanyTimeRecords(
+      companyId: $companyId
+      timestampIn: $timestampIn
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        employeeId
+        companyId
+        timestampIn
+        timestampOut
         approved
         approvedBy
         _version
@@ -392,26 +462,6 @@ export const syncTimeRecords = /* GraphQL */ `
         companyId
         timestampIn
         timestampOut
-        clockInDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        clockOutDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        rate {
-          name
-          amount
-          isHourly
-          isDefault
-        }
         approved
         approvedBy
         _version
