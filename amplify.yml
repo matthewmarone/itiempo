@@ -4,7 +4,7 @@ backend:
     build:
       commands:
         - '# Build iTiempoModules'
-        - npm --prefix ./amplify/backend/function/iTiempoModules/lib/nodejs install ./amplify/backend/function/iTiempoModules/lib/nodejs
+        - npm --prefix ./amplify/backend/function/itiempolayer/lib/nodejs install ./amplify/backend/function/itiempolayer/lib/nodejs
         - '# Execute Amplify CLI with the helper script'
         - amplifyPush --simple
 frontend:
