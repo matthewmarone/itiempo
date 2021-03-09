@@ -1,34 +1,9 @@
 {
-  "hosting": {
-    "amplifyhosting": {
-      "service": "amplifyhosting",
-      "type": "cicd"
-    }
-  },
   "function": {
-    "iTiempoModules": {
+    "itiempolayer": {
       "providerPlugin": "awscloudformation",
       "service": "LambdaLayer",
       "build": true
-    },
-    "authPreSignup": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "authPreTokenGeneration": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "iTiempoModules",
-          "attributes": [
-            "Arn"
-          ]
-        }
-      ]
     },
     "GraphQLResolver": {
       "build": true,
@@ -36,38 +11,33 @@
       "service": "Lambda",
       "dependsOn": [
         {
-          "category": "auth",
-          "resourceName": "auth",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "api",
-          "resourceName": "itiempo",
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput"
-          ]
-        },
-        {
           "category": "function",
-          "resourceName": "iTiempoModules",
+          "resourceName": "itiempolayer",
           "attributes": [
             "Arn"
           ]
         }
       ]
+    },
+    "usersPreTokenGeneration": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "usersPreSignup": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "auth": {
-    "auth": {
+    "users": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "authPreSignup",
+          "resourceName": "usersPreTokenGeneration",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
@@ -76,7 +46,7 @@
         },
         {
           "category": "function",
-          "resourceName": "authPreTokenGeneration",
+          "resourceName": "usersPreSignup",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
@@ -96,7 +66,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authauth"
+              "userPoolId": "authusers"
             }
           },
           "additionalAuthenticationProviders": [
@@ -106,12 +76,6 @@
           ]
         }
       }
-    }
-  },
-  "storage": {
-    "contentStore": {
-      "service": "S3",
-      "providerPlugin": "awscloudformation"
     }
   }
 }
