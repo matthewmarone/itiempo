@@ -31,5 +31,69 @@
         }
       }
     }
+  },
+  "test": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-itiempo-test-132349-authRole",
+      "UnauthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-test-132349-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-test-132349-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-itiempo-test-132349-deployment",
+      "UnauthRoleName": "amplify-itiempo-test-132349-unauthRole",
+      "StackName": "amplify-itiempo-test-132349",
+      "StackId": "arn:aws:cloudformation:us-east-1:388597641926:stack/amplify-itiempo-test-132349/ea4195c0-81e6-11eb-a860-12446ecd5e01",
+      "AmplifyAppId": "d3aqy5lckzu9er"
+    },
+    "categories": {
+      "auth": {
+        "users": {}
+      },
+      "function": {
+        "usersPreSignup": {
+          "deploymentBucketName": "amplify-itiempo-test-132349-deployment",
+          "s3Key": "amplify-builds/usersPreSignup-43374d6659776a6e2b69-build.zip"
+        },
+        "usersPreTokenGeneration": {
+          "deploymentBucketName": "amplify-itiempo-test-132349-deployment",
+          "s3Key": "amplify-builds/usersPreTokenGeneration-794b56726c694a617667-build.zip"
+        },
+        "GraphQLResolver": {
+          "deploymentBucketName": "amplify-itiempo-test-132349-deployment",
+          "s3Key": "amplify-builds/GraphQLResolver-4c5a646c354d5a504d51-build.zip"
+        }
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-itiempo-dev-133828-authRole",
+      "UnauthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-dev-133828-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-dev-133828-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-itiempo-dev-133828-deployment",
+      "UnauthRoleName": "amplify-itiempo-dev-133828-unauthRole",
+      "StackName": "amplify-itiempo-dev-133828",
+      "StackId": "arn:aws:cloudformation:us-east-1:388597641926:stack/amplify-itiempo-dev-133828/f601c900-81e8-11eb-98d8-12f3521c88a3",
+      "AmplifyAppId": "d3aqy5lckzu9er"
+    },
+    "categories": {
+      "auth": {
+        "users": {}
+      },
+      "function": {
+        "usersPreSignup": {
+          "deploymentBucketName": "amplify-itiempo-dev-133828-deployment",
+          "s3Key": "amplify-builds/usersPreSignup-43374d6659776a6e2b69-build.zip"
+        },
+        "usersPreTokenGeneration": {
+          "deploymentBucketName": "amplify-itiempo-dev-133828-deployment",
+          "s3Key": "amplify-builds/usersPreTokenGeneration-794b56726c694a617667-build.zip"
+        },
+        "GraphQLResolver": {
+          "deploymentBucketName": "amplify-itiempo-dev-133828-deployment",
+          "s3Key": "amplify-builds/GraphQLResolver-4c5a646c354d5a504d51-build.zip"
+        }
+      }
+    }
   }
 }

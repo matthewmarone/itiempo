@@ -39,6 +39,7 @@ export const setupNewAccount = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -80,6 +81,7 @@ export const createUser = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -121,6 +123,7 @@ export const updateEmpl = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -389,6 +392,7 @@ export const createEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -433,6 +437,7 @@ export const updateEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -477,6 +482,7 @@ export const deleteEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;

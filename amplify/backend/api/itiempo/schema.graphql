@@ -193,11 +193,11 @@ type TimeRecord
     fields: ["employeeId", "timestampIn"]
     queryField: "listEmployeeTimeRecords"
   )
-  @key(
-    name: "byCompanyTimestamp"
-    fields: ["companyId", "timestampIn"]
-    queryField: "listCompanyTimeRecords"
-  )
+  # @key(
+  #   name: "byCompanyTimestamp"
+  #   fields: ["companyId", "timestampIn"]
+  #   queryField: "listCompanyTimeRecords"
+  # )
   @auth(
     rules: [
       # Only allow GraphQLResolver to modify
