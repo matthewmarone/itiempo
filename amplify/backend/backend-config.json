@@ -80,5 +80,11 @@
         }
       }
     }
+  },
+  "storage": {
+    "sppcontent": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }

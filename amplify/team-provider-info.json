@@ -19,15 +19,15 @@
       "function": {
         "usersPreSignup": {
           "deploymentBucketName": "amplify-itiempo-prod-92653-deployment",
-          "s3Key": "amplify-builds/usersPreSignup-75734a6c6c4c5a4d4157-build.zip"
+          "s3Key": "amplify-builds/usersPreSignup-342b75726f6530686f35-build.zip"
         },
         "usersPreTokenGeneration": {
           "deploymentBucketName": "amplify-itiempo-prod-92653-deployment",
-          "s3Key": "amplify-builds/usersPreTokenGeneration-4f4c664e587534526964-build.zip"
+          "s3Key": "amplify-builds/usersPreTokenGeneration-57576d386d33486a4749-build.zip"
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-prod-92653-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-72335a62375070586638-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-3472417a56354c6a4b59-build.zip"
         }
       }
     }
