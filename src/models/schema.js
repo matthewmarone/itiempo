@@ -103,6 +103,17 @@ export const schema = {
                     }
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCompanyTimestamp",
+                        "fields": [
+                            "companyId",
+                            "timestampIn"
+                        ],
+                        "queryField": "listCompanyTimeRecords"
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -726,5 +737,5 @@ export const schema = {
             }
         }
     },
-    "version": "9efb536ed80732bec7e560024689aae6"
+    "version": "352fe033795c76fa6a1c2940e1bc362d"
 };

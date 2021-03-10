@@ -411,6 +411,42 @@ export const listEmployeeTimeRecords = /* GraphQL */ `
     }
   }
 `;
+export const listCompanyTimeRecords = /* GraphQL */ `
+  query ListCompanyTimeRecords(
+    $companyId: ID
+    $timestampIn: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTimeRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCompanyTimeRecords(
+      companyId: $companyId
+      timestampIn: $timestampIn
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        employeeId
+        companyId
+        timestampIn
+        timestampOut
+        approved
+        approvedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const syncTimeRecords = /* GraphQL */ `
   query SyncTimeRecords(
     $filter: ModelTimeRecordFilterInput
