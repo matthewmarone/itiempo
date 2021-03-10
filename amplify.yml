@@ -3,8 +3,10 @@ backend:
   phases:
     build:
       commands:
-        - '# Build iTiempoModules'
-        - npm --prefix ./amplify/backend/function/itiempolayer/lib/nodejs install ./amplify/backend/function/itiempolayer/lib/nodejs
+        - '# Build GraphQLResolver modules'
+        - npm --prefix ./amplify/backend/function/GraphQLResolver/src install ./amplify/backend/function/GraphQLResolver/src
+        - '# Build PreSignup modules'
+        - npm --prefix ./amplify/backend/function/usersPreSignup/src install ./amplify/backend/function/usersPreSignup/src
         - '# Execute Amplify CLI with the helper script'
         - amplifyPush --simple
 frontend:

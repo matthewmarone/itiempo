@@ -1,7 +1,7 @@
 /* Amplify Params - DO NOT EDIT
 	API_ITIEMPO_GRAPHQLAPIENDPOINTOUTPUT
 	API_ITIEMPO_GRAPHQLAPIIDOUTPUT
-	AUTH_AUTH_USERPOOLID
+	AUTH_USERS_USERPOOLID
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
@@ -10,7 +10,7 @@ const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider();
 /**
  * Get user pool information from environment variables.
  */
-const COGNITO_USERPOOL_ID = process.env.AUTH_AUTH_USERPOOLID;
+const COGNITO_USERPOOL_ID = process.env.AUTH_USERS_USERPOOLID;
 if (!COGNITO_USERPOOL_ID) {
   throw new Error(
     `Function requires environment variable: 'COGNITO_USERPOOL_ID'`

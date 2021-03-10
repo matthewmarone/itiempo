@@ -11,16 +11,6 @@ Parameters:
   
   
   
-  functionusersPreTokenGenerationArn:
-    Type: String
-    Default: functionusersPreTokenGenerationArn
-  
-  functionusersPreTokenGenerationName:
-    Type: String
-    Default: functionusersPreTokenGenerationName
-  
-  
-  
   functionusersPreSignupArn:
     Type: String
     Default: functionusersPreSignupArn
@@ -28,6 +18,16 @@ Parameters:
   functionusersPreSignupName:
     Type: String
     Default: functionusersPreSignupName
+  
+  
+  
+  functionusersPreTokenGenerationArn:
+    Type: String
+    Default: functionusersPreTokenGenerationArn
+  
+  functionusersPreTokenGenerationName:
+    Type: String
+    Default: functionusersPreTokenGenerationName
   
   
   

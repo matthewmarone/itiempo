@@ -1,9 +1,18 @@
 {
-  "lambdaLayers": [
-    {
-      "type": "ProjectLayer",
-      "resourceName": "itiempolayer",
-      "version": 1
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "users": [
+        "create",
+        "read",
+        "update"
+      ]
+    },
+    "api": {
+      "itiempo": [
+        "Query",
+        "Mutation"
+      ]
     }
-  ]
+  }
 }

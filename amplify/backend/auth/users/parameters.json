@@ -99,7 +99,7 @@
     "dependsOn": [
         {
             "category": "function",
-            "resourceName": "usersPreTokenGeneration",
+            "resourceName": "usersPreSignup",
             "triggerProvider": "Cognito",
             "attributes": [
                 "Arn",
@@ -108,7 +108,7 @@
         },
         {
             "category": "function",
-            "resourceName": "usersPreSignup",
+            "resourceName": "usersPreTokenGeneration",
             "triggerProvider": "Cognito",
             "attributes": [
                 "Arn",

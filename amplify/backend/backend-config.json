@@ -1,9 +1,14 @@
 {
   "function": {
-    "itiempolayer": {
+    "usersPreSignup": {
+      "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "LambdaLayer",
-      "build": true
+      "service": "Lambda"
+    },
+    "usersPreTokenGeneration": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     },
     "GraphQLResolver": {
       "build": true,
@@ -11,32 +16,21 @@
       "service": "Lambda",
       "dependsOn": [
         {
-          "category": "function",
-          "resourceName": "itiempolayer",
+          "category": "auth",
+          "resourceName": "users",
           "attributes": [
-            "Arn"
+            "UserPoolId"
           ]
-        }
-      ]
-    },
-    "usersPreTokenGeneration": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
+        },
         {
-          "category": "function",
-          "resourceName": "itiempolayer",
+          "category": "api",
+          "resourceName": "itiempo",
           "attributes": [
-            "Arn"
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
           ]
         }
       ]
-    },
-    "usersPreSignup": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
     }
   },
   "auth": {
@@ -46,7 +40,7 @@
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "usersPreTokenGeneration",
+          "resourceName": "usersPreSignup",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
@@ -55,7 +49,7 @@
         },
         {
           "category": "function",
-          "resourceName": "usersPreSignup",
+          "resourceName": "usersPreTokenGeneration",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
