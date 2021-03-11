@@ -13,11 +13,15 @@ frontend:
   phases:
     preBuild:
       commands:
+        - nvm use
         - node -v
+        - npm -v
         - npm ci
     build:
       commands:
+        - nvm use
         - node -v
+        - npm -v
         - npm run build
   artifacts:
     baseDirectory: build
