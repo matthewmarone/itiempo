@@ -76,7 +76,7 @@ const resolvers = {
       const {
         arguments: { ident, companyId },
       } = ctx;
-      console.log("ident, companyId", ident, companyId);
+      console.log("pin, companyId", ident, companyId);
       return await getEmployeeByIdent(ident, companyId);
     },
     timeRecordReport: async (ctx) => {
