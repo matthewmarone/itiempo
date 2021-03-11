@@ -4,9 +4,9 @@ backend:
     build:
       commands:
         - "# Build GraphQLResolver modules"
-        - npm --prefix ./amplify/backend/function/GraphQLResolver/src install ./amplify/backend/function/GraphQLResolver/src
+        - npm --prefix ./amplify/backend/function/GraphQLResolver/src ci ./amplify/backend/function/GraphQLResolver/src
         - "# Build PreSignup modules"
-        - npm --prefix ./amplify/backend/function/usersPreSignup/src install ./amplify/backend/function/usersPreSignup/src
+        - npm --prefix ./amplify/backend/function/usersPreSignup/src ci ./amplify/backend/function/usersPreSignup/src
         - "# Execute Amplify CLI with the helper script"
         - amplifyPush --simple
 frontend:
