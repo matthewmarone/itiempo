@@ -72,13 +72,6 @@ const PunchMethod = {
  */
 const resolvers = {
   Query: {
-    byIdent: async (ctx) => {
-      const {
-        arguments: { ident, companyId },
-      } = ctx;
-      console.log("pin, companyId", ident, companyId);
-      return await getEmployeeByIdent(ident, companyId);
-    },
     timeRecordReport: async (ctx) => {
       const {
         identity: {
