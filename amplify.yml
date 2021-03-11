@@ -3,24 +3,26 @@ backend:
   phases:
     build:
       commands:
-        - '# Build GraphQLResolver modules'
+        - "# Build GraphQLResolver modules"
         - npm --prefix ./amplify/backend/function/GraphQLResolver/src install ./amplify/backend/function/GraphQLResolver/src
-        - '# Build PreSignup modules'
+        - "# Build PreSignup modules"
         - npm --prefix ./amplify/backend/function/usersPreSignup/src install ./amplify/backend/function/usersPreSignup/src
-        - '# Execute Amplify CLI with the helper script'
+        - "# Execute Amplify CLI with the helper script"
         - amplifyPush --simple
 frontend:
   phases:
     preBuild:
       commands:
-        - npm install
+        - node -v
+        - npm ci
     build:
       commands:
+        - node -v
         - npm run build
   artifacts:
     baseDirectory: build
     files:
-      - '**/*'
+      - "**/*"
   cache:
     paths:
       - node_modules/**/*
