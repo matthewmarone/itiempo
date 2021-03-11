@@ -23,6 +23,8 @@ frontend:
         - nvm use
         - node -v
         - npm -v
+        - pwd
+        - ls
         - npm run build
   artifacts:
     baseDirectory: build
