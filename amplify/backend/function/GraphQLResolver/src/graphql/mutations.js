@@ -1,6 +1,45 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
+const createQuickPunch = /* GraphQL */ `
+  mutation CreateQuickPunch(
+    $input: CreateQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    createQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
+    }
+  }
+`;
+const updateQuickPunch = /* GraphQL */ `
+  mutation UpdateQuickPunch(
+    $input: UpdateQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    updateQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
+    }
+  }
+`;
 const deleteEmployee = /* GraphQL */ `
   mutation DeleteEmployee(
     $input: DeleteEmployeeInput!
@@ -338,3 +377,5 @@ exports.deleteEmployee = deleteEmployee;
 exports.createTimeRecord = createTimeRecord;
 exports.updateTimeRecord = updateTimeRecord;
 exports.deleteTimeRecord = deleteTimeRecord;
+exports.createQuickPunch = createQuickPunch;
+exports.updateQuickPunch = updateQuickPunch;

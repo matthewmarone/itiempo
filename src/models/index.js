@@ -14,16 +14,16 @@ const Role = {
   "EMPLOYEE": "Employee"
 };
 
-const { TimeRecord, Employee, Company, ModelTimeRecConnection, PunchCardDetails, PayRate, QuickClockIn } = initSchema(schema);
+const { TimeRecord, Employee, QuickPunch, Company, ModelTimeRecConnection, PunchCardDetails, PayRate } = initSchema(schema);
 
 export {
   TimeRecord,
   Employee,
+  QuickPunch,
   Company,
   PunchMethod,
   Role,
   ModelTimeRecConnection,
   PunchCardDetails,
-  PayRate,
-  QuickClockIn
+  PayRate
 };

@@ -36,13 +36,6 @@ export declare class PayRate {
   constructor(init: ModelInit<PayRate>);
 }
 
-export declare class QuickClockIn {
-  readonly employeeId: string;
-  readonly timeRecordId?: string;
-  readonly timestampIn?: number;
-  constructor(init: ModelInit<QuickClockIn>);
-}
-
 export declare class TimeRecord {
   readonly id: string;
   readonly employeeId: string;
@@ -84,9 +77,19 @@ export declare class Employee {
   readonly managers: string[];
   readonly allowRead: string[];
   readonly allowFull: string[];
-  readonly ident?: string;
   constructor(init: ModelInit<Employee>);
   static copyOf(source: Employee, mutator: (draft: MutableModel<Employee>) => MutableModel<Employee> | void): Employee;
+}
+
+export declare class QuickPunch {
+  readonly id: string;
+  readonly companyId: string;
+  readonly employeeId: string;
+  readonly nickName: string;
+  readonly inactive?: boolean;
+  readonly ident: string;
+  constructor(init: ModelInit<QuickPunch>);
+  static copyOf(source: QuickPunch, mutator: (draft: MutableModel<QuickPunch>) => MutableModel<QuickPunch> | void): QuickPunch;
 }
 
 export declare class Company {

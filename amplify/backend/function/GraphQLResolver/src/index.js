@@ -9,7 +9,7 @@ const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
 const { EmployeeLookup } = require("./employeeLookup");
-const { getEmployee: getEmployeeByIdent } = require("./ident");
+const { compareIdent, createIdent } = require("./ident");
 const {
   OWNER_ROLE,
   ADMIN_ROLE,
@@ -157,6 +157,53 @@ const resolvers = {
     },
   },
   Mutation: {
+    createQP: async (ctx) => {
+      const {
+        identity: {
+          claims: { eId, cId },
+        },
+        arguments: {
+          input: { companyId, employeeId, b64EncodedPin, ...usrInput },
+        },
+      } = ctx;
+      if (companyId !== cId) throw new Error("Unauthorized to set pin");
+      if (employeeId !== eId)
+        throw new Error(
+          "Setting pin for another employee is not supported at this time"
+        );
+      let ident;
+      try {
+        ident = await createIdent(b64EncodedPin, companyId);
+      } catch (e) {
+        console.error(e);
+        throw new Error("Internal error saving pin:");
+      }
+      const input = {
+        companyId,
+        employeeId,
+        ident,
+        ...usrInput,
+      };
+
+      console.log(JSON.stringify(input, null, 4));
+
+      const { data, errors } = (await api.CreateQuickPunch({ input })) || {};
+      const { createQuickPunch } = data || {};
+      if (errors || !createQuickPunch) {
+        console.warn(errors);
+        if (!createQuickPunch) {
+          const errorMessage = `Pin creation failed: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+      const { ident: dontReturn, ...retVal } = createQuickPunch;
+      return retVal;
+    },
+    updateQP: async (ctx) => {
+      return null;
+    },
     clockIn: async (ctx) => {
       const {
         identity: {

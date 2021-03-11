@@ -39,7 +39,6 @@ export const setupNewAccount = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -81,7 +80,6 @@ export const createUser = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -123,7 +121,6 @@ export const updateEmpl = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -279,6 +276,144 @@ export const updateTimeRec = /* GraphQL */ `
     }
   }
 `;
+export const createQp = /* GraphQL */ `
+  mutation CreateQp($input: createQPInput) {
+    createQP(input: $input) {
+      id
+      companyId
+      employeeId
+      nickName
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
+    }
+  }
+`;
+export const updateQp = /* GraphQL */ `
+  mutation UpdateQp($input: updateQPInput) {
+    updateQP(input: $input) {
+      id
+      companyId
+      employeeId
+      nickName
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
+    }
+  }
+`;
+export const deleteEmployee = /* GraphQL */ `
+  mutation DeleteEmployee(
+    $input: DeleteEmployeeInput!
+    $condition: ModelEmployeeConditionInput
+  ) {
+    deleteEmployee(input: $input, condition: $condition) {
+      id
+      username
+      profilePhoto
+      email
+      email_2
+      firstName
+      lastName
+      phone
+      phone_2
+      addressLine1
+      addressLine2
+      city
+      state
+      zip
+      country
+      jobTitle
+      payRates {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      roles
+      companyId
+      primaryManagerId
+      managerIds
+      inactive
+      managers
+      allowRead
+      allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createQuickPunch = /* GraphQL */ `
+  mutation CreateQuickPunch(
+    $input: CreateQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    createQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
+    }
+  }
+`;
+export const updateQuickPunch = /* GraphQL */ `
+  mutation UpdateQuickPunch(
+    $input: UpdateQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    updateQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
+    }
+  }
+`;
+export const deleteQuickPunch = /* GraphQL */ `
+  mutation DeleteQuickPunch(
+    $input: DeleteQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    deleteQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      inactive
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
+    }
+  }
+`;
 export const createCompany = /* GraphQL */ `
   mutation CreateCompany(
     $input: CreateCompanyInput!
@@ -392,7 +527,6 @@ export const createEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -437,52 +571,6 @@ export const updateEmployee = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
-    }
-  }
-`;
-export const deleteEmployee = /* GraphQL */ `
-  mutation DeleteEmployee(
-    $input: DeleteEmployeeInput!
-    $condition: ModelEmployeeConditionInput
-  ) {
-    deleteEmployee(input: $input, condition: $condition) {
-      id
-      username
-      profilePhoto
-      email
-      email_2
-      firstName
-      lastName
-      phone
-      phone_2
-      addressLine1
-      addressLine2
-      city
-      state
-      zip
-      country
-      jobTitle
-      payRates {
-        name
-        amount
-        isHourly
-        isDefault
-      }
-      roles
-      companyId
-      primaryManagerId
-      managerIds
-      inactive
-      managers
-      allowRead
-      allowFull
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ident
     }
   }
 `;

@@ -51,6 +51,18 @@ const UpdateTimeRecord = async (variables) => {
   const graphQL = Mutations.updateTimeRecord;
   return await query(operationName, graphQL, variables);
 };
+
+const CreateQuickPunch = async (variables) => {
+  const operationName = "CreateQuickPunch";
+  const graphQL = Mutations.createQuickPunch;
+  return await query(operationName, graphQL, variables);
+};
+
+const UpdateQuickPunch = async (variables) => {
+  const operationName = "UpdateQuickPunch";
+  const graphQL = Mutations.updateQuickPunch;
+  return await query(operationName, graphQL, variables);
+};
 /**
  *
  * @param {*} id
@@ -127,3 +139,5 @@ exports.CreateTimeRecord = CreateTimeRecord;
 exports.UpdateTimeRecord = UpdateTimeRecord;
 exports.ListCompanyTimeRecords = ListCompanyTimeRecords;
 exports.ListEmployeesByEmail = ListEmployeesByEmail;
+exports.CreateQuickPunch = CreateQuickPunch;
+exports.UpdateQuickPunch = UpdateQuickPunch;
