@@ -24,7 +24,7 @@ frontend:
         - node -v
         - npm -v
         - pwd
-        - ls ./src
+        - ls ./*
         - npm run build
   artifacts:
     baseDirectory: build
