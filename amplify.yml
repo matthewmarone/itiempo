@@ -1,0 +1,35 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - "# Build GraphQLResolver modules"
+        - npm --prefix ./amplify/backend/function/GraphQLResolver/src ci ./amplify/backend/function/GraphQLResolver/src
+        - "# Build PreSignup modules"
+        - npm --prefix ./amplify/backend/function/usersPreTokenGeneration/src ci ./amplify/backend/function/usersPreTokenGeneration/src
+        - "# Execute Amplify CLI with the helper script"
+        - amplifyPush --simple
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm install
+        - nvm use
+        - node -v
+        - npm -v
+        - npm ci
+    build:
+      commands:
+        - nvm use
+        - node -v
+        - npm -v
+        - pwd
+        - ls ./src
+        - npm run build
+  artifacts:
+    baseDirectory: build
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - node_modules/**/*
