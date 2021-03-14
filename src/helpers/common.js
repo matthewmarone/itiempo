@@ -214,3 +214,10 @@ export const mergeSortedLists = (
   }
   return retVal;
 };
+
+/**
+ *
+ * @param {*} str
+ * @returns true if the string contains only digits (0-9) otherwise false
+ */
+export const isDigits = (str) => /^\d+$/.test(str);

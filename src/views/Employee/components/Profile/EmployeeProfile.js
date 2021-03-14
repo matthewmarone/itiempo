@@ -11,7 +11,7 @@ import {
   Divider,
   Button,
 } from "@material-ui/core";
-import { ProfilePictureDialog } from "components";
+import { ProfilePictureDialog, SetPinDialog } from "components";
 import { v4 as uuid } from "uuid";
 import { useSnackbar } from "notistack";
 import { Logger } from "aws-amplify";
@@ -61,6 +61,7 @@ const EmployeeProfile = (props) => {
   });
 
   const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
+  const [openPinDialog, setOpenPinDialog] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [uploadingKey, setUploadingKey] = useState();
 
@@ -133,6 +134,17 @@ const EmployeeProfile = (props) => {
           <Button variant="text" onClick={handleRemoveProfilePicture}>
             Remove picture
           </Button>
+          <Button
+            className={classes.uploadButton}
+            color="primary"
+            variant="text"
+            onClick={() => setOpenPinDialog(true)}
+          >
+            Create Pin
+          </Button>
+          <Button variant="text" onClick={handleRemoveProfilePicture}>
+            Change Password
+          </Button>
         </CardActions>
       </Card>
       <ProfilePictureDialog
@@ -140,6 +152,10 @@ const EmployeeProfile = (props) => {
         handleClose={() => setOpenPhotoDialog(false)}
         onFile={handleOnFile}
         onFileError={handleOnFileError}
+      />
+      <SetPinDialog
+        open={openPinDialog}
+        onClose={() => setOpenPinDialog(false)}
       />
     </React.Fragment>
   );

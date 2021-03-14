@@ -1,4 +1,21 @@
-import { mergeSortedLists } from "../common";
+import { mergeSortedLists, isDigits } from "../common";
+
+test("isDigit", () => {
+  expect(isDigits("123")).toBeTruthy();
+  expect(isDigits("0")).toBeTruthy();
+  expect(isDigits("0123456789")).toBeTruthy();
+  expect(isDigits(null)).toBeFalsy();
+  expect(isDigits(undefined)).toBeFalsy();
+  expect(isDigits("")).toBeFalsy();
+  expect(isDigits("a123")).toBeFalsy();
+  expect(isDigits("1a23")).toBeFalsy();
+  expect(isDigits("123a")).toBeFalsy();
+  expect(isDigits(".123")).toBeFalsy();
+  expect(isDigits("12.3")).toBeFalsy();
+  expect(isDigits("123.")).toBeFalsy();
+  expect(isDigits("123.0")).toBeFalsy();
+  expect(isDigits("123F")).toBeFalsy();
+});
 
 const compareFunction = (i1, i2) => (i1 === i2 ? 0 : i1 < i2 ? -1 : 1);
 test("mergeSortedLists", () => {

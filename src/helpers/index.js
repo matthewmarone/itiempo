@@ -12,5 +12,6 @@ export {
   dateToUnixTimestamp,
   dateTimeLocalToUnixTimestamp,
   SECONDS_IN_DAY,
-  mergeSortedLists
+  mergeSortedLists,
+  isDigits,
 } from "./common";
