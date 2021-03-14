@@ -1,9 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "Store";
 import { Button } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
 import { isDigits } from "helpers";
 import { default as PinPad } from "../../PinPad";
+import { useCreateQuickPunch as useCreate, useGetEmployee } from "hooks";
+
+const CreatPin = (props) => {
+  const { input } = props;
+  const [create, { loading, error, data }] = useCreate();
+
+  useEffect(() => {
+    if (input) create({ variables: { input } });
+  }, [create, input]);
+
+  return <span>Creating</span>;
+};
 
 const defaultTitle = "Set Pin";
 
@@ -15,14 +28,30 @@ const SetPinDialog = (props) => {
   const { open, onClose } = props;
   const [pin, setPin] = useState("");
   const [firstPin, setFirstPin] = useState(null);
+  const [quickPunch, setQuickPunch] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [title, setTitle] = useState(defaultTitle);
+  const [
+    {
+      user: { employeeId },
+    },
+  ] = useContext(Context);
+  const [setEmployeeId, { data }] = useGetEmployee(employeeId);
+  const { getEmployee } = data || {};
+  useEffect(() => {
+    if (employeeId) setEmployeeId(employeeId);
+  }, [employeeId, setEmployeeId]);
 
   const isValidPin = (p) => isDigits(p) && p.length > 3;
 
   const createOrUpdatePin = (p) => {
-    clear();
-    console.log("Creating pin", pin);
+    const { id: employeeId, companyId, firstName, lastName } = getEmployee;
+    setQuickPunch({
+      companyId,
+      employeeId,
+      nickName: `${firstName} ${lastName}`,
+      b64EncodedPin: btoa(p),
+    });
   };
 
   const handlePinChange = (v) => {
@@ -51,6 +80,7 @@ const SetPinDialog = (props) => {
     setFirstPin(null);
     setErrorMessage(errMsg || null);
     setTitle(defaultTitle);
+    setQuickPunch(null);
   };
 
   useEffect(() => {
@@ -63,14 +93,18 @@ const SetPinDialog = (props) => {
       handleClose={onClose}
       title={title}
       dialogContent={
-        <PinPad
-          pin={pin}
-          onChange={handlePinChange}
-          onSubmit={handlePinSubmit}
-          errorMessage={errorMessage}
-          valid={isValidPin(pin)}
-          hint={!firstPin ? undefined : "Re-enter pin"}
-        />
+        !quickPunch ? (
+          <PinPad
+            pin={pin}
+            onChange={handlePinChange}
+            onSubmit={handlePinSubmit}
+            errorMessage={errorMessage}
+            valid={isValidPin(pin)}
+            hint={!firstPin ? undefined : "Re-enter pin"}
+          />
+        ) : (
+          <CreatPin input={quickPunch} />
+        )
       }
       actions={[
         <Button key="cancel" autoFocus onClick={handleClose}>
