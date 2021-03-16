@@ -51,6 +51,7 @@ export const useDownloadImage = ({
 
   useEffect(() => {
     const { key, level, download } = variables;
+    console.log("key key", key);
     if (key) {
       setError(null);
       setLoading(true);

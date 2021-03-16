@@ -11,6 +11,7 @@ import {
   Divider,
   Button,
 } from "@material-ui/core";
+import AddAPhotoOutlinedIcon from "@material-ui/icons/AddAPhotoOutlined";
 import { ProfilePictureDialog, SetPinDialog } from "components";
 import { v4 as uuid } from "uuid";
 import { useSnackbar } from "notistack";
@@ -30,12 +31,10 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
     flexShrink: 0,
     flexGrow: 0,
+    cursor: "pointer",
   },
   progress: {
     marginTop: theme.spacing(2),
-  },
-  uploadButton: {
-    marginRight: theme.spacing(2),
   },
 }));
 /**
@@ -94,6 +93,8 @@ const EmployeeProfile = (props) => {
     }
   }, [profilePhoto, setPhotoVars]);
 
+  console.log("My profile photo", profilePhoto);
+
   return (
     <React.Fragment>
       <Card {...rest} className={clsx(classes.root, className)}>
@@ -118,40 +119,35 @@ const EmployeeProfile = (props) => {
                 {"Role: " + (role || "")}
               </Typography>
             </div>
-            <Avatar className={classes.avatar} src={avatarUrl} />
+            <Avatar
+              className={classes.avatar}
+              src={!profilePhoto ? "" : avatarUrl}
+              onClick={() => setOpenPhotoDialog(true)}
+            >
+              <AddAPhotoOutlinedIcon style={{ color: "white" }} />
+            </Avatar>
           </div>
         </CardContent>
         <Divider />
         <CardActions>
           <Button
-            className={classes.uploadButton}
-            color="primary"
-            variant="text"
-            onClick={() => setOpenPhotoDialog(true)}
-          >
-            Upload picture
-          </Button>
-          <Button variant="text" onClick={handleRemoveProfilePicture}>
-            Remove picture
-          </Button>
-          <Button
-            className={classes.uploadButton}
             color="primary"
             variant="text"
             onClick={() => setOpenPinDialog(true)}
           >
-            Create Pin
+            Set Pin
           </Button>
           <Button variant="text" onClick={handleRemoveProfilePicture}>
-            Change Password
+            Reset Password
           </Button>
         </CardActions>
       </Card>
       <ProfilePictureDialog
         open={openPhotoDialog}
-        handleClose={() => setOpenPhotoDialog(false)}
+        onClose={() => setOpenPhotoDialog(false)}
         onFile={handleOnFile}
         onFileError={handleOnFileError}
+        onRemovePhoto={!profilePhoto ? undefined : handleRemoveProfilePicture}
       />
       <SetPinDialog
         open={openPinDialog}
