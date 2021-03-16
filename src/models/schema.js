@@ -475,13 +475,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "inactive": {
-                    "name": "inactive",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "ident": {
                     "name": "ident",
                     "isArray": false,
@@ -824,5 +817,5 @@ export const schema = {
             }
         }
     },
-    "version": "c0576c7f4ebc6d2a58a2ebddcab537e6"
+    "version": "d35fc0b4da90baa76325fce024291046"
 };

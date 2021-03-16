@@ -86,7 +86,6 @@ export declare class QuickPunch {
   readonly companyId: string;
   readonly employeeId: string;
   readonly nickName: string;
-  readonly inactive?: boolean;
   readonly ident: string;
   constructor(init: ModelInit<QuickPunch>);
   static copyOf(source: QuickPunch, mutator: (draft: MutableModel<QuickPunch>) => MutableModel<QuickPunch> | void): QuickPunch;
