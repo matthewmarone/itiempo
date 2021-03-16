@@ -341,13 +341,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": false
-                },
-                "ident": {
-                    "name": "ident",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -445,6 +438,119 @@ export const schema = {
                                     "read"
                                 ],
                                 "groupField": "groups"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "QuickPunch": {
+            "name": "QuickPunch",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "companyId": {
+                    "name": "companyId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "employeeId": {
+                    "name": "employeeId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "nickName": {
+                    "name": "nickName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "ident": {
+                    "name": "ident",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "QuickPunches",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCompany",
+                        "fields": [
+                            "companyId",
+                            "nickName"
+                        ],
+                        "queryField": "listQuickPunchByCompany"
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmployee",
+                        "fields": [
+                            "employeeId"
+                        ],
+                        "queryField": "listQuickPunchByEmployee"
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "private",
+                                "provider": "iam",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "read",
+                                    "delete"
+                                ]
+                            },
+                            {
+                                "provider": "userPools",
+                                "ownerField": "employeeId",
+                                "allow": "owner",
+                                "identityClaim": "eId",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "ForbiddenGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "read",
+                                    "update",
+                                    "delete"
+                                ]
                             }
                         ]
                     }
@@ -709,33 +815,7 @@ export const schema = {
                     "attributes": []
                 }
             }
-        },
-        "QuickClockIn": {
-            "name": "QuickClockIn",
-            "fields": {
-                "employeeId": {
-                    "name": "employeeId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "timeRecordId": {
-                    "name": "timeRecordId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "timestampIn": {
-                    "name": "timestampIn",
-                    "isArray": false,
-                    "type": "AWSTimestamp",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            }
         }
     },
-    "version": "352fe033795c76fa6a1c2940e1bc362d"
+    "version": "d35fc0b4da90baa76325fce024291046"
 };

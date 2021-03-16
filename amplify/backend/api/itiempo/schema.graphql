@@ -12,6 +12,10 @@ type Mutation {
     @function(name: "GraphQLResolver-${env}")
   updateTimeRec(input: UpdateTimeRecInput!): TimeRecord
     @function(name: "GraphQLResolver-${env}")
+  createQP(input: createQPInput): QuickPunch
+    @function(name: "GraphQLResolver-${env}")
+  updateQP(input: updateQPInput): QuickPunch
+    @function(name: "GraphQLResolver-${env}")
 }
 
 type Query {
@@ -20,21 +24,88 @@ type Query {
     limit: Int
     nextToken: String
   ): ModelTimeRecConnection @function(name: "GraphQLResolver-${env}")
-  byIdent(ident: String!, companyId: ID!): QuickClockIn
-    @function(name: "GraphQLResolver-${env}")
-    @auth(rules: [{ allow: public, provider: iam }])
-}
-
-type QuickClockIn {
-  employeeId: ID!
-  timeRecordId: ID
-  timestampIn: AWSTimestamp
 }
 
 type ModelTimeRecConnection {
   items: [TimeRecord]
   nextToken: String
   startedAt: AWSTimestamp
+}
+
+type QuickPunch
+  @model(subscriptions: { level: off })
+  @key(
+    name: "byCompany"
+    fields: ["companyId", "nickName"]
+    queryField: "listQuickPunchByCompany"
+  )
+  @key(
+    name: "byEmployee"
+    fields: ["employeeId"]
+    queryField: "listQuickPunchByEmployee"
+  )
+  @auth(
+    rules: [
+      # Allows creation only through GraphQLResolver
+      {
+        allow: private
+        provider: iam
+        operations: [create, update, read, delete]
+      }
+      {
+        # Allow all memebers of a company to read
+        allow: owner
+        ownerField: "employeeId"
+        identityClaim: "eId"
+        operations: [read]
+      }
+      {
+        allow: groups
+        groups: ["ForbiddenGroup"]
+        operations: [create, read, update, delete]
+      }
+    ]
+  ) {
+  id: ID!
+  companyId: ID!
+  employeeId: ID!
+  nickName: String!
+  ident: String!
+    @auth(
+      rules: [
+        # Only allow GraphQLResolver to see and use this
+        {
+          allow: private
+          provider: iam
+          operations: [create, update, read, delete]
+        }
+        {
+          allow: groups
+          groups: ["ForbiddenGroup"]
+          operations: [create, update, delete, read]
+        }
+      ]
+    )
+}
+
+input createQPInput {
+  companyId: ID!
+  employeeId: ID!
+  nickName: String!
+  b64EncodedPin: String!
+}
+
+input updateQPInput {
+  id: ID!
+  companyId: ID!
+  employeeId: ID!
+  nickName: String
+  b64EncodedPin: String
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
 }
 
 type Company
@@ -169,22 +240,6 @@ type Employee
   managers: [ID!]!
   allowRead: [String!]! # Write once, implemented in GraphQLResolver
   allowFull: [String!]! # Write once, implemented in GraphQLResolver
-  ident: String
-    @auth(
-      rules: [
-        # Only allow GraphQLResolver (setupNewAccount, addUser) to create
-        {
-          allow: private
-          provider: iam
-          operations: [create, update, read, delete]
-        }
-        {
-          allow: groups
-          groups: ["ForbiddenGroup"]
-          operations: [create, update, delete, read]
-        }
-      ]
-    )
 }
 type TimeRecord
   @model(subscriptions: { level: off })
