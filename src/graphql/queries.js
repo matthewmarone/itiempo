@@ -69,7 +69,6 @@ export const listQuickPunchByCompany = /* GraphQL */ `
         companyId
         employeeId
         nickName
-        inactive
         _version
         _deleted
         _lastChangedAt
@@ -102,7 +101,6 @@ export const listQuickPunchByEmployee = /* GraphQL */ `
         companyId
         employeeId
         nickName
-        inactive
         _version
         _deleted
         _lastChangedAt
@@ -133,7 +131,6 @@ export const syncQuickPunches = /* GraphQL */ `
         companyId
         employeeId
         nickName
-        inactive
         _version
         _deleted
         _lastChangedAt
@@ -153,7 +150,6 @@ export const getQuickPunch = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -175,7 +171,6 @@ export const listQuickPunchs = /* GraphQL */ `
         companyId
         employeeId
         nickName
-        inactive
         _version
         _deleted
         _lastChangedAt

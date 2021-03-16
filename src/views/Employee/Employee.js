@@ -5,6 +5,8 @@ import { Grid } from "@material-ui/core";
 import { EmployeeProfile, EmployeeDetails, EmployeeSetup } from "./components";
 import { Logger } from "aws-amplify";
 import { useGetEmployee, useUpdateEmployee } from "hooks";
+import { Loading } from "views";
+import clsx from "clsx";
 
 // eslint-disable-next-line no-unused-vars
 const logger = new Logger("Employee.js", "ERROR");
@@ -16,13 +18,11 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
     paddingLeft: theme.spacing(4),
   },
+  loadingRoot: {
+    height: "50%",
+    paddingLeft: theme.spacing(0),
+  },
 }));
-/**
- *
- * @param {*} props
- */
-const LoadingView = (props) => "Loading...";
-
 const EmployeeView = (props) => {
   const { employee } = props;
   const [employeeState, setEmployeeState] = useState(employee);
@@ -142,8 +142,8 @@ const Employee = (props) => {
   }, [employeeId, setId]);
 
   return (
-    <div className={classes.root}>
-      {!employee ? <LoadingView /> : <EmployeeView employee={employee} />}
+    <div className={clsx(classes.root, !employee && classes.loadingRoot)}>
+      {!employee ? <Loading /> : <EmployeeView employee={employee} />}
     </div>
   );
 };

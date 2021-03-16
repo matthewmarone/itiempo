@@ -283,12 +283,12 @@ export const createQp = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -299,12 +299,12 @@ export const updateQp = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -362,7 +362,6 @@ export const createQuickPunch = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -382,7 +381,6 @@ export const updateQuickPunch = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -402,7 +400,6 @@ export const deleteQuickPunch = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
