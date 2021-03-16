@@ -9,6 +9,7 @@ export {
   ProfilePictureDialog,
   ClockinDialog,
   SetPinDialog,
+  PasswordResetDialog,
 } from "./Dialogs";
 export { default as Image } from "./Image";
 export { default as RouteWithLayout } from "./RouteWithLayout";

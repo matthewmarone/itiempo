@@ -157,6 +157,23 @@ const getUser = async (Username) => {
  *
  * @param {*} Username
  */
+const resetUserPassword = async (Username) => {
+  const params = {
+    Username,
+    UserPoolId: COGNITO_USERPOOL_ID,
+  };
+  try {
+    return await cognitoIdentityServiceProvider
+      .adminResetUserPassword(params)
+      .promise();
+  } catch (e) {
+    throw e;
+  }
+};
+/**
+ *
+ * @param {*} Username
+ */
 const globalSignOut = async (Username) => {
   const params = {
     Username,
@@ -179,3 +196,4 @@ exports.listUserGroups = listUserGroups;
 exports.updateUserAttributes = updateUserAttributes;
 exports.addCustomAttributes = addCustomAttributes;
 exports.globalSignOut = globalSignOut;
+exports.resetUserPassword = resetUserPassword;

@@ -306,6 +306,11 @@ export const updateQp = /* GraphQL */ `
     }
   }
 `;
+export const resetPassword = /* GraphQL */ `
+  mutation ResetPassword($employeeId: ID!) {
+    resetPassword(employeeId: $employeeId)
+  }
+`;
 export const deleteEmployee = /* GraphQL */ `
   mutation DeleteEmployee(
     $input: DeleteEmployeeInput!

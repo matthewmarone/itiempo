@@ -12,7 +12,11 @@ import {
   Button,
 } from "@material-ui/core";
 import AddAPhotoOutlinedIcon from "@material-ui/icons/AddAPhotoOutlined";
-import { ProfilePictureDialog, SetPinDialog } from "components";
+import {
+  ProfilePictureDialog,
+  SetPinDialog,
+  PasswordResetDialog,
+} from "components";
 import { v4 as uuid } from "uuid";
 import { useSnackbar } from "notistack";
 import { Logger } from "aws-amplify";
@@ -45,6 +49,7 @@ const EmployeeProfile = (props) => {
   const classes = useStyles();
   const { employee, onPhotoSave, ...rest } = props;
   const {
+    id: employeeId,
     className,
     firstName,
     lastName,
@@ -61,6 +66,7 @@ const EmployeeProfile = (props) => {
 
   const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
   const [openPinDialog, setOpenPinDialog] = useState(false);
+  const [openPsswdRestDilog, setOpenPsswdRestDilog] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [uploadingKey, setUploadingKey] = useState();
 
@@ -137,7 +143,7 @@ const EmployeeProfile = (props) => {
           >
             Set Pin
           </Button>
-          <Button variant="text" onClick={handleRemoveProfilePicture}>
+          <Button variant="text" onClick={() => setOpenPsswdRestDilog(true)}>
             Reset Password
           </Button>
         </CardActions>
@@ -152,6 +158,11 @@ const EmployeeProfile = (props) => {
       <SetPinDialog
         open={openPinDialog}
         onClose={() => setOpenPinDialog(false)}
+      />
+      <PasswordResetDialog
+        open={openPsswdRestDilog}
+        onClose={() => setOpenPsswdRestDilog(false)}
+        employeeId={employeeId}
       />
     </React.Fragment>
   );

@@ -92,7 +92,7 @@ const isAuthorizedToUpdateEmployee = (requestorClaims, employee) => {
       isRoleGreater(requestorsHighestRole, MANAGER_ROLE) ||
       // Or they are a manager that manages this employee
       (requestorsHighestRole === MANAGER_ROLE &&
-        [primaryManagerId, ...managerIds].includes(eId))
+        [primaryManagerId, ...(managerIds || [])].includes(eId))
     ) {
       return { ...retVal, authorized: true };
     } else {

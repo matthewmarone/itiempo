@@ -150,6 +150,32 @@ const resolvers = {
     },
   },
   Mutation: {
+    resetPassword: async (ctx) => {
+      const {
+        identity: { claims },
+        arguments: {
+          input: { employeeId },
+        },
+      } = ctx;
+
+      const { data } = await api.GetEmployee(employeeId);
+      if (data && data.getEmployee) {
+        if (isAuthorizedToUpdateEmployee(claims, data.getEmployee)) {
+          try {
+            await user.resetUserPassword(data.getEmployee.username);
+            return true;
+          } catch (e) {
+            console.error(e);
+            return false;
+          }
+        } else {
+          return false;
+        }
+      } else {
+        console.error("Could not locate employee", employeeId);
+        return false;
+      }
+    },
     createQP: async (ctx) => {
       const {
         identity: {
