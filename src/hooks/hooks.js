@@ -15,6 +15,7 @@ import {
   clockOut as clockOutGQL,
   createQp as createQpGQL,
   updateQp as updateQpGQL,
+  resetPassword as resetPasswordGQL,
 } from "graphql/mutations";
 import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -129,6 +130,11 @@ export const useCreateQuickPunch = () => useMutation(gql(createQpGQL));
  *
  */
 export const useUpdateQuickPunch = () => useMutation(gql(updateQpGQL));
+
+/**
+ *
+ */
+export const useResetPassword = () => useMutation(gql(resetPasswordGQL));
 
 /**
  *

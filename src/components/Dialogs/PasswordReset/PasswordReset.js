@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, CircularProgress, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
+import { useResetPassword } from "hooks";
 
 const Content = (props) => {
   const { loading } = props;
@@ -24,11 +25,17 @@ const Content = (props) => {
  */
 const PasswordReset = (props) => {
   const { open, onClose, employeeId } = props;
-  const loading = true;
+  const [reset, { loading, error, data }] = useResetPassword();
+
+  console.log("Password reset", error, data);
+
+  useEffect(() => {
+    if (open && employeeId) reset({ variables: { employeeId } });
+  }, [employeeId, open, reset]);
+
   const handleClose = () => {
     if (!loading) onClose();
   };
-
   return (
     <DialogTemplate
       open={open}
@@ -37,7 +44,7 @@ const PasswordReset = (props) => {
       dialogContent={<Content loading={loading} />}
       actions={[
         <Button key="close" autoFocus onClick={handleClose} disabled={loading}>
-          Close
+          OK
         </Button>,
       ]}
     />

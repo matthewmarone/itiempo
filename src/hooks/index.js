@@ -16,4 +16,5 @@ export {
   useClockOut,
   useCreateQuickPunch,
   useUpdateQuickPunch,
+  useResetPassword,
 } from "./hooks";

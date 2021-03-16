@@ -153,9 +153,7 @@ const resolvers = {
     resetPassword: async (ctx) => {
       const {
         identity: { claims },
-        arguments: {
-          input: { employeeId },
-        },
+        arguments: { employeeId },
       } = ctx;
 
       const { data } = await api.GetEmployee(employeeId);
@@ -163,6 +161,7 @@ const resolvers = {
         if (isAuthorizedToUpdateEmployee(claims, data.getEmployee)) {
           try {
             await user.resetUserPassword(data.getEmployee.username);
+            await user.globalSignOut(data.getEmployee.username);
             return true;
           } catch (e) {
             console.error(e);
