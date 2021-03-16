@@ -1,62 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-const deleteQuickPunch = /* GraphQL */ `
-  mutation DeleteQuickPunch(
-    $input: DeleteQuickPunchInput!
-    $condition: ModelQuickPunchConditionInput
-  ) {
-    deleteQuickPunch(input: $input, condition: $condition) {
-      id
-      companyId
-      employeeId
-      nickName
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ident
-    }
-  }
-`;
-const createQuickPunch = /* GraphQL */ `
-  mutation CreateQuickPunch(
-    $input: CreateQuickPunchInput!
-    $condition: ModelQuickPunchConditionInput
-  ) {
-    createQuickPunch(input: $input, condition: $condition) {
-      id
-      companyId
-      employeeId
-      nickName
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ident
-    }
-  }
-`;
-const updateQuickPunch = /* GraphQL */ `
-  mutation UpdateQuickPunch(
-    $input: UpdateQuickPunchInput!
-    $condition: ModelQuickPunchConditionInput
-  ) {
-    updateQuickPunch(input: $input, condition: $condition) {
-      id
-      companyId
-      employeeId
-      nickName
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-      ident
-    }
-  }
-`;
+
 const deleteEmployee = /* GraphQL */ `
   mutation DeleteEmployee(
     $input: DeleteEmployeeInput!
@@ -93,6 +37,60 @@ const deleteEmployee = /* GraphQL */ `
       managers
       allowRead
       allowFull
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+const createQuickPunch = /* GraphQL */ `
+  mutation CreateQuickPunch(
+    $input: CreateQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    createQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+const updateQuickPunch = /* GraphQL */ `
+  mutation UpdateQuickPunch(
+    $input: UpdateQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    updateQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+const deleteQuickPunch = /* GraphQL */ `
+  mutation DeleteQuickPunch(
+    $input: DeleteQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    deleteQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
       _version
       _deleted
       _lastChangedAt
@@ -384,6 +382,7 @@ const deleteTimeRecord = /* GraphQL */ `
     }
   }
 `;
+
 
 exports.createCompany = createCompany;
 exports.updateCompany = updateCompany;

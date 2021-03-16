@@ -1,5 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
+
 const listQuickPunchByEmployee = /* GraphQL */ `
   query ListQuickPunchByEmployee(
     $employeeId: ID
@@ -29,6 +30,22 @@ const listQuickPunchByEmployee = /* GraphQL */ `
       }
       nextToken
       startedAt
+    }
+  }
+`;
+const getQuickPunch = /* GraphQL */ `
+  query GetQuickPunch($id: ID!) {
+    getQuickPunch(id: $id) {
+      id
+      companyId
+      employeeId
+      nickName
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
     }
   }
 `;
@@ -153,66 +170,6 @@ const listEmployeesByEmail = /* GraphQL */ `
     }
   }
 `;
-const listEmployeesByEmailWithIdent = /* GraphQL */ `
-  query ListEmployeesByEmail(
-    $companyId: ID
-    $email: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelEmployeeFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listEmployeesByEmail(
-      companyId: $companyId
-      email: $email
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        inactive
-        managers
-        allowRead
-        allowFull
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        ident
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
 const getTimeRecord = /* GraphQL */ `
   query GetTimeRecord($id: ID!) {
     getTimeRecord(id: $id) {
@@ -314,3 +271,4 @@ exports.getEmployee = getEmployee;
 exports.listEmployeesByEmail = listEmployeesByEmail;
 exports.getCompany = getCompany;
 exports.listQuickPunchByEmployee = listQuickPunchByEmployee;
+exports.getQuickPunch = getQuickPunch;
