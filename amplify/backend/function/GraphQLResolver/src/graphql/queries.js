@@ -20,7 +20,6 @@ const listQuickPunchByEmployee = /* GraphQL */ `
         companyId
         employeeId
         nickName
-        inactive
         _version
         _deleted
         _lastChangedAt
@@ -313,6 +312,5 @@ exports.listCompanyTimeRecords = listCompanyTimeRecords;
 exports.getTimeRecord = getTimeRecord;
 exports.getEmployee = getEmployee;
 exports.listEmployeesByEmail = listEmployeesByEmail;
-exports.listEmployeesByEmailWithIdent = listEmployeesByEmailWithIdent;
 exports.getCompany = getCompany;
 exports.listQuickPunchByEmployee = listQuickPunchByEmployee;

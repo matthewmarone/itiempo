@@ -189,29 +189,41 @@ const resolvers = {
       // Asynchronosly remove any existing for the same employee
       const removePreviousPromise = (async () => {
         const { data, errors } =
-          (await api.ListQuickPunchByEmployee({ employeeId, limit: 100 })) | {};
-        if (errors || !data) {
+          (await api.ListQuickPunchByEmployee({ employeeId, limit: 100 })) ||
+          {};
+        if (
+          errors ||
+          !(
+            data &&
+            data.listQuickPunchByEmployee &&
+            data.listQuickPunchByEmployee.items
+          )
+        ) {
           console.warn(
             "ListQuickPunchByEmployee failed",
             { employeeId, limit: 100 },
+            data,
             errors
           );
+          return await Promise.all([]);
+        } else {
+          const deletPromises = data.listQuickPunchByEmployee.items.map(
+            ({ id, _version, _deleted }) =>
+              id === newId ||
+              !!_deleted ||
+              api
+                .DeleteQuickPunch({ input: { id, _version } })
+                .then((d) => {
+                  // console.log(d);
+                  return true;
+                })
+                .catch((e) => {
+                  console.error(e);
+                  return false;
+                })
+          );
+          return await Promise.all(deletPromises);
         }
-        const deletPromises = (data?.items || []).map(
-          ({ id, _version }) =>
-            id === newId ||
-            api
-              .DeleteQuickPunch({ input: { id, _version } })
-              .then((d) => {
-                console.log(d);
-                return true;
-              })
-              .catch((e) => {
-                console.error(e);
-                return false;
-              })
-        );
-        return await Promise.all(deletPromises);
       })();
 
       // TODO (): Create promise to check for same nickName

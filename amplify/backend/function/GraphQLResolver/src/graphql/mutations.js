@@ -10,7 +10,6 @@ const deleteQuickPunch = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -30,7 +29,6 @@ const createQuickPunch = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
@@ -50,7 +48,6 @@ const updateQuickPunch = /* GraphQL */ `
       companyId
       employeeId
       nickName
-      inactive
       _version
       _deleted
       _lastChangedAt
