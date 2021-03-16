@@ -21,43 +21,81 @@ AWS.config.update({
 });
 
 const uri = URL.parse(process.env.API_ITIEMPO_GRAPHQLAPIENDPOINTOUTPUT);
-
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
 const CreateCompany = async (variables) => {
   const operationName = "CreateCompany";
   const graphQL = Mutations.createCompany;
   return await query(operationName, graphQL, variables);
 };
-
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
 const CreateEmployee = async (variables) => {
   const operationName = "CreateEmployee";
   const graphQL = Mutations.createEmployee;
   return await query(operationName, graphQL, variables);
 };
-
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
 const UpdateEmployee = async (variables) => {
   const operationName = "UpdateEmployee";
   const graphQL = Mutations.updateEmployee;
   return await query(operationName, graphQL, variables);
 };
-
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
 const CreateTimeRecord = async (variables) => {
   const operationName = "CreateTimeRecord";
   const graphQL = Mutations.createTimeRecord;
   return await query(operationName, graphQL, variables);
 };
-
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
 const UpdateTimeRecord = async (variables) => {
   const operationName = "UpdateTimeRecord";
   const graphQL = Mutations.updateTimeRecord;
   return await query(operationName, graphQL, variables);
 };
-
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
 const CreateQuickPunch = async (variables) => {
   const operationName = "CreateQuickPunch";
   const graphQL = Mutations.createQuickPunch;
   return await query(operationName, graphQL, variables);
 };
-
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
+const DeleteQuickPunch = async (variables) => {
+  const operationName = "DeleteQuickPunch";
+  const graphQL = Mutations.deleteQuickPunch;
+  return await query(operationName, graphQL, variables);
+};
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
 const UpdateQuickPunch = async (variables) => {
   const operationName = "UpdateQuickPunch";
   const graphQL = Mutations.updateQuickPunch;
@@ -79,19 +117,27 @@ const GetEmployee = async (id) => {
 const ListCompanyTimeRecords = async (variables = {}) => {
   const operationName = "ListCompanyTimeRecords";
   const graphQL = Queries.listCompanyTimeRecords;
-  return await query(operationName, graphQL, { ...variables });
+  return await query(operationName, graphQL, variables);
 };
 /**
  *
  * @param {*} variables
- * @param {*} includeIdent
+ * @returns
  */
-const ListEmployeesByEmail = async (variables = {}, includeIdent = false) => {
+const ListEmployeesByEmail = async (variables = {}) => {
   const operationName = "ListEmployeesByEmail";
-  const graphQL = !includeIdent
-    ? Queries.listEmployeesByEmail
-    : Queries.listEmployeesByEmailWithIdent;
-  return await query(operationName, graphQL, { ...variables });
+  const graphQL = Queries.listEmployeesByEmail;
+  return await query(operationName, graphQL, variables);
+};
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
+const ListQuickPunchByEmployee = async (variables = {}) => {
+  const operationName = "ListQuickPunchByEmployee";
+  const graphQL = Queries.listQuickPunchByEmployee;
+  return await query(operationName, graphQL, variables);
 };
 /**
  *
@@ -102,7 +148,13 @@ const GetCompany = async (id) => {
   const graphQL = Queries.getCompany;
   return await query(operationName, graphQL, { id });
 };
-
+/**
+ *
+ * @param {*} operationName
+ * @param {*} query
+ * @param {*} variables
+ * @returns
+ */
 const query = async (operationName, query, variables = {}) => {
   const postBody = { operationName, query, variables };
   try {
@@ -141,3 +193,5 @@ exports.ListCompanyTimeRecords = ListCompanyTimeRecords;
 exports.ListEmployeesByEmail = ListEmployeesByEmail;
 exports.CreateQuickPunch = CreateQuickPunch;
 exports.UpdateQuickPunch = UpdateQuickPunch;
+exports.ListQuickPunchByEmployee = ListQuickPunchByEmployee;
+exports.DeleteQuickPunch = DeleteQuickPunch;

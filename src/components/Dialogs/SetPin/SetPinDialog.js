@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Context } from "Store";
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
 import { isDigits } from "helpers";
@@ -8,14 +8,30 @@ import { default as PinPad } from "../../PinPad";
 import { useCreateQuickPunch as useCreate, useGetEmployee } from "hooks";
 
 const CreatPin = (props) => {
-  const { input } = props;
+  const { input, onCreate, onError } = props;
   const [create, { loading, error, data }] = useCreate();
 
   useEffect(() => {
     if (input) create({ variables: { input } });
   }, [create, input]);
 
-  return <span>Creating</span>;
+  useEffect(() => {
+    if (!loading && (data?.createQP || error)) {
+      !error ? onCreate(data.createQP) : onError(error);
+    }
+  }, [data, error, loading, onCreate, onError]);
+
+  return (
+    <div>
+      <CircularProgress color="secondary" />
+      <Typography variant="body1">Setting your pin, please wait...</Typography>
+    </div>
+  );
+};
+CreatPin.propTypes = {
+  input: PropTypes.object.isRequired,
+  onCreate: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
 };
 
 const defaultTitle = "Set Pin";
@@ -31,11 +47,8 @@ const SetPinDialog = (props) => {
   const [quickPunch, setQuickPunch] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [title, setTitle] = useState(defaultTitle);
-  const [
-    {
-      user: { employeeId },
-    },
-  ] = useContext(Context);
+  const [{ user }] = useContext(Context);
+  const { employeeId } = user || {};
   const [setEmployeeId, { data }] = useGetEmployee(employeeId);
   const { getEmployee } = data || {};
   useEffect(() => {
@@ -87,6 +100,12 @@ const SetPinDialog = (props) => {
     if (open) clear();
   }, [open]);
 
+  const handlePinCreate = useCallback((d) => onClose(), [onClose]);
+  const handlePinCreateError = useCallback(
+    (e) => clear("Error creating pin, please try again"),
+    []
+  );
+
   return (
     <DialogTemplate
       open={open}
@@ -103,7 +122,11 @@ const SetPinDialog = (props) => {
             hint={!firstPin ? undefined : "Re-enter pin"}
           />
         ) : (
-          <CreatPin input={quickPunch} />
+          <CreatPin
+            input={quickPunch}
+            onCreate={handlePinCreate}
+            onError={handlePinCreateError}
+          />
         )
       }
       actions={[

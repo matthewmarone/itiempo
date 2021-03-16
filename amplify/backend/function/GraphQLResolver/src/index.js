@@ -9,7 +9,7 @@ const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
 const { EmployeeLookup } = require("./employeeLookup");
-const { compareIdent, createIdent } = require("./ident");
+const { createIdent } = require("./ident");
 const {
   OWNER_ROLE,
   ADMIN_ROLE,
@@ -164,23 +164,61 @@ const resolvers = {
         throw new Error(
           "Setting pin for another employee is not supported at this time"
         );
-      let ident;
-      try {
-        ident = await createIdent(b64EncodedPin, companyId);
-      } catch (e) {
-        console.error(e);
-        throw new Error("Internal error saving pin:");
-      }
-      const input = {
-        companyId,
-        employeeId,
-        ident,
-        ...usrInput,
-      };
+      const newId = uuid.v4(); // ID for the new QuickPunch record
+      // Asychronosly create the record
+      const createNewPromise = (async () => {
+        let ident;
+        try {
+          ident = await createIdent(b64EncodedPin, companyId);
+        } catch (e) {
+          console.error(e);
+          throw new Error("Internal error saving pin:");
+        }
+        const input = {
+          id: newId,
+          companyId,
+          employeeId,
+          ident,
+          ...usrInput,
+        };
 
-      console.log(JSON.stringify(input, null, 4));
+        console.log(JSON.stringify(input, null, 4));
+        return (await api.CreateQuickPunch({ input })) || {};
+      })();
 
-      const { data, errors } = (await api.CreateQuickPunch({ input })) || {};
+      // Asynchronosly remove any existing for the same employee
+      const removePreviousPromise = (async () => {
+        const { data, errors } =
+          (await api.ListQuickPunchByEmployee({ employeeId, limit: 100 })) | {};
+        if (errors || !data) {
+          console.warn(
+            "ListQuickPunchByEmployee failed",
+            { employeeId, limit: 100 },
+            errors
+          );
+        }
+        const deletPromises = (data?.items || []).map(
+          ({ id, _version }) =>
+            id === newId ||
+            api
+              .DeleteQuickPunch({ input: { id, _version } })
+              .then((d) => {
+                console.log(d);
+                return true;
+              })
+              .catch((e) => {
+                console.error(e);
+                return false;
+              })
+        );
+        return await Promise.all(deletPromises);
+      })();
+
+      const [{ data, errors }] = Promise.all([
+        createNewPromise,
+        removePreviousPromise,
+      ]);
+
       const { createQuickPunch } = data || {};
       if (errors || !createQuickPunch) {
         console.warn(errors);
