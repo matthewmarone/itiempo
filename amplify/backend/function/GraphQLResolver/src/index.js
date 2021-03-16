@@ -175,11 +175,11 @@ const resolvers = {
           throw new Error("Internal error saving pin:");
         }
         const input = {
+          ...usrInput,
           id: newId,
           companyId,
           employeeId,
           ident,
-          ...usrInput,
         };
 
         console.log(JSON.stringify(input, null, 4));
@@ -214,7 +214,8 @@ const resolvers = {
         return await Promise.all(deletPromises);
       })();
 
-      const [{ data, errors }] = Promise.all([
+      // TODO (): Create promise to check for same nickName
+      const [{ data, errors }] = await Promise.all([
         createNewPromise,
         removePreviousPromise,
       ]);
