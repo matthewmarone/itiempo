@@ -45,6 +45,60 @@ const deleteEmployee = /* GraphQL */ `
     }
   }
 `;
+const createQuickPunch = /* GraphQL */ `
+  mutation CreateQuickPunch(
+    $input: CreateQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    createQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+const updateQuickPunch = /* GraphQL */ `
+  mutation UpdateQuickPunch(
+    $input: UpdateQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    updateQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+const deleteQuickPunch = /* GraphQL */ `
+  mutation DeleteQuickPunch(
+    $input: DeleteQuickPunchInput!
+    $condition: ModelQuickPunchConditionInput
+  ) {
+    deleteQuickPunch(input: $input, condition: $condition) {
+      id
+      companyId
+      employeeId
+      nickName
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
 const createCompany = /* GraphQL */ `
   mutation CreateCompany(
     $input: CreateCompanyInput!
@@ -329,6 +383,7 @@ const deleteTimeRecord = /* GraphQL */ `
   }
 `;
 
+
 exports.createCompany = createCompany;
 exports.updateCompany = updateCompany;
 exports.deleteCompany = deleteCompany;
@@ -338,3 +393,6 @@ exports.deleteEmployee = deleteEmployee;
 exports.createTimeRecord = createTimeRecord;
 exports.updateTimeRecord = updateTimeRecord;
 exports.deleteTimeRecord = deleteTimeRecord;
+exports.createQuickPunch = createQuickPunch;
+exports.updateQuickPunch = updateQuickPunch;
+exports.deleteQuickPunch = deleteQuickPunch;

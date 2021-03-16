@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { DialogTemplate } from "../components";
 import { WebcamCapture, CenterContent } from "components";
-import { getBlobFromDataURI, getEpoch } from "helpers";
+import { getBlobFromDataURI } from "helpers";
 import PropTypes from "prop-types";
 import { useClockIn, useClockOut, useUploadImage } from "hooks";
 import { v4 as uuidv4 } from "uuid";

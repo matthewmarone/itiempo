@@ -1,6 +1,6 @@
 import React from "react";
 import { ApolloClient, InMemoryCache, ApolloLink } from "@apollo/client";
-import { Auth, Hub, Logger } from "aws-amplify";
+import { Auth, Logger } from "aws-amplify";
 import { AUTH_TYPE, createAuthLink } from "aws-appsync-auth-link";
 import { createSubscriptionHandshakeLink } from "aws-appsync-subscription-link";
 import { mergeSortedLists } from "helpers";
@@ -8,7 +8,7 @@ import { mergeSortedLists } from "helpers";
 // eslint-disable-next-line
 const logger = new Logger("App.js", "ERROR");
 /**
- * 
+ *
  */
 const cache = new InMemoryCache({
   typePolicies: {
@@ -100,11 +100,9 @@ const cache = new InMemoryCache({
   },
 });
 
-// To keep things simple, only support a single instance.
-let singnedIn = false;
 /**
- * 
- * @param {*} appSyncConfig 
+ *
+ * @param {*} appSyncConfig
  */
 const createApolloClient = (appSyncConfig) => {
   const url = appSyncConfig.aws_appsync_graphqlEndpoint;
@@ -128,12 +126,11 @@ const createApolloClient = (appSyncConfig) => {
   ]);
 
   const desicionLink = new ApolloLink((operation, forward) => {
-    operation.setContext({ singnedIn });
     return forward(operation);
   }).split(
-    (operation) => operation.getContext().singnedIn,
-    cognitoLink,
-    iamLink
+    (operation) => operation.getContext()?.unAuthenticated === true,
+    iamLink,
+    cognitoLink
   );
 
   return new ApolloClient({
@@ -159,32 +156,5 @@ const createApolloClient = (appSyncConfig) => {
 
 export const useApolloClient = (appSyncConfig) => {
   const [client] = React.useState(() => createApolloClient(appSyncConfig));
-  React.useEffect(() => {
-    const handleAuthEvents = ({ payload }) => {
-      switch (payload.event) {
-        case "signIn":
-          singnedIn = true;
-          break;
-        case "signOut":
-          singnedIn = false;
-          break;
-        case "configured":
-        case "signIn_failure":
-        case "signUp":
-        default:
-          break;
-      }
-    };
-    Hub.listen("auth", handleAuthEvents);
-    // Check if user is already signed in
-    Auth.currentSession()
-      .then(() => {
-        singnedIn = true;
-      })
-      .catch((e) => {
-        singnedIn = false;
-      });
-    return () => Hub.remove("auth", handleAuthEvents);
-  }, []);
   return client;
 };

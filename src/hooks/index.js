@@ -14,4 +14,6 @@ export {
   useSetupNewAccount,
   useClockIn,
   useClockOut,
+  useCreateQuickPunch,
+  useUpdateQuickPunch,
 } from "./hooks";

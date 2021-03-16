@@ -106,14 +106,12 @@ const WEBCAM_SCEAN = "WEBCAM_SCEAN";
 const EDIT_SCEAN = "EDIT_SCEAN";
 
 const ProfilePictureDialog = (props) => {
-  const { open, handleClose, onFile, onFileError } = props;
+  const { open, onClose, onFile, onFileError, onRemovePhoto } = props;
   const [image, setImage] = useState(null);
   const [editor, setEditor] = useState(null);
   const [scean, setScean] = useState(UPLOAD_SCEAN);
   const webcamRef = useRef(null);
   const title = "Upload Profile Picture";
-
-  console.debug("imageURL", image);
 
   useEffect(() => {
     // Always return to Upload Scean on re-renders
@@ -148,7 +146,7 @@ const ProfilePictureDialog = (props) => {
     // const dataUrl = canvas.toDataURL('image/png', 1);
     canvas.toBlob((blob) => {
       onFile(blob);
-      handleClose();
+      onClose();
     });
   };
 
@@ -176,6 +174,20 @@ const ProfilePictureDialog = (props) => {
           Use Camera
         </Button>
       );
+      if (onRemovePhoto)
+        actions.push(
+          <Button
+            key="btnRmvCamera"
+            autoFocus
+            onClick={() => {
+              onRemovePhoto();
+              onClose();
+            }}
+            color="secondary"
+          >
+            Remove Photo
+          </Button>
+        );
       break;
     case WEBCAM_SCEAN:
       dialogContent = webCamScean;
@@ -203,7 +215,7 @@ const ProfilePictureDialog = (props) => {
     <Button
       key="btnTwo"
       autoFocus
-      onClick={isWebcamScean ? handleUseFile : handleClose}
+      onClick={isWebcamScean ? handleUseFile : onClose}
       color="primary"
     >
       {isWebcamScean ? "Back" : "Cancel"}
@@ -214,7 +226,7 @@ const ProfilePictureDialog = (props) => {
   return (
     <DialogTemplate
       open={open}
-      handleClose={handleClose}
+      handleClose={onClose}
       title={title}
       dialogContent={dialogContent}
       actions={actions}
@@ -224,9 +236,10 @@ const ProfilePictureDialog = (props) => {
 
 ProfilePictureDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   onFile: PropTypes.func.isRequired,
   onFileError: PropTypes.func,
+  onRemovePhoto: PropTypes.func,
 };
 
 export default ProfilePictureDialog;

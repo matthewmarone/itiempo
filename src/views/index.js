@@ -11,3 +11,4 @@ export { default as NotFound } from "./NotFound";
 export { default as Report } from "./Report";
 export { default as Employee } from "./Employee";
 export { default as EmployeeList } from "./EmployeeList";
+export { default as Loading } from "./Loading";

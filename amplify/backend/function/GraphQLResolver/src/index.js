@@ -9,7 +9,7 @@ const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
 const { EmployeeLookup } = require("./employeeLookup");
-const { getEmployee: getEmployeeByIdent } = require("./ident");
+const { createIdent } = require("./ident");
 const {
   OWNER_ROLE,
   ADMIN_ROLE,
@@ -72,13 +72,6 @@ const PunchMethod = {
  */
 const resolvers = {
   Query: {
-    byIdent: async (ctx) => {
-      const {
-        arguments: { ident, companyId },
-      } = ctx;
-      console.log("ident, companyId", ident, companyId);
-      return await getEmployeeByIdent(ident, companyId);
-    },
     timeRecordReport: async (ctx) => {
       const {
         identity: {
@@ -157,6 +150,104 @@ const resolvers = {
     },
   },
   Mutation: {
+    createQP: async (ctx) => {
+      const {
+        identity: {
+          claims: { eId, cId },
+        },
+        arguments: {
+          input: { companyId, employeeId, b64EncodedPin, ...usrInput },
+        },
+      } = ctx;
+      if (companyId !== cId) throw new Error("Unauthorized to set pin");
+      if (employeeId !== eId)
+        throw new Error(
+          "Setting pin for another employee is not supported at this time"
+        );
+      const newId = uuid.v4(); // ID for the new QuickPunch record
+      // Asychronosly create the record
+      const createNewPromise = (async () => {
+        let ident;
+        try {
+          ident = await createIdent(b64EncodedPin, companyId);
+        } catch (e) {
+          console.error(e);
+          throw new Error("Internal error saving pin:");
+        }
+        const input = {
+          ...usrInput,
+          id: newId,
+          companyId,
+          employeeId,
+          ident,
+        };
+
+        console.log(JSON.stringify(input, null, 4));
+        return (await api.CreateQuickPunch({ input })) || {};
+      })();
+
+      // Asynchronosly remove any existing for the same employee
+      const removePreviousPromise = (async () => {
+        const { data, errors } =
+          (await api.ListQuickPunchByEmployee({ employeeId, limit: 100 })) ||
+          {};
+        if (
+          errors ||
+          !(
+            data &&
+            data.listQuickPunchByEmployee &&
+            data.listQuickPunchByEmployee.items
+          )
+        ) {
+          console.warn(
+            "ListQuickPunchByEmployee failed",
+            { employeeId, limit: 100 },
+            data,
+            errors
+          );
+          return await Promise.all([]);
+        } else {
+          const deletPromises = data.listQuickPunchByEmployee.items.map(
+            ({ id, _version, _deleted }) =>
+              id === newId ||
+              !!_deleted ||
+              api
+                .DeleteQuickPunch({ input: { id, _version } })
+                .then((d) => {
+                  // console.log(d);
+                  return true;
+                })
+                .catch((e) => {
+                  console.error(e);
+                  return false;
+                })
+          );
+          return await Promise.all(deletPromises);
+        }
+      })();
+
+      // TODO (): Create promise to check for same nickName
+      const [{ data, errors }] = await Promise.all([
+        createNewPromise,
+        removePreviousPromise,
+      ]);
+
+      const { createQuickPunch } = data || {};
+      if (errors || !createQuickPunch) {
+        console.warn(errors);
+        if (!createQuickPunch) {
+          const errorMessage = `Pin creation failed: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+      const { ident: dontReturn, ...retVal } = createQuickPunch;
+      return retVal;
+    },
+    updateQP: async (ctx) => {
+      return null;
+    },
     clockIn: async (ctx) => {
       const {
         identity: {

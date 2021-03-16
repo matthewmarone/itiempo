@@ -13,6 +13,8 @@ import {
   updateEmpl as updateEmployeeGQL,
   clockIn as clockInGQL,
   clockOut as clockOutGQL,
+  createQp as createQpGQL,
+  updateQp as updateQpGQL,
 } from "graphql/mutations";
 import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -49,6 +51,7 @@ export const useDownloadImage = ({
 
   useEffect(() => {
     const { key, level, download } = variables;
+    console.log("key key", key);
     if (key) {
       setError(null);
       setLoading(true);
@@ -116,6 +119,16 @@ export const useUpdateEmployee = () => useMutation(gql(updateEmployeeGQL));
  *
  */
 export const useSetupNewAccount = () => useMutation(gql(setupNewAccountGQL));
+
+/**
+ *
+ */
+export const useCreateQuickPunch = () => useMutation(gql(createQpGQL));
+
+/**
+ *
+ */
+export const useUpdateQuickPunch = () => useMutation(gql(updateQpGQL));
 
 /**
  *
