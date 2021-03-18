@@ -534,6 +534,13 @@ export const schema = {
                                 ]
                             },
                             {
+                                "allow": "public",
+                                "provider": "iam",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
                                 "provider": "userPools",
                                 "ownerField": "employeeId",
                                 "allow": "owner",

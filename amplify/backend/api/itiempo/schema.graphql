@@ -76,7 +76,7 @@ type QuickPunch
       }
       # Allows creation only through GraphQLResolver
       {
-        allow: private
+        allow: public
         provider: iam
         operations: [read]
       }
