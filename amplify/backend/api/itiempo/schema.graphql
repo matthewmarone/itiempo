@@ -30,12 +30,12 @@ type Query {
     companyId: ID!
     limit: Int
     nextToken: String
-  ): QuickClockInConnection
+  ): QuickDirectoryConnection
     @auth(rules: [{ allow: public, provider: iam }])
     @function(name: "GraphQLResolver-${env}")
 }
 
-type QuickClockInConnection {
+type QuickDirectoryConnection {
   items: [QuickDirectory]
   nextToken: String
   startedAt: AWSTimestamp
@@ -55,7 +55,7 @@ type ModelTimeRecConnection {
 }
 
 type QuickPunch
-  @model(subscriptions: { level: off }, queries: { get: null, list: null })
+  @model(subscriptions: { level: off })
   @key(
     name: "byCompany"
     fields: ["companyId", "nickName"]
@@ -73,12 +73,6 @@ type QuickPunch
         allow: private
         provider: iam
         operations: [create, update, read, delete]
-      }
-      # Allows creation only through GraphQLResolver
-      {
-        allow: public
-        provider: iam
-        operations: [read]
       }
       {
         # Allow all memebers of a company to read

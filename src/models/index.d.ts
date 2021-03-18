@@ -36,21 +36,6 @@ export declare class PayRate {
   constructor(init: ModelInit<PayRate>);
 }
 
-export declare class QuickClockInConnection {
-  readonly items?: (QuickDirectory | null)[];
-  readonly nextToken?: string;
-  readonly startedAt?: number;
-  constructor(init: ModelInit<QuickClockInConnection>);
-}
-
-export declare class QuickDirectory {
-  readonly id: string;
-  readonly companyId: string;
-  readonly employeeId: string;
-  readonly nickName: string;
-  constructor(init: ModelInit<QuickDirectory>);
-}
-
 export declare class TimeRecord {
   readonly id: string;
   readonly employeeId: string;

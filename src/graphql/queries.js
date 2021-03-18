@@ -47,6 +47,20 @@ export const timeRecordReport = /* GraphQL */ `
     }
   }
 `;
+export const quickClockIn = /* GraphQL */ `
+  query QuickClockIn($companyId: ID!, $limit: Int, $nextToken: String) {
+    quickClockIn(companyId: $companyId, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        companyId
+        employeeId
+        nickName
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const listQuickPunchByCompany = /* GraphQL */ `
   query ListQuickPunchByCompany(
     $companyId: ID
@@ -74,6 +88,7 @@ export const listQuickPunchByCompany = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        ident
       }
       nextToken
       startedAt
@@ -105,20 +120,7 @@ export const listQuickPunchByEmployee = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const quickClockIn = /* GraphQL */ `
-  query QuickClockIn($companyId: ID!, $limit: Int, $nextToken: String) {
-    quickClockIn(companyId: $companyId, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        companyId
-        employeeId
-        nickName
+        ident
       }
       nextToken
       startedAt
@@ -148,6 +150,47 @@ export const syncQuickPunches = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        ident
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getQuickPunch = /* GraphQL */ `
+  query GetQuickPunch($id: ID!) {
+    getQuickPunch(id: $id) {
+      id
+      companyId
+      employeeId
+      nickName
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      ident
+    }
+  }
+`;
+export const listQuickPunchs = /* GraphQL */ `
+  query ListQuickPunchs(
+    $filter: ModelQuickPunchFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listQuickPunchs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        companyId
+        employeeId
+        nickName
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        ident
       }
       nextToken
       startedAt

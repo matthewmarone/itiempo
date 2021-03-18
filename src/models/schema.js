@@ -491,10 +491,6 @@ export const schema = {
                     "properties": {
                         "subscriptions": {
                             "level": "off"
-                        },
-                        "queries": {
-                            "get": null,
-                            "list": null
                         }
                     }
                 },
@@ -531,13 +527,6 @@ export const schema = {
                                     "update",
                                     "read",
                                     "delete"
-                                ]
-                            },
-                            {
-                                "allow": "public",
-                                "provider": "iam",
-                                "operations": [
-                                    "read"
                                 ]
                             },
                             {
@@ -826,69 +815,7 @@ export const schema = {
                     "attributes": []
                 }
             }
-        },
-        "QuickClockInConnection": {
-            "name": "QuickClockInConnection",
-            "fields": {
-                "items": {
-                    "name": "items",
-                    "isArray": true,
-                    "type": {
-                        "nonModel": "QuickDirectory"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
-                },
-                "nextToken": {
-                    "name": "nextToken",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "startedAt": {
-                    "name": "startedAt",
-                    "isArray": false,
-                    "type": "AWSTimestamp",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            }
-        },
-        "QuickDirectory": {
-            "name": "QuickDirectory",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "companyId": {
-                    "name": "companyId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "employeeId": {
-                    "name": "employeeId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "nickName": {
-                    "name": "nickName",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                }
-            }
         }
     },
-    "version": "5b1cc24a49b294765e6feaf5d069c7de"
+    "version": "d35fc0b4da90baa76325fce024291046"
 };

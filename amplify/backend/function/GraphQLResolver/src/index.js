@@ -83,6 +83,7 @@ const resolvers = {
           limit,
           nextToken: ntIn,
         })) || {};
+      console.log(JSON.stringify({ data, errors }, null, 4));
       const { listQuickPunchByCompany } = data || {};
       if (errors || !listQuickPunchByCompany) {
         console.warn(errors);
@@ -95,13 +96,16 @@ const resolvers = {
       }
 
       const { items, nextToken, startedAt } = listQuickPunchByCompany;
-      return {
+      const retVal = {
         items: (items || []).map(({ companyId, employeeId, id, nickName }) => {
           return { companyId, employeeId, id, nickName };
         }),
         nextToken,
         startedAt,
       };
+
+      console.log(JSON.stringify(retVal, null, 4));
+      return retVal;
     },
     timeRecordReport: async (ctx) => {
       const {
