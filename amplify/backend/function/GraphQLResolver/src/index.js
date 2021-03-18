@@ -72,6 +72,12 @@ const PunchMethod = {
  */
 const resolvers = {
   Query: {
+    quickClockIn: async (ctx) => {
+      const {
+        arguments: { companyId, limit, nextToken },
+      } = ctx;
+      return { items: [], nextToken: null, startedAt: null };
+    },
     timeRecordReport: async (ctx) => {
       const {
         identity: {
@@ -153,7 +159,9 @@ const resolvers = {
     resetPassword: async (ctx) => {
       const {
         identity: { claims },
-        arguments: { employeeId },
+        arguments: {
+          input: { employeeId },
+        },
       } = ctx;
 
       const { data } = await api.GetEmployee(employeeId);
@@ -161,7 +169,6 @@ const resolvers = {
         if (isAuthorizedToUpdateEmployee(claims, data.getEmployee)) {
           try {
             await user.resetUserPassword(data.getEmployee.username);
-            await user.globalSignOut(data.getEmployee.username);
             return true;
           } catch (e) {
             console.error(e);

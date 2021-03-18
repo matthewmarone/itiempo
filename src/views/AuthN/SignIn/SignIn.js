@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/styles";
 import { UIAuthState } from "AppAuthenticator";
 import { Auth, Logger } from "aws-amplify";
 import { AuthLayout } from "./../components";
+import { EnterPinDialog } from "components";
 import {
   Button,
   TextField,
@@ -12,6 +13,7 @@ import {
   Typography,
   CircularProgress,
 } from "@material-ui/core";
+import { useListQuickClockIn } from "hooks";
 // eslint-disable-next-line
 const logger = new Logger("SignIn.js", "ERROR");
 
@@ -57,6 +59,16 @@ const SignIn = (props) => {
   const classes = useStyles();
   const { authData, onAuthStateChange } = props;
   const { email } = authData || {};
+  const [openQuickClock, setOpenQuickClock] = useState(false);
+  const [companyIds] = useState(JSON.parse(localStorage.getItem("itiempo.ac")));
+  const [queryCompany, { loading, error, data }] = useListQuickClockIn();
+  console.log("loading, error, data", loading, error, data);
+  useEffect(() => {
+    if (Array.isArray(companyIds) && companyIds.length > 0) {
+      console.log("Would query INC,", companyIds[0]);
+      queryCompany({ companyId: companyIds[0] });
+    }
+  }, [companyIds, queryCompany]);
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -195,6 +207,17 @@ const SignIn = (props) => {
             <CircularProgress color="secondary" size={28} />
           )}
         </Button>
+        <Button
+          className={classes.signInButton}
+          color="secondary"
+          disabled={authState.authorizing}
+          fullWidth
+          size="large"
+          variant="contained"
+          onClick={() => setOpenQuickClock(true)}
+        >
+          Quick Clock In/Out
+        </Button>
         {!authState.authError || (
           <Typography color="error" variant="body2">
             {authState.authError.message}
@@ -207,6 +230,10 @@ const SignIn = (props) => {
           </Link>
         </Typography>
       </form>
+      <EnterPinDialog
+        open={openQuickClock}
+        onClose={() => setOpenQuickClock(false)}
+      />
     </AuthLayout>
   );
 };

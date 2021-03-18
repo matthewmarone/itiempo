@@ -22,6 +22,11 @@ const Reducer = (state, action) => {
         "cognito:username": username,
         newAccount,
       } = action.payload;
+      try {
+        localStorage.setItem("itiempo.ac", JSON.stringify([companyId]));
+      } catch (e) {
+        logger.warn(e);
+      }
       return {
         ...state,
         user: {

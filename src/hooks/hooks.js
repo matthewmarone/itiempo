@@ -4,6 +4,7 @@ import {
   listEmployeesByEmail as listEmployeesByEmailGQL,
   getEmployee as getEmployeeGQL,
   timeRecordReport as timeRecordReportGQL,
+  quickClockIn as quickClockInGQL,
 } from "graphql/queries";
 import {
   setupNewAccount as setupNewAccountGQL,
@@ -369,6 +370,26 @@ export const useListEmployeesByEmail = (companyId) =>
       sortDirection: CONSTS.ASC,
     },
   });
+/**
+ *
+ */
+export const useListQuickClockIn = () => {
+  const [query, retVal] = useLazyQuery(gql(quickClockInGQL), {
+    context: { unAuthenticated: true },
+  });
+  const setVariables = useCallback(
+    (v) => {
+      query({
+        variables: {
+          limit: CONSTS.LIMIT_25,
+          ...v,
+        },
+      });
+    },
+    [query]
+  );
+  return [setVariables, retVal];
+};
 
 /**
  *

@@ -154,6 +154,119 @@ export const schema = {
                 }
             ]
         },
+        "QuickPunch": {
+            "name": "QuickPunch",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "companyId": {
+                    "name": "companyId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "employeeId": {
+                    "name": "employeeId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "nickName": {
+                    "name": "nickName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "ident": {
+                    "name": "ident",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "QuickPunches",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCompany",
+                        "fields": [
+                            "companyId",
+                            "nickName"
+                        ],
+                        "queryField": "listQuickPunchByCompany"
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmployee",
+                        "fields": [
+                            "employeeId"
+                        ],
+                        "queryField": "listQuickPunchByEmployee"
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "private",
+                                "provider": "iam",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "read",
+                                    "delete"
+                                ]
+                            },
+                            {
+                                "provider": "userPools",
+                                "ownerField": "employeeId",
+                                "allow": "owner",
+                                "identityClaim": "eId",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "ForbiddenGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "read",
+                                    "update",
+                                    "delete"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Employee": {
             "name": "Employee",
             "fields": {
@@ -444,119 +557,6 @@ export const schema = {
                 }
             ]
         },
-        "QuickPunch": {
-            "name": "QuickPunch",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "companyId": {
-                    "name": "companyId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "employeeId": {
-                    "name": "employeeId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "nickName": {
-                    "name": "nickName",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "ident": {
-                    "name": "ident",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "QuickPunches",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {
-                        "subscriptions": {
-                            "level": "off"
-                        }
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byCompany",
-                        "fields": [
-                            "companyId",
-                            "nickName"
-                        ],
-                        "queryField": "listQuickPunchByCompany"
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byEmployee",
-                        "fields": [
-                            "employeeId"
-                        ],
-                        "queryField": "listQuickPunchByEmployee"
-                    }
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "private",
-                                "provider": "iam",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "read",
-                                    "delete"
-                                ]
-                            },
-                            {
-                                "provider": "userPools",
-                                "ownerField": "employeeId",
-                                "allow": "owner",
-                                "identityClaim": "eId",
-                                "operations": [
-                                    "read"
-                                ]
-                            },
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "ForbiddenGroup"
-                                ],
-                                "operations": [
-                                    "create",
-                                    "read",
-                                    "update",
-                                    "delete"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
         "Company": {
             "name": "Company",
             "fields": {
@@ -815,7 +815,36 @@ export const schema = {
                     "attributes": []
                 }
             }
+        },
+        "QuickClockInConnection": {
+            "name": "QuickClockInConnection",
+            "fields": {
+                "items": {
+                    "name": "items",
+                    "isArray": true,
+                    "type": {
+                        "model": "QuickPunch"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "nextToken": {
+                    "name": "nextToken",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "startedAt": {
+                    "name": "startedAt",
+                    "isArray": false,
+                    "type": "AWSTimestamp",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
         }
     },
-    "version": "d35fc0b4da90baa76325fce024291046"
+    "version": "2da097e734abbc9dd36fd25b70cdcc42"
 };

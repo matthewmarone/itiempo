@@ -26,6 +26,19 @@ type Query {
     limit: Int
     nextToken: String
   ): ModelTimeRecConnection @function(name: "GraphQLResolver-${env}")
+  quickClockIn(
+    companyId: ID!
+    limit: Int
+    nextToken: String
+  ): QuickClockInConnection
+    @function(name: "GraphQLResolver-${env}")
+    @auth(rules: [{ allow: public, provider: iam }])
+}
+
+type QuickClockInConnection {
+  items: [QuickPunch]
+  nextToken: String
+  startedAt: AWSTimestamp
 }
 
 type ModelTimeRecConnection {
