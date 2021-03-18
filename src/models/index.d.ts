@@ -36,13 +36,6 @@ export declare class PayRate {
   constructor(init: ModelInit<PayRate>);
 }
 
-export declare class QuickClockInConnection {
-  readonly items?: (QuickPunch | null)[];
-  readonly nextToken?: string;
-  readonly startedAt?: number;
-  constructor(init: ModelInit<QuickClockInConnection>);
-}
-
 export declare class TimeRecord {
   readonly id: string;
   readonly employeeId: string;
@@ -56,16 +49,6 @@ export declare class TimeRecord {
   readonly approvedBy?: string;
   constructor(init: ModelInit<TimeRecord>);
   static copyOf(source: TimeRecord, mutator: (draft: MutableModel<TimeRecord>) => MutableModel<TimeRecord> | void): TimeRecord;
-}
-
-export declare class QuickPunch {
-  readonly id: string;
-  readonly companyId: string;
-  readonly employeeId: string;
-  readonly nickName: string;
-  readonly ident: string;
-  constructor(init: ModelInit<QuickPunch>);
-  static copyOf(source: QuickPunch, mutator: (draft: MutableModel<QuickPunch>) => MutableModel<QuickPunch> | void): QuickPunch;
 }
 
 export declare class Employee {
@@ -96,6 +79,16 @@ export declare class Employee {
   readonly allowFull: string[];
   constructor(init: ModelInit<Employee>);
   static copyOf(source: Employee, mutator: (draft: MutableModel<Employee>) => MutableModel<Employee> | void): Employee;
+}
+
+export declare class QuickPunch {
+  readonly id: string;
+  readonly companyId: string;
+  readonly employeeId: string;
+  readonly nickName: string;
+  readonly ident: string;
+  constructor(init: ModelInit<QuickPunch>);
+  static copyOf(source: QuickPunch, mutator: (draft: MutableModel<QuickPunch>) => MutableModel<QuickPunch> | void): QuickPunch;
 }
 
 export declare class Company {

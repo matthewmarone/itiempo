@@ -76,7 +76,7 @@ const resolvers = {
       const {
         arguments: { companyId, limit, nextToken },
       } = ctx;
-      return { items: [], nextToken: null, startedAt: null };
+      return `${companyId}, ${limit}, ${nextToken}`;
     },
     timeRecordReport: async (ctx) => {
       const {

@@ -17,5 +17,5 @@ export {
   useCreateQuickPunch,
   useUpdateQuickPunch,
   useResetPassword,
-  useListQuickClockIn,
+  useQuickClockIn,
 } from "./hooks";

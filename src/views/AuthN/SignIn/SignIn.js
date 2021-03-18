@@ -13,7 +13,7 @@ import {
   Typography,
   CircularProgress,
 } from "@material-ui/core";
-import { useListQuickClockIn } from "hooks";
+import { useQuickClockIn } from "hooks";
 // eslint-disable-next-line
 const logger = new Logger("SignIn.js", "ERROR");
 
@@ -61,7 +61,7 @@ const SignIn = (props) => {
   const { email } = authData || {};
   const [openQuickClock, setOpenQuickClock] = useState(false);
   const [companyIds] = useState(JSON.parse(localStorage.getItem("itiempo.ac")));
-  const [queryCompany, { loading, error, data }] = useListQuickClockIn();
+  const [queryCompany, { loading, error, data }] = useQuickClockIn();
   console.log("loading, error, data", loading, error, data);
   useEffect(() => {
     if (Array.isArray(companyIds) && companyIds.length > 0) {

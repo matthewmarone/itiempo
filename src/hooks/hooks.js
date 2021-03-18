@@ -373,7 +373,7 @@ export const useListEmployeesByEmail = (companyId) =>
 /**
  *
  */
-export const useListQuickClockIn = () => {
+export const useQuickClockIn = () => {
   const [query, retVal] = useLazyQuery(gql(quickClockInGQL), {
     context: { unAuthenticated: true },
   });
