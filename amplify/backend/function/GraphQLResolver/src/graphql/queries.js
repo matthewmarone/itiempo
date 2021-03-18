@@ -1,6 +1,38 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
+const listQuickPunchByCompany = /* GraphQL */ `
+  query ListQuickPunchByCompany(
+    $companyId: ID
+    $nickName: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelQuickPunchFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listQuickPunchByCompany(
+      companyId: $companyId
+      nickName: $nickName
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        companyId
+        employeeId
+        nickName
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 const listQuickPunchByEmployee = /* GraphQL */ `
   query ListQuickPunchByEmployee(
     $employeeId: ID
@@ -272,3 +304,4 @@ exports.listEmployeesByEmail = listEmployeesByEmail;
 exports.getCompany = getCompany;
 exports.listQuickPunchByEmployee = listQuickPunchByEmployee;
 exports.getQuickPunch = getQuickPunch;
+exports.listQuickPunchByCompany = listQuickPunchByCompany;

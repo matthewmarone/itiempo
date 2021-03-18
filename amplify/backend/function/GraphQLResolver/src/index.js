@@ -74,9 +74,34 @@ const resolvers = {
   Query: {
     quickClockIn: async (ctx) => {
       const {
-        arguments: { companyId, limit, nextToken },
+        arguments: { companyId: cIdIn, limit, nextToken: ntIn },
       } = ctx;
-      return `${companyId}, ${limit}, ${nextToken}`;
+
+      const { data, errors } =
+        (await api.ListQuickPunchByCompany({
+          companyId: cIdIn,
+          limit,
+          nextToken: ntIn,
+        })) || {};
+      const { listQuickPunchByCompany } = data || {};
+      if (errors || !listQuickPunchByCompany) {
+        console.warn(errors);
+        if (!listQuickPunchByCompany) {
+          const errorMessage = `listQuickPunchByCompany faild: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+
+      const { items, nextToken, startedAt } = listQuickPunchByCompany;
+      return {
+        items: (items || []).map(({ companyId, employeeId, id, nickName }) => {
+          return { companyId, employeeId, id, nickName };
+        }),
+        nextToken,
+        startedAt,
+      };
     },
     timeRecordReport: async (ctx) => {
       const {

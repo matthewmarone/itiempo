@@ -26,24 +26,27 @@ type Query {
     limit: Int
     nextToken: String
   ): ModelTimeRecConnection @function(name: "GraphQLResolver-${env}")
-  quickClockIn(companyId: ID!, limit: Int, nextToken: String): String!
+  quickClockIn(
+    companyId: ID!
+    limit: Int
+    nextToken: String
+  ): QuickClockInConnection
     @auth(rules: [{ allow: public, provider: iam }])
     @function(name: "GraphQLResolver-${env}")
 }
 
-# type QuickClockInConnection {
-#   items: [QuickDirectory]
-#   nextToken: String
-#   startedAt: AWSTimestamp
-# }
+type QuickClockInConnection {
+  items: [QuickDirectory]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
 
-# type QuickDirectory
-#   @auth(rules: [{ allow: public, provider: iam, operations: [read] }]) {
-#   id: ID!
-#   companyId: ID!
-#   employeeId: ID!
-#   nickName: String!
-# }
+type QuickDirectory {
+  id: ID!
+  companyId: ID!
+  employeeId: ID!
+  nickName: String!
+}
 
 type ModelTimeRecConnection {
   items: [TimeRecord]
@@ -70,6 +73,12 @@ type QuickPunch
         allow: private
         provider: iam
         operations: [create, update, read, delete]
+      }
+      # Allows creation only through GraphQLResolver
+      {
+        allow: private
+        provider: iam
+        operations: [read]
       }
       {
         # Allow all memebers of a company to read

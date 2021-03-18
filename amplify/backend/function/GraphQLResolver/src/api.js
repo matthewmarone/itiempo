@@ -141,6 +141,16 @@ const ListQuickPunchByEmployee = async (variables = {}) => {
 };
 /**
  *
+ * @param {*} variables
+ * @returns
+ */
+const ListQuickPunchByCompany = async (variables = {}) => {
+  const operationName = "ListQuickPunchByCompany";
+  const graphQL = Queries.listQuickPunchByCompany;
+  return await query(operationName, graphQL, variables);
+};
+/**
+ *
  * @param {*} id
  */
 const GetCompany = async (id) => {
@@ -195,3 +205,4 @@ exports.CreateQuickPunch = CreateQuickPunch;
 exports.UpdateQuickPunch = UpdateQuickPunch;
 exports.ListQuickPunchByEmployee = ListQuickPunchByEmployee;
 exports.DeleteQuickPunch = DeleteQuickPunch;
+exports.ListQuickPunchByCompany = ListQuickPunchByCompany;
