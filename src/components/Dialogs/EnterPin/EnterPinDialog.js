@@ -1,18 +1,24 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Button, CircularProgress, Typography } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+} from "@material-ui/core";
 import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
 import { isDigits } from "helpers";
 import { default as PinPad } from "../../PinPad";
-import { useCreateQuickPunch as useCreate, useGetEmployee } from "hooks";
 
 /**
  *
  * @param {*} props
  */
 const EnterPinDialog = (props) => {
-  const { open, onClose } = props;
+  const { open, onClose, pinRecords } = props;
   const [pin, setPin] = useState("");
+  const [selectedRecord, setSelectedRecord] = useState(null);
   const [errorMessage, setErrorMessage] = useState(undefined);
 
   const isValidPin = (p) => isDigits(p) && p.length > 3;
@@ -46,13 +52,52 @@ const EnterPinDialog = (props) => {
       handleClose={onClose}
       title="Quick Clock"
       dialogContent={
-        <PinPad
-          pin={pin}
-          onChange={handlePinChange}
-          onSubmit={handlePinSubmit}
-          errorMessage={errorMessage}
-          valid={isValidPin(pin)}
-        />
+        <Grid
+          container
+          spacing={4}
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
+          <Grid item>
+            <FormControl>
+              <InputLabel htmlFor="pin-user-select">Name</InputLabel>
+              <Select
+                native
+                value={selectedRecord || ""}
+                onChange={({ target: { value } }) => setSelectedRecord(value)}
+                inputProps={{
+                  name: "name",
+                  id: "pin-user-select",
+                }}
+                color="primary"
+                size="large"
+              >
+                <option aria-label="None" value="" />
+                {pinRecords.map(({ id, nickName }) => (
+                  <option key={id} value={id}>
+                    {nickName}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <PinPad
+              pin={pin}
+              onChange={handlePinChange}
+              onSubmit={handlePinSubmit}
+              errorMessage={errorMessage}
+              valid={
+                !!(
+                  isValidPin(pin) &&
+                  selectedRecord &&
+                  selectedRecord.length > 0
+                )
+              }
+            />
+          </Grid>
+        </Grid>
       }
       actions={[
         <Button key="cancel" autoFocus onClick={handleClose}>
@@ -66,6 +111,7 @@ const EnterPinDialog = (props) => {
 EnterPinDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  pinRecords: PropTypes.array.isRequired,
 };
 
 export default EnterPinDialog;

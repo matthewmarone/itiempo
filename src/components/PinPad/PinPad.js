@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 
 /**
@@ -31,6 +31,22 @@ const PinPad = (props) => {
     if (pin.length > 0) onChange(pin.substring(0, pin.length - 1));
   };
 
+  const isError =
+    errorMessage && errorMessage.length > 0 && (!pin || pin.length === 0);
+
+  const createStars = (p, star = "*") => {
+    let retVal = "";
+    for (let i = 0; i < p.length; i++) retVal = retVal.concat(star);
+    return retVal;
+  };
+
+  const stars =
+    pin && pin.length > 0
+      ? createStars(pin)
+      : hint && hint.length > 0
+      ? hint
+      : "Enter Pin";
+
   return (
     <Grid
       container
@@ -40,18 +56,8 @@ const PinPad = (props) => {
       alignItems="center"
     >
       <Grid item xs={12}>
-        <TextField
-          type="password"
-          value={pin}
-          label={hint}
-          onChange={({ target: { value } }) => {
-            onChange(value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <Typography color="error" variant="body1">
-          {errorMessage || ""}
+        <Typography color={isError ? "error" : "textPrimary"} variant="body1">
+          {isError ? errorMessage : stars}
         </Typography>
       </Grid>
       <Grid item xs={12}>

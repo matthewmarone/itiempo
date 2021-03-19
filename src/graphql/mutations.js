@@ -288,7 +288,6 @@ export const createQp = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -304,7 +303,6 @@ export const updateQp = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -372,7 +370,6 @@ export const createQuickPunch = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -391,7 +388,6 @@ export const updateQuickPunch = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -410,7 +406,6 @@ export const deleteQuickPunch = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;

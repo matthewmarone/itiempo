@@ -79,7 +79,6 @@ export const listQuickPunchByCompany = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        ident
       }
       nextToken
       startedAt
@@ -111,7 +110,6 @@ export const listQuickPunchByEmployee = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        ident
       }
       nextToken
       startedAt
@@ -141,7 +139,6 @@ export const syncQuickPunches = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        ident
       }
       nextToken
       startedAt
@@ -160,7 +157,6 @@ export const getQuickPunch = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-      ident
     }
   }
 `;
@@ -181,7 +177,6 @@ export const listQuickPunchs = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        ident
       }
       nextToken
       startedAt

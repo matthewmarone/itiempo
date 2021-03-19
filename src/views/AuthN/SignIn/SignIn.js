@@ -60,15 +60,33 @@ const SignIn = (props) => {
   const { authData, onAuthStateChange } = props;
   const { email } = authData || {};
   const [openQuickClock, setOpenQuickClock] = useState(false);
+  const [pinRecords, setPinRecords] = useState([]);
   const [companyIds] = useState(JSON.parse(localStorage.getItem("itiempo.ac")));
-  const [queryCompany, { loading, error, data }] = useQuickClockIn();
-  console.log("loading, error, data", loading, error, data);
+  const [queryCompany, { error, data }] = useQuickClockIn();
+  if (error) console.warn(error);
   useEffect(() => {
     if (Array.isArray(companyIds) && companyIds.length > 0) {
       console.log("Would query INC,", companyIds[0]);
       queryCompany({ companyId: companyIds[0] });
     }
   }, [companyIds, queryCompany]);
+
+  useEffect(() => {
+    if (data?.quickClockIn) {
+      const quickClockIn = JSON.parse(data.quickClockIn);
+      try {
+        if (Array.isArray(quickClockIn?.items)) {
+          setPinRecords(quickClockIn.items);
+          localStorage.setItem(
+            "itiempo.qc",
+            JSON.stringify(quickClockIn.items)
+          );
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  }, [data]);
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -192,6 +210,11 @@ const SignIn = (props) => {
             Reset password
           </Link>
         </Typography>
+        {!authState.authError || (
+          <Typography color="error" variant="body2">
+            {authState.authError.message}
+          </Typography>
+        )}
         <Button
           className={classes.signInButton}
           color="primary"
@@ -207,21 +230,18 @@ const SignIn = (props) => {
             <CircularProgress color="secondary" size={28} />
           )}
         </Button>
-        <Button
-          className={classes.signInButton}
-          color="secondary"
-          disabled={authState.authorizing}
-          fullWidth
-          size="large"
-          variant="contained"
-          onClick={() => setOpenQuickClock(true)}
-        >
-          Quick Clock In/Out
-        </Button>
-        {!authState.authError || (
-          <Typography color="error" variant="body2">
-            {authState.authError.message}
-          </Typography>
+        {!(Array.isArray(companyIds) && companyIds.length > 0) || (
+          <Button
+            className={classes.signInButton}
+            color="secondary"
+            disabled={authState.authorizing}
+            fullWidth
+            size="large"
+            variant="contained"
+            onClick={() => setOpenQuickClock(true)}
+          >
+            Quick Clock In/Out
+          </Button>
         )}
         <Typography color="textSecondary" variant="body1">
           Don't have an account?{" "}
@@ -232,6 +252,7 @@ const SignIn = (props) => {
       </form>
       <EnterPinDialog
         open={openQuickClock}
+        pinRecords={pinRecords}
         onClose={() => setOpenQuickClock(false)}
       />
     </AuthLayout>
