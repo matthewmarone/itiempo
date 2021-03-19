@@ -97,15 +97,20 @@ const resolvers = {
 
       const { items, nextToken, startedAt } = listQuickPunchByCompany;
       const retVal = {
-        items: (items || []).map(({ companyId, employeeId, id, nickName }) => {
-          return { companyId, employeeId, id, nickName };
-        }),
+        items: (items || []).reduce(
+          (accum, { companyId, employeeId, id, nickName, _deleted }) => {
+            if (!_deleted)
+              accum[accum.length] = { id, companyId, employeeId, nickName };
+            return accum;
+          },
+          []
+        ),
         nextToken,
         startedAt,
       };
 
       console.log(JSON.stringify(retVal, null, 4));
-      return retVal;
+      return JSON.stringify(retVal);
     },
     timeRecordReport: async (ctx) => {
       const {

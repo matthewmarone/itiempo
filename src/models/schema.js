@@ -815,69 +815,7 @@ export const schema = {
                     "attributes": []
                 }
             }
-        },
-        "QuickDirectoryConnection": {
-            "name": "QuickDirectoryConnection",
-            "fields": {
-                "items": {
-                    "name": "items",
-                    "isArray": true,
-                    "type": {
-                        "nonModel": "QuickDirectory"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
-                },
-                "nextToken": {
-                    "name": "nextToken",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "startedAt": {
-                    "name": "startedAt",
-                    "isArray": false,
-                    "type": "AWSTimestamp",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            }
-        },
-        "QuickDirectory": {
-            "name": "QuickDirectory",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "companyId": {
-                    "name": "companyId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "employeeId": {
-                    "name": "employeeId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "nickName": {
-                    "name": "nickName",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                }
-            }
         }
     },
-    "version": "4bc6f6860a2480be3e02131433e2e9ba"
+    "version": "d35fc0b4da90baa76325fce024291046"
 };

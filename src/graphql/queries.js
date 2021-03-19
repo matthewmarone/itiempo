@@ -49,16 +49,7 @@ export const timeRecordReport = /* GraphQL */ `
 `;
 export const quickClockIn = /* GraphQL */ `
   query QuickClockIn($companyId: ID!, $limit: Int, $nextToken: String) {
-    quickClockIn(companyId: $companyId, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        companyId
-        employeeId
-        nickName
-      }
-      nextToken
-      startedAt
-    }
+    quickClockIn(companyId: $companyId, limit: $limit, nextToken: $nextToken)
   }
 `;
 export const listQuickPunchByCompany = /* GraphQL */ `

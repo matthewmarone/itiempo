@@ -26,27 +26,23 @@ type Query {
     limit: Int
     nextToken: String
   ): ModelTimeRecConnection @function(name: "GraphQLResolver-${env}")
-  quickClockIn(
-    companyId: ID!
-    limit: Int
-    nextToken: String
-  ): QuickDirectoryConnection
+  quickClockIn(companyId: ID!, limit: Int, nextToken: String): String
     @auth(rules: [{ allow: public, provider: iam }])
     @function(name: "GraphQLResolver-${env}")
 }
 
-type QuickDirectoryConnection {
-  items: [QuickDirectory]
-  nextToken: String
-  startedAt: AWSTimestamp
-}
+# type QuickDirectoryConnection {
+#   items: [QuickDirectory]
+#   nextToken: String
+#   startedAt: AWSTimestamp
+# }
 
-type QuickDirectory {
-  id: ID!
-  companyId: ID!
-  employeeId: ID!
-  nickName: String!
-}
+# type QuickDirectory {
+#   id: ID!
+#   companyId: ID!
+#   employeeId: ID!
+#   nickName: String!
+# }
 
 type ModelTimeRecConnection {
   items: [TimeRecord]
