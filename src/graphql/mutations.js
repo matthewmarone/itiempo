@@ -355,6 +355,39 @@ export const deleteEmployee = /* GraphQL */ `
     }
   }
 `;
+export const punchInByPin = /* GraphQL */ `
+  mutation PunchInByPin($input: PunchInByPinInput!) {
+    punchInByPin(input: $input) {
+      id
+      employeeId
+      companyId
+      timestampIn
+      timestampOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      rate {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      approved
+      approvedBy
+    }
+  }
+`;
 export const createQuickPunch = /* GraphQL */ `
   mutation CreateQuickPunch(
     $input: CreateQuickPunchInput!

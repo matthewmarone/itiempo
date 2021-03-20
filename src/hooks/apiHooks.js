@@ -17,6 +17,7 @@ import {
   createQp as createQpGQL,
   updateQp as updateQpGQL,
   resetPassword as resetPasswordGQL,
+  punchInByPin as punchInByPinGQL,
 } from "graphql/mutations";
 import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -136,6 +137,14 @@ export const useUpdateQuickPunch = () => useMutation(gql(updateQpGQL));
  *
  */
 export const useResetPassword = () => useMutation(gql(resetPasswordGQL));
+/**
+ *
+ */
+export const usePunchInByPin = () =>
+  useMutation(gql(punchInByPinGQL), {
+    context: { unAuthenticated: true },
+    fetchPolicy: "no-cache",
+  });
 
 /**
  *
@@ -376,6 +385,7 @@ export const useListEmployeesByEmail = (companyId) =>
 export const useQuickClockIn = () => {
   const [query, retVal] = useLazyQuery(gql(quickClockInGQL), {
     context: { unAuthenticated: true },
+    fetchPolicy: "no-cache",
   });
   const setVariables = useCallback(
     (v) => {

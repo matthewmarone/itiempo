@@ -11,28 +11,28 @@ import { DialogTemplate } from "../components";
 import { isDigits } from "helpers";
 import { default as PinPad } from "../../PinPad";
 
+const findSelectedPinRecord = (pinRecords, _id) =>
+  (pinRecords || []).find(({ id }) => _id === id);
+
 /**
  *
  * @param {*} props
  */
 const EnterPinDialog = (props) => {
-  const { open, onClose, pinRecords, onValidate } = props;
+  const { open, onClose, pinRecords, onSubmit } = props;
   const [pin, setPin] = useState("");
-  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [selectedRecordId, setSelectedRecordId] = useState(null);
   const [errorMessage, setErrorMessage] = useState(undefined);
 
   const isValidPin = (p) => isDigits(p) && p.length > 3;
-
-  const createOrUpdatePin = (p) => {
-    console.log(btoa(p));
-  };
 
   const handlePinChange = (v) => {
     if (isDigits(v) || v === "") setPin(v);
   };
   const handlePinSubmit = () => {
-    if (isValidPin(pin)) {
-      createOrUpdatePin(pin);
+    const record = findSelectedPinRecord(pinRecords, selectedRecordId);
+    if (record && isValidPin(pin)) {
+      onSubmit({ record, pin });
     }
   };
   const handleClose = () => onClose();
@@ -64,8 +64,8 @@ const EnterPinDialog = (props) => {
               <InputLabel htmlFor="pin-user-select">Name</InputLabel>
               <Select
                 native
-                value={selectedRecord || ""}
-                onChange={({ target: { value } }) => setSelectedRecord(value)}
+                value={selectedRecordId || ""}
+                onChange={({ target: { value } }) => setSelectedRecordId(value)}
                 inputProps={{
                   name: "name",
                   id: "pin-user-select",
@@ -91,8 +91,8 @@ const EnterPinDialog = (props) => {
               valid={
                 !!(
                   isValidPin(pin) &&
-                  selectedRecord &&
-                  selectedRecord.length > 0
+                  selectedRecordId &&
+                  selectedRecordId.length > 0
                 )
               }
             />
@@ -111,7 +111,7 @@ const EnterPinDialog = (props) => {
 EnterPinDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onValidate: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   pinRecords: PropTypes.array.isRequired,
 };
 

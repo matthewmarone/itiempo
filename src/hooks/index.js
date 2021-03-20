@@ -18,6 +18,7 @@ export {
   useUpdateQuickPunch,
   useResetPassword,
   useQuickClockIn,
+  usePunchInByPin
 } from "./apiHooks";
 
 export { useEventListener } from "./commonHooks";
