@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/styles";
 import { UIAuthState } from "AppAuthenticator";
 import { Auth, Logger } from "aws-amplify";
 import { AuthLayout } from "./../components";
-import { EnterPinDialog } from "components";
+import { PinClockInDialog } from "components";
 import {
   Button,
   TextField,
@@ -55,18 +55,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const cachedPins = () => {
+  const retVal = JSON.parse(localStorage.getItem("itiempo.qc") || "[]");
+  if (!Array.isArray(retVal)) {
+    console.error("Expected array for localStorage key 'itiempo.qc'");
+    return [];
+  }
+  return retVal;
+};
+
 const SignIn = (props) => {
   const classes = useStyles();
   const { authData, onAuthStateChange } = props;
   const { email } = authData || {};
   const [openQuickClock, setOpenQuickClock] = useState(false);
-  const [pinRecords, setPinRecords] = useState([]);
+  const [pinRecords, setPinRecords] = useState(cachedPins);
   const [companyIds] = useState(JSON.parse(localStorage.getItem("itiempo.ac")));
   const [queryCompany, { error, data }] = useQuickClockIn();
   if (error) console.warn(error);
   useEffect(() => {
     if (Array.isArray(companyIds) && companyIds.length > 0) {
-      console.log("Would query INC,", companyIds[0]);
       queryCompany({ companyId: companyIds[0] });
     }
   }, [companyIds, queryCompany]);
@@ -250,7 +258,7 @@ const SignIn = (props) => {
           </Link>
         </Typography>
       </form>
-      <EnterPinDialog
+      <PinClockInDialog
         open={openQuickClock}
         pinRecords={pinRecords}
         onClose={() => setOpenQuickClock(false)}

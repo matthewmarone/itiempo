@@ -16,7 +16,7 @@ import { default as PinPad } from "../../PinPad";
  * @param {*} props
  */
 const EnterPinDialog = (props) => {
-  const { open, onClose, pinRecords } = props;
+  const { open, onClose, pinRecords, onValidate } = props;
   const [pin, setPin] = useState("");
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [errorMessage, setErrorMessage] = useState(undefined);
@@ -111,6 +111,7 @@ const EnterPinDialog = (props) => {
 EnterPinDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onValidate: PropTypes.func.isRequired,
   pinRecords: PropTypes.array.isRequired,
 };
 

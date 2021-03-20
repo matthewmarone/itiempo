@@ -11,6 +11,7 @@ export {
   SetPinDialog,
   EnterPinDialog,
   PasswordResetDialog,
+  PinClockInDialog,
 } from "./Dialogs";
 export { default as Image } from "./Image";
 export { default as RouteWithLayout } from "./RouteWithLayout";

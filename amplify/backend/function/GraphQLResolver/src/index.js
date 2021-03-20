@@ -190,6 +190,13 @@ const resolvers = {
     },
   },
   Mutation: {
+    punchInByPin: async (ctx) => {
+      const {
+        arguments: { input },
+      } = ctx;
+      console.log(input);
+      return null;
+    },
     resetPassword: async (ctx) => {
       const {
         identity: { claims },
