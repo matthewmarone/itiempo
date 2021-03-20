@@ -122,12 +122,31 @@ const ListCompanyTimeRecords = async (variables = {}) => {
 /**
  *
  * @param {*} variables
+ */
+const ListEmployeeTimeRecords = async (variables = {}) => {
+  const operationName = "ListEmployeeTimeRecords";
+  const graphQL = Queries.listEmployeeTimeRecords;
+  return await query(operationName, graphQL, variables);
+};
+/**
+ *
+ * @param {*} variables
  * @returns
  */
 const ListEmployeesByEmail = async (variables = {}) => {
   const operationName = "ListEmployeesByEmail";
   const graphQL = Queries.listEmployeesByEmail;
   return await query(operationName, graphQL, variables);
+};
+/**
+ *
+ * @param {*} id
+ * @returns
+ */
+const GetQuickPunch = async (id) => {
+  const operationName = "GetQuickPunch";
+  const graphQL = Queries.getQuickPunch;
+  return await query(operationName, graphQL, { id });
 };
 /**
  *
@@ -200,9 +219,11 @@ exports.GetCompany = GetCompany;
 exports.CreateTimeRecord = CreateTimeRecord;
 exports.UpdateTimeRecord = UpdateTimeRecord;
 exports.ListCompanyTimeRecords = ListCompanyTimeRecords;
+exports.ListEmployeeTimeRecords = ListEmployeeTimeRecords;
 exports.ListEmployeesByEmail = ListEmployeesByEmail;
 exports.CreateQuickPunch = CreateQuickPunch;
 exports.UpdateQuickPunch = UpdateQuickPunch;
 exports.ListQuickPunchByEmployee = ListQuickPunchByEmployee;
 exports.DeleteQuickPunch = DeleteQuickPunch;
 exports.ListQuickPunchByCompany = ListQuickPunchByCompany;
+exports.GetQuickPunch = GetQuickPunch;

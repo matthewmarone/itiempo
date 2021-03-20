@@ -296,8 +296,65 @@ const listCompanyTimeRecords = /* GraphQL */ `
     }
   }
 `;
+const listEmployeeTimeRecords = /* GraphQL */ `
+  query ListEmployeeTimeRecords(
+    $employeeId: ID
+    $timestampIn: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTimeRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEmployeeTimeRecords(
+      employeeId: $employeeId
+      timestampIn: $timestampIn
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        employeeId
+        companyId
+        timestampIn
+        timestampOut
+        clockInDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        clockOutDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+        }
+        rate {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        approved
+        approvedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 
 exports.listCompanyTimeRecords = listCompanyTimeRecords;
+exports.listEmployeeTimeRecords = listEmployeeTimeRecords;
 exports.getTimeRecord = getTimeRecord;
 exports.getEmployee = getEmployee;
 exports.listEmployeesByEmail = listEmployeesByEmail;

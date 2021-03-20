@@ -9,7 +9,7 @@ const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
 const { EmployeeLookup } = require("./employeeLookup");
-const { createIdent } = require("./ident");
+const { createIdent, compareIdent } = require("./ident");
 const {
   OWNER_ROLE,
   ADMIN_ROLE,
@@ -192,10 +192,104 @@ const resolvers = {
   Mutation: {
     punchInByPin: async (ctx) => {
       const {
-        arguments: { input },
+        identity: { sourceIp },
+        arguments: {
+          input: { quickPunchId, base64Ident, photo, note, rate },
+        },
       } = ctx;
-      console.log(input);
-      return null;
+      const timestamp = Math.round(new Date().getTime() / 1000);
+
+      const { data: { getQuickPunch } = {} } =
+        (await api.GetQuickPunch(quickPunchId)) || {};
+
+      if (!getQuickPunch) throw new Error("Quick Punch Rec does not exist");
+
+      const { companyId, employeeId, ident } = getQuickPunch;
+
+      const isMatchPromise = compareIdent(base64Ident, companyId, ident);
+      const variables = {
+        employeeId,
+        limit: 1,
+        sortDirection: "DESC",
+      };
+      const timeRecordPromise = api.ListEmployeeTimeRecords(variables);
+
+      const [match, lastRecord] = await Promise.all([
+        isMatchPromise.catch((e) => {
+          console.error("Failed to compare ident:", e);
+          return false;
+        }),
+        timeRecordPromise
+          .then(({ data, errors }) => {
+            if (errors) {
+              console.error(errors);
+              const errorMessage = `Clock-in failed: ${
+                !errors || !errors[0] || errors[0].message
+              }`;
+              console.error(errorMessage);
+              throw new Error("Failed to lookup timerecord");
+            }
+            const { listEmployeeTimeRecords: { items } = {} } = data || {};
+            return items && items.length > 0 ? items[0] : null;
+          })
+          .catch((e) => {
+            const msg = "Failed to lookup timerecord";
+            console.error(msg, e);
+            throw new Error(msg);
+          }),
+      ]);
+
+      if (!match) throw new Error("In correct pin:");
+
+      const { timestampOut } = lastRecord || {};
+
+      if (!timestampOut) {
+        // Clock in
+
+        const clockInDetails = {
+          punchMethod: PunchMethod.TimeClock,
+          createdBy: employeeId,
+          photo,
+          note,
+          ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
+        };
+        const input = {
+          employeeId,
+          companyId,
+          timestampIn: timestamp,
+          clockInDetails,
+          rate,
+        };
+
+        console.log(JSON.stringify(input, null, 4));
+
+        const { data, errors } = (await api.CreateTimeRecord({ input })) || {};
+        const { createTimeRecord } = data || {};
+        if (errors || !createTimeRecord) {
+          console.warn(errors);
+          if (!createTimeRecord) {
+            const errorMessage = `Clock-in failed: ${
+              !errors || !errors[0] || errors[0].message
+            }`;
+            throw new Error(errorMessage);
+          }
+        }
+        return {
+          id: createTimeRecord.id,
+          employeeId: createTimeRecord.employeeId,
+          companyId: createTimeRecord.companyId,
+          timestampIn: createTimeRecord.timestampIn,
+          timestampOut: createTimeRecord.timestampOut,
+          clockInDetails: createTimeRecord.clockInDetails,
+          clockOutDetails: createTimeRecord.clockOutDetails,
+          rate: createTimeRecord.rate,
+          approved: createTimeRecord.approved,
+          approvedBy: createTimeRecord.approvedBy,
+        };
+      } else {
+        //Clock out
+        return null;
+      }
     },
     resetPassword: async (ctx) => {
       const {
