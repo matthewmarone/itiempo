@@ -87,11 +87,11 @@
         },
         "usersPreTokenGeneration": {
           "deploymentBucketName": "amplify-itiempo-dev-133828-deployment",
-          "s3Key": "amplify-builds/usersPreTokenGeneration-57576d386d33486a4749-build.zip"
+          "s3Key": "amplify-builds/usersPreTokenGeneration-52346465595666364342-build.zip"
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-dev-133828-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-7674474b714169506463-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-564f343772546d6f5a2f-build.zip"
         }
       }
     }

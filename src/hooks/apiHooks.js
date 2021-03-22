@@ -14,8 +14,8 @@ import {
   updateEmpl as updateEmployeeGQL,
   clockIn as clockInGQL,
   clockOut as clockOutGQL,
-  createQp as createQpGQL,
-  updateQp as updateQpGQL,
+  createQP as createQpGQL,
+  updateQP as updateQpGQL,
   resetPassword as resetPasswordGQL,
   punchInByPin as punchInByPinGQL,
 } from "graphql/mutations";

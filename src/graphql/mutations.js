@@ -276,8 +276,8 @@ export const updateTimeRec = /* GraphQL */ `
     }
   }
 `;
-export const createQp = /* GraphQL */ `
-  mutation CreateQp($input: createQPInput) {
+export const createQP = /* GraphQL */ `
+  mutation CreateQP($input: createQPInput) {
     createQP(input: $input) {
       id
       companyId
@@ -291,8 +291,8 @@ export const createQp = /* GraphQL */ `
     }
   }
 `;
-export const updateQp = /* GraphQL */ `
-  mutation UpdateQp($input: updateQPInput) {
+export const updateQP = /* GraphQL */ `
+  mutation UpdateQP($input: updateQPInput) {
     updateQP(input: $input) {
       id
       companyId
@@ -357,35 +357,7 @@ export const deleteEmployee = /* GraphQL */ `
 `;
 export const punchInByPin = /* GraphQL */ `
   mutation PunchInByPin($input: PunchInByPinInput!) {
-    punchInByPin(input: $input) {
-      id
-      employeeId
-      companyId
-      timestampIn
-      timestampOut
-      clockInDetails {
-        punchMethod
-        createdBy
-        photo
-        note
-        ipAddress
-      }
-      clockOutDetails {
-        punchMethod
-        createdBy
-        photo
-        note
-        ipAddress
-      }
-      rate {
-        name
-        amount
-        isHourly
-        isDefault
-      }
-      approved
-      approvedBy
-    }
+    punchInByPin(input: $input)
   }
 `;
 export const createQuickPunch = /* GraphQL */ `

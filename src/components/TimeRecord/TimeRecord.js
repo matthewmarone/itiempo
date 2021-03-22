@@ -74,7 +74,9 @@ const TimeRecord = (props) => {
         <Typography {...leftTxtProps}>Date</Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography {...rightTxtProps}>03/01/2021</Typography>
+        <Typography {...rightTxtProps}>
+          <DateLocal epochSeconds={timestampIn} local="es" format="l" />
+        </Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>

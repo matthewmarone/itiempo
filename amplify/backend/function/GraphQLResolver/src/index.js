@@ -241,7 +241,7 @@ const resolvers = {
 
       if (!match) throw new Error("In correct pin:");
 
-      const { timestampOut } = lastRecord || {};
+      const { id, timestampOut, _version } = lastRecord || {};
 
       if (!timestampOut) {
         // Clock Out
@@ -253,10 +253,12 @@ const resolvers = {
           ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
         };
         const input = {
+          id,
           employeeId,
           companyId,
-          timestampIn: timestamp,
+          timestampOut: timestamp,
           clockOutDetails,
+          _version,
         };
 
         console.log(JSON.stringify(input, null, 4));

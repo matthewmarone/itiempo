@@ -20,7 +20,7 @@ const DateLocal = (props) => {
 
   return (
     <span className={!noWrap || classes.root}>
-      {moment(epochSeconds * 1000).format(format)}
+      {epochSeconds > 0 ? moment(epochSeconds * 1000).format(format) : ""}
     </span>
   );
 };
