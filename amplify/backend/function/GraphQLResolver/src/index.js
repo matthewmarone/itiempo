@@ -244,8 +244,37 @@ const resolvers = {
       const { timestampOut } = lastRecord || {};
 
       if (!timestampOut) {
-        // Clock in
+        // Clock Out
+        const clockOutDetails = {
+          punchMethod: PunchMethod.TimeClock,
+          createdBy: employeeId,
+          photo,
+          note,
+          ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
+        };
+        const input = {
+          employeeId,
+          companyId,
+          timestampIn: timestamp,
+          clockOutDetails,
+        };
 
+        console.log(JSON.stringify(input, null, 4));
+
+        const { data, errors } = (await api.UpdateTimeRecord({ input })) || {};
+        const { updateTimeRecord } = data || {};
+        if (errors || !updateTimeRecord) {
+          console.warn(errors);
+          if (!updateTimeRecord) {
+            const errorMessage = `Clock-out failed: ${
+              !errors || !errors[0] || errors[0].message
+            }`;
+            throw new Error(errorMessage);
+          }
+        }
+        return JSON.stringify(updateTimeRecord);
+      } else {
+        //Clock in
         const clockInDetails = {
           punchMethod: PunchMethod.TimeClock,
           createdBy: employeeId,
@@ -274,21 +303,7 @@ const resolvers = {
             throw new Error(errorMessage);
           }
         }
-        return {
-          id: createTimeRecord.id,
-          employeeId: createTimeRecord.employeeId,
-          companyId: createTimeRecord.companyId,
-          timestampIn: createTimeRecord.timestampIn,
-          timestampOut: createTimeRecord.timestampOut,
-          clockInDetails: createTimeRecord.clockInDetails,
-          clockOutDetails: createTimeRecord.clockOutDetails,
-          rate: createTimeRecord.rate,
-          approved: createTimeRecord.approved,
-          approvedBy: createTimeRecord.approvedBy,
-        };
-      } else {
-        //Clock out
-        return null;
+        return JSON.stringify(createTimeRecord);
       }
     },
     resetPassword: async (ctx) => {

@@ -18,7 +18,7 @@ type Mutation {
     @function(name: "GraphQLResolver-${env}")
   resetPassword(employeeId: ID!): Boolean!
     @function(name: "GraphQLResolver-${env}")
-  punchInByPin(input: PunchInByPinInput!): QuickPunchCard
+  punchInByPin(input: PunchInByPinInput!): String
     @auth(rules: [{ allow: public, provider: iam }])
     @function(name: "GraphQLResolver-${env}")
 }
@@ -41,18 +41,18 @@ input PunchInByPinInput {
   note: String
 }
 
-type QuickPunchCard {
-  id: ID!
-  employeeId: ID!
-  companyId: ID!
-  timestampIn: AWSTimestamp!
-  timestampOut: AWSTimestamp
-  clockInDetails: PunchCardDetails!
-  clockOutDetails: PunchCardDetails
-  rate: PayRate
-  approved: Boolean
-  approvedBy: ID
-}
+# type QuickPunchCard {
+#   id: ID!
+#   employeeId: ID!
+#   companyId: ID!
+#   timestampIn: AWSTimestamp!
+#   timestampOut: AWSTimestamp
+#   clockInDetails: PunchCardDetails!
+#   clockOutDetails: PunchCardDetails
+#   rate: PayRate
+#   approved: Boolean
+#   approvedBy: ID
+# }
 
 # type QuickDirectoryConnection {
 #   items: [QuickDirectory]
