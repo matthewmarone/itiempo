@@ -25,7 +25,7 @@ const DateLocal = (props) => {
   );
 };
 DateLocal.propTypes = {
-  epochSeconds: PropTypes.number.isRequired,
+  epochSeconds: PropTypes.number,
   format: PropTypes.string,
   local: PropTypes.string,
   noWrap: PropTypes.bool,

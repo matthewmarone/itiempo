@@ -14,4 +14,5 @@ export {
   SECONDS_IN_DAY,
   mergeSortedLists,
   isDigits,
+  getCounterFromMiliSeconds,
 } from "./common";

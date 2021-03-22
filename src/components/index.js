@@ -12,6 +12,7 @@ export {
   EnterPinDialog,
   PasswordResetDialog,
   PinClockInDialog,
+  ClockSuccessDialog,
 } from "./Dialogs";
 export { default as Image } from "./Image";
 export { default as RouteWithLayout } from "./RouteWithLayout";
@@ -25,3 +26,4 @@ export { default as ZoomSlider } from "./ZoomSlider";
 export { default as AddTimeButton } from "./AddTimeButton";
 export { default as SingleEmployeeSelect } from "./SingleEmployeeSelect";
 export { default as EmployeeName } from "./EmployeeName";
+export { default as CountUp } from "./CountUp";

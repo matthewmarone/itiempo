@@ -239,7 +239,7 @@ const resolvers = {
           }),
       ]);
 
-      if (!match) throw new Error("In correct pin:");
+      if (!match) throw new Error("Incorrect Pin:");
 
       const { id, timestampOut, _version } = lastRecord || {};
 

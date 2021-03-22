@@ -4,12 +4,14 @@ import { usePunchInByPin, useUploadImage } from "hooks";
 import { default as EnterPinDialog } from "../EnterPin";
 import { default as ClockinDialogTwo } from "../ClockinTwo";
 import { default as LoadingDialog } from "../Loading";
+import { default as ClockSuccessDialog } from "../ClockSuccess";
 import { v4 as uuidv4 } from "uuid";
 
 const scene = {
   pinPad: "pinPad",
   photoAndNote: "photoAndNote",
   loading: "loading",
+  success: "success",
 };
 
 /**
@@ -22,19 +24,47 @@ const PinClockInDialog = (props) => {
   const [pin, setPin] = useState(null);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [punchIn, { loading, error, data }] = usePunchInByPin();
-  const [uploadImg, { error: imgError, response }] = useUploadImage();
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [uploadImg, { error: imgError }] = useUploadImage();
+  const [timeRecord, setTimeRecord] = useState(null);
 
-  console.log("imgError, response", imgError, response);
-  console.log("loading, error, data ", loading, error, data);
+  if (imgError) console.warn("Failed to upload image", imgError);
+
+  useEffect(() => {
+    if (error) {
+      const { message } = error;
+      let displayMessage;
+      switch (message) {
+        case "Incorrect Pin:":
+          displayMessage = "Pin entered was incorrect.";
+          break;
+
+        default:
+          displayMessage = "An error occurred, please try fully logging in.";
+          break;
+      }
+      console.log("PunchIn Error", error);
+      clear(displayMessage);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!loading && data?.punchInByPin?.length > 0) {
+      setTimeRecord(JSON.parse(data.punchInByPin));
+      setShowScene(scene.success);
+    }
+  }, [data, loading]);
 
   useEffect(() => {
     if (open) clear();
   }, [open]);
 
-  const clear = () => {
+  const clear = (err) => {
     setShowScene(scene.pinPad);
     setPin(null);
     setSelectedRecord(null);
+    setTimeRecord(null);
+    setErrorMessage(err);
   };
 
   const handleClose = useCallback(() => onClose(), [onClose]);
@@ -72,6 +102,14 @@ const PinClockInDialog = (props) => {
   const getScene = useCallback(
     (s) => {
       switch (s) {
+        case scene.success:
+          return (
+            <ClockSuccessDialog
+              open={open}
+              onClose={handleClose}
+              record={timeRecord}
+            />
+          );
         case scene.loading:
           return (
             <LoadingDialog
@@ -97,11 +135,20 @@ const PinClockInDialog = (props) => {
               pinRecords={pinRecords}
               onClose={handleClose}
               onSubmit={handlePinSubmit}
+              errorMessage={errorMessage}
             />
           );
       }
     },
-    [handleClockInSubmit, handleClose, handlePinSubmit, open, pinRecords]
+    [
+      errorMessage,
+      handleClockInSubmit,
+      handleClose,
+      handlePinSubmit,
+      open,
+      pinRecords,
+      timeRecord,
+    ]
   );
 
   return getScene(showScene);

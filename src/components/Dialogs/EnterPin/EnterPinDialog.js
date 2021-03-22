@@ -19,10 +19,9 @@ const findSelectedPinRecord = (pinRecords, _id) =>
  * @param {*} props
  */
 const EnterPinDialog = (props) => {
-  const { open, onClose, pinRecords, onSubmit } = props;
+  const { open, onClose, pinRecords, onSubmit, errorMessage } = props;
   const [pin, setPin] = useState("");
   const [selectedRecordId, setSelectedRecordId] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(undefined);
 
   const isValidPin = (p) => isDigits(p) && p.length > 3;
 
@@ -39,7 +38,6 @@ const EnterPinDialog = (props) => {
 
   const clear = (errMsg) => {
     setPin("");
-    setErrorMessage(errMsg);
   };
 
   useEffect(() => {
@@ -113,6 +111,7 @@ EnterPinDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   pinRecords: PropTypes.array.isRequired,
+  errorMessage: PropTypes.string,
 };
 
 export default EnterPinDialog;

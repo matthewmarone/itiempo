@@ -57,6 +57,20 @@ export const dateTimeLocalToUnixTimestamp = (dateString) => {
 
 /**
  *
+ * @param {*} mili
+ * @returns
+ */
+export const getCounterFromMiliSeconds = (mili) => {
+  return {
+    days: Math.floor((mili / (1000 * 60 * 60 * 24)) % 24),
+    hours: Math.floor((mili / (1000 * 60 * 60)) % 60),
+    minutes: Math.floor((mili / (1000 * 60)) % 60),
+    seconds: Math.floor(mili / 1000) % 60,
+  };
+};
+
+/**
+ *
  * @param {*} timeInMinutes
  * @returns Time formatted as HH:MM, or 00:00
  */
