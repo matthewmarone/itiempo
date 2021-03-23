@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { DialogTemplate } from "../components";
-import { WebcamCapture, CenterContent } from "components";
+import { WebcamCapture, CenterContent, Verse } from "components";
 import { getBlobFromDataURI } from "helpers";
 import PropTypes from "prop-types";
 import { useClockIn, useClockOut, useUploadImage } from "hooks";
@@ -53,17 +53,21 @@ ClockInContent.propTypes = {
 };
 
 const Saving = (props) => {
-  const { message } = props;
+  const { saving, message } = props;
   return (
     <CenterContent>
-      <CircularProgress />
-      <Typography variant="body1" color="textSecondary">
+      {!saving || <CircularProgress />}
+      <Typography variant="body1" color={!saving ? "primary" : "textSecondary"}>
         {message}
       </Typography>
+      <Verse />
     </CenterContent>
   );
 };
-Saving.propTypes = { message: PropTypes.string };
+Saving.propTypes = {
+  saving: PropTypes.bool,
+  message: PropTypes.string,
+};
 
 /**
  *
@@ -85,7 +89,7 @@ const ClockingIn = (props) => {
     if (!loading && error) onError(error);
   }, [error, onError, loading]);
 
-  return <Saving message="Clocking you in..." />;
+  return <Saving saving message="Clocking you in..." />;
 };
 ClockingIn.propTypes = {
   input: PropTypes.object,
@@ -112,7 +116,7 @@ const ClockingOut = (props) => {
   useEffect(() => {
     if (!loading && error) onError(error);
   }, [error, onError, loading]);
-  return <Saving message="Clocking you out..." />;
+  return <Saving saving message="Clocking you out..." />;
 };
 ClockingOut.propTypes = {
   input: PropTypes.object,
@@ -139,7 +143,7 @@ const ClockingInOrOut = (props) => {
   }, [imageVars, uploadImg]);
 
   return imageVars && !response && !error ? (
-    <Saving message="Saving your selfie..." />
+    <Saving saving message="Saving your selfie..." />
   ) : clockingIn ? (
     <ClockingIn {...propState} />
   ) : (
@@ -162,13 +166,12 @@ const ClockinDialog = (props) => {
   const { open, handleClose: hc, isClockedIn, employee, latestRecord } = props;
   const inOrOut = isClockedIn ? "out" : "in";
 
-  useEffect(() => {}, []);
-
   const webcamRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [formState, setFormState] = useState({});
   const [timerecordInput, setTimerecordInput] = useState(null);
   const [imageVars, setImageVars] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = useCallback(
     (e) => {
@@ -192,6 +195,7 @@ const ClockinDialog = (props) => {
     setFormState({});
     setTimerecordInput(null);
     setImageVars(null);
+    setSuccess(false);
     hc();
   }, [hc]);
 
@@ -234,29 +238,33 @@ const ClockinDialog = (props) => {
   const cancleBtn = (
     <Button
       key="cancel"
-      disabled={!!timerecordInput}
+      disabled={!!timerecordInput && !success}
       onClick={handleClose}
       color="primary"
     >
-      Cancel
+      {!success ? "Cancel" : "Done"}
     </Button>
   );
-  actions.push(clockInBtn);
+  if (!success) actions.push(clockInBtn);
   actions.push(cancleBtn);
 
   return (
     <DialogTemplate
       open={open}
-      handleClose={timerecordInput ? () => {} : handleClose}
+      handleClose={timerecordInput && !success ? () => {} : handleClose}
       title={`Clock${timerecordInput ? "ing" : ""}-${inOrOut}`}
       dialogContent={
         timerecordInput || !open ? (
-          <ClockingInOrOut
-            input={timerecordInput}
-            clockIn={!isClockedIn}
-            imageVars={imageVars}
-            onSuccess={handleClose}
-          />
+          !success ? (
+            <ClockingInOrOut
+              input={timerecordInput}
+              clockIn={!isClockedIn}
+              imageVars={imageVars}
+              onSuccess={() => setSuccess(true)}
+            />
+          ) : (
+            <Saving message={`Done, you are clocked ${inOrOut}`} />
+          )
         ) : (
           <ClockInContent
             webcamRef={webcamRef}

@@ -75,33 +75,9 @@ const Home = () => {
         <Grid item sm={4} xs={12}>
           <Card>
             <CardContent>
-              <div className={classes.clockInBody}>
-                <Typography gutterBottom variant="h3">
-                  Welcome!
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  Word of the Day,
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  gutterBottom
-                  className={classes.verse}
-                >
-                  <i>
-                    For God so loved the world that he gave his one and only
-                    Son, that whoever believes in him shall not perish but have
-                    eternal life.
-                  </i>
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  className={classes.verse}
-                >
-                  ~ John 3:16
-                </Typography>
-              </div>
+              <Typography gutterBottom variant="h3">
+                Welcome!
+              </Typography>
             </CardContent>
             <Divider />
             <CardActions style={{ textAlign: "right" }}>
