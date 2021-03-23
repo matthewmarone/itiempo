@@ -27,3 +27,4 @@ export { default as AddTimeButton } from "./AddTimeButton";
 export { default as SingleEmployeeSelect } from "./SingleEmployeeSelect";
 export { default as EmployeeName } from "./EmployeeName";
 export { default as CountUp } from "./CountUp";
+export { default as Verse } from "./Verse";
