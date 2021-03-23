@@ -4,6 +4,7 @@ import { DialogTemplate } from "../components";
 import { CountUp, Verse } from "components";
 import { makeStyles } from "@material-ui/styles";
 import PropTypes from "prop-types";
+import { getCounterFromMiliSeconds } from "helpers";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,9 +21,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const td = (n) => {
+  return `${n < 10 ? `0` : ``}${n}`;
+};
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
+const ShowTime = (props) => {
+  const { seconds } = props;
+  const { days: dd, hours: hh, minutes: mm } = getCounterFromMiliSeconds(
+    seconds * 1000
+  );
+
+  return `${dd > 0 ? td(dd) + ":" : ""}${td(hh)}:${td(mm)}`;
+};
+
 const Content = (props) => {
   const classes = useStyles();
-  const { timestampIn } = props;
+  const { timestampIn, timestampOut } = props;
   return (
     <div className={classes.root}>
       <Grid
@@ -37,8 +55,12 @@ const Content = (props) => {
           {!timestampIn ? (
             <CircularProgress />
           ) : (
-            <Typography variant="h4" color="textPrimary">
-              <CountUp fromInSecond={timestampIn} />
+            <Typography variant="h4" color="primary">
+              {!timestampOut ? (
+                <CountUp fromInSecond={timestampIn} />
+              ) : (
+                <ShowTime seconds={timestampOut - timestampIn} />
+              )}
             </Typography>
           )}
         </Grid>

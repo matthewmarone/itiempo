@@ -37,7 +37,7 @@ const CountUp = (props) => {
     seconds: ss,
   } = getCounterFromMiliSeconds(now - from);
 
-  return `${dd > 0 ? td(dd) + ":" : ""}${td(hh)}:${td(mm)}:${td(ss)}`;
+  return `${dd > 0 ? td(dd) + ":" : ""}${td(hh)}:${td(mm)}.${td(ss)}`;
 };
 CountUp.propTypes = { fromInSecond: PropTypes.number };
 

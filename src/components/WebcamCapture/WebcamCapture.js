@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Webcam from "react-webcam";
 import { Logger } from "aws-amplify";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { VideocamOffTwoTone } from "@material-ui/icons";
 
@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
   visible: {},
   spinner: {
     position: "absolute",
-    top: "48%",
-    left: "48%",
+    top: "40%",
+    left: "38%",
   },
 }));
 
@@ -26,6 +26,18 @@ const videoConstraints = {
   //   width: 1280,
   //   height: 720,
   facingMode: "user",
+};
+
+const LoadingCamera = (props) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.spinner}>
+      <CircularProgress />
+      <Typography variant="body1" color="textSecondary">
+        Loading camera...
+      </Typography>
+    </div>
+  );
 };
 
 const WebcamCapture = React.forwardRef((props, webcamRef) => {
@@ -98,7 +110,7 @@ const WebcamCapture = React.forwardRef((props, webcamRef) => {
         onUserMedia={onUserMedia}
         onUserMediaError={onUserMediaError}
       />
-      {!isLoading || <CircularProgress className={classes.spinner} />}
+      {!isLoading || <LoadingCamera />}
       {!error || (
         <VideocamOffTwoTone
           className={classes.spinner}
