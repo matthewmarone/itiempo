@@ -12,6 +12,8 @@ type Mutation {
     @function(name: "GraphQLResolver-${env}")
   updateTimeRec(input: UpdateTimeRecInput!): TimeRecord
     @function(name: "GraphQLResolver-${env}")
+  deleteTimeRec(input: deleteTimeRecInput!): TimeRecord
+    @function(name: "GraphQLResolver-${env}")
   createQP(input: createQPInput): QuickPunch
     @function(name: "GraphQLResolver-${env}")
   updateQP(input: updateQPInput): QuickPunch
@@ -479,6 +481,12 @@ input UpdateTimeRecInput {
   _lastChangedAt: AWSTimestamp
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
+}
+input DeleteTimeRecInput {
+  id: ID!
+  employeeId: ID
+  companyId: ID
+  _version: Int!
 }
 input PunchCardDetsInput {
   photo: String
