@@ -18,6 +18,7 @@ import {
   updateQP as updateQpGQL,
   resetPassword as resetPasswordGQL,
   punchInByPin as punchInByPinGQL,
+  deleteTimeRec as deleteTimeRecGQL,
 } from "graphql/mutations";
 import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -203,6 +204,11 @@ export const useCreateTimeRecord = () =>
  *
  */
 export const useUpdateTimeRecord = () => useMutation(gql(updateTimeRecordGQL));
+
+/**
+ *
+ */
+export const useDeleteTimeRecord = () => useMutation(gql(deleteTimeRecGQL));
 
 /**
  *

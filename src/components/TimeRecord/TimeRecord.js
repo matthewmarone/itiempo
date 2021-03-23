@@ -3,6 +3,7 @@ import { Grid, Typography, Button, makeStyles } from "@material-ui/core";
 import { Image } from "components";
 import { DialogTemplate } from "components/Dialogs/components";
 import { default as TimeRecordEdit } from "../TimeRecordEdit";
+import { default as TimeRecordDelete } from "../TimeRecordDelete";
 import { default as DateLocal } from "../DateLocal";
 import { getFormatedTime, getTimeDifference } from "helpers";
 import { useDownloadImage } from "hooks";
@@ -10,14 +11,22 @@ import PropTypes from "prop-types";
 
 const useStyles = makeStyles({
   imageSize: { maxHeight: "175px" },
+  deleteBtn: { color: "red" },
 });
+
+const scene = {
+  details: "details",
+  edit: "edit",
+  delete: "delete",
+};
+
 /**
  *
  * @param {*} props
  */
 const TimeRecord = (props) => {
   const classes = useStyles();
-  const [showEdit, setShowEdit] = useState(false);
+  const [currentScene, setCurrentScene] = useState(scene.details);
   const { open, record, onClose } = props;
   const { timestampIn, timestampOut, clockInDetails, clockOutDetails } = record;
   const {
@@ -39,6 +48,7 @@ const TimeRecord = (props) => {
     if (open) {
       setClockInImageVars({ key: photoIn });
       setClockOutImageVars({ key: photoOut });
+      setCurrentScene(scene.details);
     }
   }, [photoIn, open, photoOut, setClockInImageVars, setClockOutImageVars]);
 
@@ -141,9 +151,27 @@ const TimeRecord = (props) => {
     </Grid>
   );
 
+  const deleteButton = React.useMemo(
+    () => (
+      <Button
+        key="deleteBtn"
+        onClick={() => setCurrentScene(scene.delete)}
+        color="primary"
+        classes={{ textPrimary: classes.deleteBtn }}
+      >
+        Delete
+      </Button>
+    ),
+    [classes.deleteBtn]
+  );
+
   const editButton = React.useMemo(
     () => (
-      <Button key="editBtn" onClick={() => setShowEdit(true)} color="secondary">
+      <Button
+        key="editBtn"
+        onClick={() => setCurrentScene(scene.edit)}
+        color="secondary"
+      >
         Edit
       </Button>
     ),
@@ -157,23 +185,31 @@ const TimeRecord = (props) => {
     ),
     [onClose]
   );
-  const actions = [editButton, closeBtn];
+  const actions = [deleteButton, editButton, closeBtn];
 
-  return !showEdit ? (
-    <DialogTemplate
-      open={open}
-      handleClose={onClose}
-      title="Time Record Details"
-      dialogContent={dialogContent}
-      actions={actions}
-    />
-  ) : (
-    <TimeRecordEdit
-      record={record}
-      open={open}
-      onClose={() => setShowEdit(false)}
-    />
-  );
+  switch (currentScene) {
+    case scene.delete:
+      return <TimeRecordDelete record={record} open={open} onClose={onClose} />;
+    case scene.edit:
+      return (
+        <TimeRecordEdit
+          record={record}
+          open={open}
+          onClose={() => setCurrentScene(scene.details)}
+        />
+      );
+    case scene.details:
+    default:
+      return (
+        <DialogTemplate
+          open={open}
+          handleClose={onClose}
+          title="Time Record Details"
+          dialogContent={dialogContent}
+          actions={actions}
+        />
+      );
+  }
 };
 
 TimeRecord.propTypes = {

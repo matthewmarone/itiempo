@@ -18,7 +18,8 @@ export {
   useUpdateQuickPunch,
   useResetPassword,
   useQuickClockIn,
-  usePunchInByPin
+  usePunchInByPin,
+  useDeleteTimeRecord,
 } from "./apiHooks";
 
 export { useEventListener } from "./commonHooks";

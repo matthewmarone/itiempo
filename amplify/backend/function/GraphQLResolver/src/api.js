@@ -133,6 +133,16 @@ const ListEmployeeTimeRecords = async (variables = {}) => {
  * @param {*} variables
  * @returns
  */
+const DeleteTimeRecord = async (variables) => {
+  const operationName = "DeleteTimeRecord";
+  const graphQL = Mutations.deleteTimeRecord;
+  return await query(operationName, graphQL, variables);
+};
+/**
+ *
+ * @param {*} variables
+ * @returns
+ */
 const ListEmployeesByEmail = async (variables = {}) => {
   const operationName = "ListEmployeesByEmail";
   const graphQL = Queries.listEmployeesByEmail;
@@ -218,6 +228,7 @@ exports.GetEmployee = GetEmployee;
 exports.GetCompany = GetCompany;
 exports.CreateTimeRecord = CreateTimeRecord;
 exports.UpdateTimeRecord = UpdateTimeRecord;
+exports.DeleteTimeRecord = DeleteTimeRecord;
 exports.ListCompanyTimeRecords = ListCompanyTimeRecords;
 exports.ListEmployeeTimeRecords = ListEmployeeTimeRecords;
 exports.ListEmployeesByEmail = ListEmployeesByEmail;

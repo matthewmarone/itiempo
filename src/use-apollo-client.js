@@ -39,9 +39,10 @@ const cache = new InMemoryCache({
               if (!items) return existing; // Could be an error obj
 
               const filteredItems = items.filter((value) => {
+                const _deleted = readField("_deleted", value);
                 const v = readField("timestampIn", value);
                 const { between, gt, ge, lt, le, eq } = timestampIn;
-                let satisfies = true;
+                let satisfies = !_deleted;
                 if (satisfies && between) {
                   const [gTe, lTe] = between.sort();
                   satisfies = v >= gTe && v <= lTe;

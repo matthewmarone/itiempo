@@ -300,7 +300,7 @@ const TimeRecordForm = (props) => {
   const closeBtn = React.useMemo(
     () => (
       <Button key="closeBtn" onClick={onClose} color="primary">
-        Close
+        Back
       </Button>
     ),
     [onClose]

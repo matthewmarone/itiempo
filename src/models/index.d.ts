@@ -12,6 +12,11 @@ export enum Role {
   EMPLOYEE = "Employee"
 }
 
+export enum Lang {
+  EN = "en",
+  ES = "es"
+}
+
 export declare class ModelTimeRecConnection {
   readonly items?: (TimeRecord | null)[];
   readonly nextToken?: string;
@@ -89,6 +94,20 @@ export declare class QuickPunch {
   readonly ident: string;
   constructor(init: ModelInit<QuickPunch>);
   static copyOf(source: QuickPunch, mutator: (draft: MutableModel<QuickPunch>) => MutableModel<QuickPunch> | void): QuickPunch;
+}
+
+export declare class Verse {
+  readonly id: string;
+  readonly monthYear: string;
+  readonly lang: Lang | keyof typeof Lang;
+  readonly book: string;
+  readonly chapter: number;
+  readonly verseStart: string;
+  readonly verseEnd?: string;
+  readonly translation: string;
+  readonly text: string;
+  constructor(init: ModelInit<Verse>);
+  static copyOf(source: Verse, mutator: (draft: MutableModel<Verse>) => MutableModel<Verse> | void): Verse;
 }
 
 export declare class Company {

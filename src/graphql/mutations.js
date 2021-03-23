@@ -276,6 +276,44 @@ export const updateTimeRec = /* GraphQL */ `
     }
   }
 `;
+export const deleteTimeRec = /* GraphQL */ `
+  mutation DeleteTimeRec($input: DeleteTimeRecInput!) {
+    deleteTimeRec(input: $input) {
+      id
+      employeeId
+      companyId
+      timestampIn
+      timestampOut
+      clockInDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      clockOutDetails {
+        punchMethod
+        createdBy
+        photo
+        note
+        ipAddress
+      }
+      rate {
+        name
+        amount
+        isHourly
+        isDefault
+      }
+      approved
+      approvedBy
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createQP = /* GraphQL */ `
   mutation CreateQP($input: createQPInput) {
     createQP(input: $input) {
@@ -358,6 +396,75 @@ export const deleteEmployee = /* GraphQL */ `
 export const punchInByPin = /* GraphQL */ `
   mutation PunchInByPin($input: PunchInByPinInput!) {
     punchInByPin(input: $input)
+  }
+`;
+export const createVerse = /* GraphQL */ `
+  mutation CreateVerse(
+    $input: CreateVerseInput!
+    $condition: ModelVerseConditionInput
+  ) {
+    createVerse(input: $input, condition: $condition) {
+      id
+      monthYear
+      lang
+      book
+      chapter
+      verseStart
+      verseEnd
+      translation
+      text
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateVerse = /* GraphQL */ `
+  mutation UpdateVerse(
+    $input: UpdateVerseInput!
+    $condition: ModelVerseConditionInput
+  ) {
+    updateVerse(input: $input, condition: $condition) {
+      id
+      monthYear
+      lang
+      book
+      chapter
+      verseStart
+      verseEnd
+      translation
+      text
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteVerse = /* GraphQL */ `
+  mutation DeleteVerse(
+    $input: DeleteVerseInput!
+    $condition: ModelVerseConditionInput
+  ) {
+    deleteVerse(input: $input, condition: $condition) {
+      id
+      monthYear
+      lang
+      book
+      chapter
+      verseStart
+      verseEnd
+      translation
+      text
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
   }
 `;
 export const createQuickPunch = /* GraphQL */ `

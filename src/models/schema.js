@@ -557,6 +557,115 @@ export const schema = {
                 }
             ]
         },
+        "Verse": {
+            "name": "Verse",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "monthYear": {
+                    "name": "monthYear",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "lang": {
+                    "name": "lang",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Lang"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "book": {
+                    "name": "book",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "chapter": {
+                    "name": "chapter",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "verseStart": {
+                    "name": "verseStart",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "verseEnd": {
+                    "name": "verseEnd",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "translation": {
+                    "name": "translation",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "text": {
+                    "name": "text",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "Verses",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {
+                        "subscriptions": {
+                            "level": "off"
+                        }
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byMonthYear",
+                        "fields": [
+                            "monthYear"
+                        ],
+                        "queryField": "listVerseByMonthYear"
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "provider": "iam",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Company": {
             "name": "Company",
             "fields": {
@@ -709,6 +818,13 @@ export const schema = {
                 "Manager",
                 "Employee"
             ]
+        },
+        "Lang": {
+            "name": "Lang",
+            "values": [
+                "en",
+                "es"
+            ]
         }
     },
     "nonModels": {
@@ -817,5 +933,5 @@ export const schema = {
             }
         }
     },
-    "version": "d35fc0b4da90baa76325fce024291046"
+    "version": "92ec721341b99a60e2edece39edc34c0"
 };

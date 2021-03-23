@@ -12,11 +12,7 @@ const EmployeeName = ({ employeeId }) => {
   useEffect(() => {
     setId(employeeId);
   }, [employeeId, setId]);
-  return (
-    <span>
-      `${firstName || ""} ${lastName || ""}`.trim()
-    </span>
-  );
+  return <span>{`${firstName || ""} ${lastName || ""}`.trim()}</span>;
 };
 
 EmployeeName.propTypes = {

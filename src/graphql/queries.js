@@ -52,6 +52,124 @@ export const quickClockIn = /* GraphQL */ `
     quickClockIn(companyId: $companyId, limit: $limit, nextToken: $nextToken)
   }
 `;
+export const getVerse = /* GraphQL */ `
+  query GetVerse($id: ID!) {
+    getVerse(id: $id) {
+      id
+      monthYear
+      lang
+      book
+      chapter
+      verseStart
+      verseEnd
+      translation
+      text
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listVerses = /* GraphQL */ `
+  query ListVerses(
+    $filter: ModelVerseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listVerses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        monthYear
+        lang
+        book
+        chapter
+        verseStart
+        verseEnd
+        translation
+        text
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const listVerseByMonthYear = /* GraphQL */ `
+  query ListVerseByMonthYear(
+    $monthYear: String
+    $sortDirection: ModelSortDirection
+    $filter: ModelVerseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listVerseByMonthYear(
+      monthYear: $monthYear
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        monthYear
+        lang
+        book
+        chapter
+        verseStart
+        verseEnd
+        translation
+        text
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncVerses = /* GraphQL */ `
+  query SyncVerses(
+    $filter: ModelVerseFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncVerses(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        monthYear
+        lang
+        book
+        chapter
+        verseStart
+        verseEnd
+        translation
+        text
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const listQuickPunchByCompany = /* GraphQL */ `
   query ListQuickPunchByCompany(
     $companyId: ID

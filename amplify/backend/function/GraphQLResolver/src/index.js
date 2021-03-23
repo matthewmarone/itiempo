@@ -190,6 +190,27 @@ const resolvers = {
     },
   },
   Mutation: {
+    deleteTimeRec: async (ctx) => {
+      const {
+        arguments: {
+          input: { id, employeeId, companyId, _version },
+        },
+      } = ctx;
+      console.log("Should run verificatin with ", employeeId, companyId);
+      const input = { id, _version };
+      const { data, errors } = (await api.DeleteTimeRecord({ input })) || {};
+      const { deleteTimeRecord } = data || {};
+      if (errors || !deleteTimeRecord) {
+        console.warn(errors);
+        if (!deleteTimeRecord) {
+          const errorMessage = `Clock-out failed: ${
+            !errors || !errors[0] || errors[0].message
+          }`;
+          throw new Error(errorMessage);
+        }
+      }
+      return deleteTimeRecord;
+    },
     punchInByPin: async (ctx) => {
       const {
         identity: { sourceIp },
