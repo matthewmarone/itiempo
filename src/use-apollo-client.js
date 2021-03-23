@@ -14,6 +14,24 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
+        timeRecordReport: {
+          read(existing, { readField }) {
+            if (existing) {
+              // We have data and a timestamp filter to filter
+              const { items } = existing;
+
+              if (!items) return existing; // Could be an error obj
+
+              const filteredItems = items.filter((value) => {
+                const _deleted = readField("_deleted", value);
+                return !_deleted;
+              });
+              return { ...existing, items: filteredItems };
+            } else {
+              return existing;
+            }
+          },
+        },
         listEmployeeTimeRecords: {
           keyArgs: ["employeeId"],
           read(
