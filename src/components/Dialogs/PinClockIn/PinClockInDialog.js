@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { usePunchInByPin, useUploadImage } from "hooks";
 import { default as EnterPinDialog } from "../EnterPin";
 import { default as ClockinDialogTwo } from "../ClockinTwo";
-import { default as LoadingDialog } from "../Loading";
 import { default as ClockSuccessDialog } from "../ClockSuccess";
 import { v4 as uuidv4 } from "uuid";
 
@@ -102,21 +101,13 @@ const PinClockInDialog = (props) => {
   const getScene = useCallback(
     (s) => {
       switch (s) {
+        case scene.loading:
         case scene.success:
           return (
             <ClockSuccessDialog
               open={open}
               onClose={handleClose}
               record={timeRecord}
-            />
-          );
-        case scene.loading:
-          return (
-            <LoadingDialog
-              open={open}
-              onClose={handleClose}
-              title="Loading"
-              message="Clocking you in/out, please wait..."
             />
           );
         case scene.photoAndNote:
