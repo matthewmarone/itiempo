@@ -12,7 +12,7 @@ type Mutation {
     @function(name: "GraphQLResolver-${env}")
   updateTimeRec(input: UpdateTimeRecInput!): TimeRecord
     @function(name: "GraphQLResolver-${env}")
-  deleteTimeRec(input: deleteTimeRecInput!): TimeRecord
+  deleteTimeRec(input: DeleteTimeRecInput!): TimeRecord
     @function(name: "GraphQLResolver-${env}")
   createQP(input: createQPInput): QuickPunch
     @function(name: "GraphQLResolver-${env}")
