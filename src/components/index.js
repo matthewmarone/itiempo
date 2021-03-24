@@ -13,6 +13,7 @@ export {
   PasswordResetDialog,
   PinClockInDialog,
   ClockSuccessDialog,
+  ChangePasswordDialog,
 } from "./Dialogs";
 export { default as Image } from "./Image";
 export { default as RouteWithLayout } from "./RouteWithLayout";
