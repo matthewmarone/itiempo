@@ -31,9 +31,9 @@ const PasswordReset = (props) => {
 
   console.log("Password reset", error, data);
 
-  useEffect(() => {
-    if (open && employeeId) reset({ variables: { employeeId } });
-  }, [employeeId, open, reset]);
+  // useEffect(() => {
+  //   if (open && employeeId) reset({ variables: { employeeId } });
+  // }, [employeeId, open, reset]);
 
   const handleClose = () => {
     if (!loading) onClose();

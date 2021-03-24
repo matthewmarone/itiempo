@@ -17,6 +17,7 @@ import {
   ProfilePictureDialog,
   SetPinDialog,
   ChangePasswordDialog,
+  PasswordResetDialog,
 } from "components";
 import { v4 as uuid } from "uuid";
 import { useSnackbar } from "notistack";
@@ -182,14 +183,23 @@ const EmployeeProfile = (props) => {
         onFileError={handleOnFileError}
         onRemovePhoto={!profilePhoto ? undefined : handleRemoveProfilePicture}
       />
-      <SetPinDialog
-        open={openPinDialog}
-        onClose={() => setOpenPinDialog(false)}
-      />
+      {!isCurrentUser || (
+        <SetPinDialog
+          open={openPinDialog}
+          onClose={() => setOpenPinDialog(false)}
+        />
+      )}
       {!isCurrentUser || (
         <ChangePasswordDialog
           open={openPsswdChangeDilog}
           onClose={() => setOpenPsswdChangeDilog(false)}
+        />
+      )}
+      {isCurrentUser || (
+        <PasswordResetDialog
+          open={openPsswdRestDilog}
+          onClose={() => setOpenPsswdRestDilog(false)}
+          employeeId={id}
         />
       )}
     </React.Fragment>
