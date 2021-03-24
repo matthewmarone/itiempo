@@ -1,23 +1,81 @@
-import React, { useEffect } from "react";
-import { Button, CircularProgress, Typography } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
-import { useResetPassword } from "hooks";
+import { Auth } from "aws-amplify";
 
 const Content = (props) => {
-  const { loading, error, data } = props;
-
-  const text = loading
-    ? "Emailing temporary password..."
-    : !error && data?.resetPassword
-    ? "Done! Employee has been emaild a temporary password which they can use to login and set a new password."
-    : "An error occurred";
-
+  const {
+    onChange,
+    current,
+    password,
+    confirm,
+    valid,
+    onSubmit,
+    saving,
+    errorMessage,
+    success,
+  } = props;
   return (
-    <div>
-      {!loading || <CircularProgress />}
-      <Typography variant="body1">{text}</Typography>
-    </div>
+    <form
+      noValidate
+      autoComplete="off"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing={2}
+      >
+        <Grid item xs={12}>
+          <TextField
+            name="current"
+            value={current}
+            onChange={onChange}
+            label="Current Password"
+            type="password"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            name="password"
+            value={password}
+            onChange={onChange}
+            label="New Password"
+            type="password"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            name="confirm"
+            value={confirm}
+            onChange={onChange}
+            label="Confirm Password"
+            type="password"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography
+            color={errorMessage?.length > 0 ? "error" : "primary"}
+            variant="body1"
+          >
+            {errorMessage?.length > 0
+              ? errorMessage
+              : success
+              ? "Your password has been changed."
+              : ""}
+          </Typography>
+          <Button color="secondary" disabled={!valid || saving} type="submit">
+            {!saving ? "Change" : "Saving"}
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 };
 
@@ -26,26 +84,81 @@ const Content = (props) => {
  * @param {*} props
  */
 const ChangePassword = (props) => {
-  const { open, onClose, employeeId } = props;
-  const [reset, { loading, error, data }] = useResetPassword();
+  const { open, onClose } = props;
+  const [formState, setFormState] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [success, setSucces] = useState(false);
+  const [errMsg, setErrMsg] = useState(null);
 
-  console.log("Password reset", error, data);
+  const clear = (msg) => {
+    setFormState({ current: "", password: "", confirm: "" });
+    setSaving(false);
+    setSucces(false);
+    setErrMsg(msg);
+  };
 
   useEffect(() => {
-    if (open && employeeId) reset({ variables: { employeeId } });
-  }, [employeeId, open, reset]);
-
-  const handleClose = () => {
-    if (!loading) onClose();
+    if (open) {
+      clear();
+    }
+  }, [open]);
+  const handleChange = ({ target: { name, value } }) =>
+    setFormState((curr) => {
+      return { ...curr, [name]: value };
+    });
+  const handleSubmit = () => {
+    const { current, password } = formState;
+    Auth.currentAuthenticatedUser()
+      .then((user) => {
+        return Auth.changePassword(user, current, password);
+      })
+      .then((data) => {
+        clear();
+        setSucces(true);
+      })
+      .catch((err) => {
+        const { code } = err;
+        if (code === "NotAuthorizedException") {
+          clear("Incorrect password.");
+        } else if (code === "NetworkError") {
+          clear(
+            "You appear to be off-line, please check your Internet connection and try again"
+          );
+        } else if (code === "LimitExceededException") {
+          clear("Attempt limit exceeded, please try after some time.");
+        } else {
+          clear("An error occurred, please try again later.");
+          console.error(err);
+        }
+      });
   };
+  const handleClose = () => {
+    onClose();
+  };
+  const { current, password, confirm } = formState;
+  const valid =
+    current?.length > 4 && password?.length > 4 && password === confirm;
+
   return (
     <DialogTemplate
       open={open}
       handleClose={onClose}
-      title="Password Reset"
-      dialogContent={<Content loading={loading} error={error} data={data} />}
+      title="Change Password"
+      dialogContent={
+        <Content
+          onChange={handleChange}
+          current={current}
+          password={password}
+          confirm={confirm}
+          onSubmit={handleSubmit}
+          valid={valid}
+          saving={saving}
+          errorMessage={errMsg}
+          success={success}
+        />
+      }
       actions={[
-        <Button key="close" autoFocus onClick={handleClose} disabled={loading}>
+        <Button key="close" onClick={handleClose}>
           OK
         </Button>,
       ]}
@@ -56,7 +169,6 @@ const ChangePassword = (props) => {
 ChangePassword.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  employeeId: PropTypes.string.isRequired,
 };
 
 export default ChangePassword;

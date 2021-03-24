@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "Store";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
@@ -15,7 +16,7 @@ import AddAPhotoOutlinedIcon from "@material-ui/icons/AddAPhotoOutlined";
 import {
   ProfilePictureDialog,
   SetPinDialog,
-  PasswordResetDialog,
+  ChangePasswordDialog,
 } from "components";
 import { v4 as uuid } from "uuid";
 import { useSnackbar } from "notistack";
@@ -49,7 +50,7 @@ const EmployeeProfile = (props) => {
   const classes = useStyles();
   const { employee, onPhotoSave, ...rest } = props;
   const {
-    id: employeeId,
+    id,
     className,
     firstName,
     lastName,
@@ -58,6 +59,8 @@ const EmployeeProfile = (props) => {
     profilePhoto,
   } = employee;
   const role = roles && roles[0] ? roles[0] : "Employee";
+  const [{ user }] = useContext(Context);
+  const isCurrentUser = id === user?.employeeId;
 
   const [upload, { loading, error, response }] = useUploadImage();
   const [setPhotoVars, { data: avatarUrl }] = useDownloadImage({
@@ -66,6 +69,7 @@ const EmployeeProfile = (props) => {
 
   const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
   const [openPinDialog, setOpenPinDialog] = useState(false);
+  const [openPsswdChangeDilog, setOpenPsswdChangeDilog] = useState(false);
   const [openPsswdRestDilog, setOpenPsswdRestDilog] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [uploadingKey, setUploadingKey] = useState();
@@ -101,6 +105,40 @@ const EmployeeProfile = (props) => {
 
   console.log("My profile photo", profilePhoto);
 
+  const actions = [];
+  if (isCurrentUser) {
+    actions.push(
+      <Button
+        key="setPin"
+        color="primary"
+        variant="text"
+        onClick={() => setOpenPinDialog(true)}
+      >
+        Set Pin
+      </Button>
+    );
+    actions.push(
+      <Button
+        key="changePassword"
+        variant="text"
+        onClick={() => setOpenPsswdChangeDilog(true)}
+      >
+        Change Password
+      </Button>
+    );
+  } else {
+    actions.push(
+      <Button
+        key="restBtn"
+        color="primary"
+        variant="text"
+        onClick={() => setOpenPsswdRestDilog(true)}
+      >
+        Send New Password
+      </Button>
+    );
+  }
+
   return (
     <React.Fragment>
       <Card {...rest} className={clsx(classes.root, className)}>
@@ -135,18 +173,7 @@ const EmployeeProfile = (props) => {
           </div>
         </CardContent>
         <Divider />
-        <CardActions>
-          <Button
-            color="primary"
-            variant="text"
-            onClick={() => setOpenPinDialog(true)}
-          >
-            Set Pin
-          </Button>
-          <Button variant="text" onClick={() => setOpenPsswdRestDilog(true)}>
-            Reset Password
-          </Button>
-        </CardActions>
+        <CardActions>{actions}</CardActions>
       </Card>
       <ProfilePictureDialog
         open={openPhotoDialog}
@@ -159,11 +186,12 @@ const EmployeeProfile = (props) => {
         open={openPinDialog}
         onClose={() => setOpenPinDialog(false)}
       />
-      <PasswordResetDialog
-        open={openPsswdRestDilog}
-        onClose={() => setOpenPsswdRestDilog(false)}
-        employeeId={employeeId}
-      />
+      {!isCurrentUser || (
+        <ChangePasswordDialog
+          open={openPsswdChangeDilog}
+          onClose={() => setOpenPsswdChangeDilog(false)}
+        />
+      )}
     </React.Fragment>
   );
 };
