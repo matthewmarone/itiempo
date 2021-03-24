@@ -18,7 +18,7 @@ type Mutation {
     @function(name: "GraphQLResolver-${env}")
   updateQP(input: updateQPInput): QuickPunch
     @function(name: "GraphQLResolver-${env}")
-  resetPassword(employeeId: ID!): Boolean!
+  resetPassword(employeeId: ID!, temporaryPassword: String): Boolean!
     @function(name: "GraphQLResolver-${env}")
   punchInByPin(input: PunchInByPinInput!): String
     @auth(rules: [{ allow: public, provider: iam }])
