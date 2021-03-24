@@ -332,9 +332,7 @@ const resolvers = {
     resetPassword: async (ctx) => {
       const {
         identity: { claims },
-        arguments: {
-          input: { employeeId },
-        },
+        arguments: { employeeId },
       } = ctx;
 
       const { data } = await api.GetEmployee(employeeId);

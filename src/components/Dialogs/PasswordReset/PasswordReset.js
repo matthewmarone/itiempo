@@ -5,11 +5,13 @@ import { DialogTemplate } from "../components";
 import { useResetPassword } from "hooks";
 
 const Content = (props) => {
-  const { loading } = props;
+  const { loading, error, data } = props;
 
   const text = loading
     ? "Emailing temporary password..."
-    : "Done! Employee has been emaild a temporary password which they can use to login and then set a new password.";
+    : !error && data?.resetPassword
+    ? "Done! Employee has been emaild a temporary password which they can use to login and set a new password."
+    : "An error occurred";
 
   return (
     <div>
@@ -41,7 +43,7 @@ const PasswordReset = (props) => {
       open={open}
       handleClose={onClose}
       title="Password Reset"
-      dialogContent={<Content loading={loading} />}
+      dialogContent={<Content loading={loading} error={error} data={data} />}
       actions={[
         <Button key="close" autoFocus onClick={handleClose} disabled={loading}>
           OK
