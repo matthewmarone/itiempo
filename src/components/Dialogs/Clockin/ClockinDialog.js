@@ -56,7 +56,16 @@ const Saving = (props) => {
   const { saving, message } = props;
   return (
     <CenterContent>
-      {!saving || <CircularProgress />}
+      {!saving ? (
+        <Typography
+          variant="body1"
+          color={!saving ? "primary" : "textSecondary"}
+        >
+          &nbsp;
+        </Typography>
+      ) : (
+        <CircularProgress />
+      )}
       <Typography variant="body1" color={!saving ? "primary" : "textSecondary"}>
         {message}
       </Typography>
@@ -164,7 +173,6 @@ ClockingInOrOut.propTypes = {
  */
 const ClockinDialog = (props) => {
   const { open, handleClose: hc, isClockedIn, employee, latestRecord } = props;
-  const inOrOut = isClockedIn ? "out" : "in";
 
   const webcamRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
@@ -232,7 +240,7 @@ const ClockinDialog = (props) => {
       onClick={handleClick}
       color="secondary"
     >
-      {isReady ? `Clock-${inOrOut}` : "Loading camera..."}
+      {isReady ? `Clock ${!isClockedIn ? `In` : `Out`}` : "Loading camera..."}
     </Button>
   );
   const cancleBtn = (
@@ -252,7 +260,9 @@ const ClockinDialog = (props) => {
     <DialogTemplate
       open={open}
       handleClose={timerecordInput && !success ? () => {} : handleClose}
-      title={`Clock${timerecordInput ? "ing" : ""}-${inOrOut}`}
+      title={`Clock ${
+        isClockedIn ? (!success ? `Out` : `In`) : !success ? `In` : `Out`
+      }`}
       dialogContent={
         timerecordInput || !open ? (
           !success ? (
@@ -263,7 +273,9 @@ const ClockinDialog = (props) => {
               onSuccess={() => setSuccess(true)}
             />
           ) : (
-            <Saving message={`Done, you are clocked ${inOrOut}`} />
+            <Saving
+              message={`Done, you are clocked ${isClockedIn ? `in` : `out`}.`}
+            />
           )
         ) : (
           <ClockInContent

@@ -36,7 +36,7 @@ const ClockInButton = (props) => {
         startIcon={<AccessTimeIcon />}
         onClick={() => setOpen(true)}
       >
-        {clockedIn !== CLOCK_IN_STATE.IN ? "Clock-in" : "Clock-out"}
+        {clockedIn !== CLOCK_IN_STATE.IN ? "Clock In" : "Clock Out"}
       </Button>
       {!employee || (
         <ClockinDialog
