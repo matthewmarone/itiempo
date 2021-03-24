@@ -345,8 +345,11 @@ export const updateQP = /* GraphQL */ `
   }
 `;
 export const resetPassword = /* GraphQL */ `
-  mutation ResetPassword($employeeId: ID!) {
-    resetPassword(employeeId: $employeeId)
+  mutation ResetPassword($employeeId: ID!, $temporaryPassword: String) {
+    resetPassword(
+      employeeId: $employeeId
+      temporaryPassword: $temporaryPassword
+    )
   }
 `;
 export const deleteEmployee = /* GraphQL */ `

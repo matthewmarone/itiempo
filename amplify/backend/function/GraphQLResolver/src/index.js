@@ -20,6 +20,8 @@ const {
   isAuthorizedToUpdateRole,
   isRoleGreater,
   getHighestGroup,
+  isValidPassword,
+  createTemporaryPassword,
 } = require("./authentication");
 
 /**
@@ -332,14 +334,18 @@ const resolvers = {
     resetPassword: async (ctx) => {
       const {
         identity: { claims },
-        arguments: { employeeId },
+        arguments: { employeeId, temporaryPassword },
       } = ctx;
+
+      const password = isValidPassword(temporaryPassword)
+        ? temporaryPassword
+        : createTemporaryPassword();
 
       const { data } = await api.GetEmployee(employeeId);
       if (data && data.getEmployee) {
         if (isAuthorizedToUpdateEmployee(claims, data.getEmployee)) {
           try {
-            await user.resetUserPassword(data.getEmployee.username);
+            await user.setUserPassword(data.getEmployee.username, password);
             return true;
           } catch (e) {
             console.error(e);

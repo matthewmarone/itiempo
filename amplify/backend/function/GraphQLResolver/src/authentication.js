@@ -150,6 +150,22 @@ const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
   return true;
 };
 
+/**
+ *
+ * @param {*} password
+ * @returns
+ */
+const isValidPassword = (password) =>
+  (typeof password === "string" || password instanceof String) &&
+  password &&
+  password.length > 5;
+/**
+ *
+ * @returns
+ */
+const createTemporaryPassword = () =>
+  Math.random().toString(36).substring(2, 9);
+
 exports.OWNER_ROLE = OWNER_ROLE;
 exports.ADMIN_ROLE = ADMIN_ROLE;
 exports.MANAGER_ROLE = MANAGER_ROLE;
@@ -160,3 +176,5 @@ exports.isAuthorizedToUpdateEmployee = isAuthorizedToUpdateEmployee;
 exports.isRoleGreater = isRoleGreater;
 exports.getHighestGroup = getHighestGroup;
 exports.getHighestRole = getHighestRole;
+exports.isValidPassword = isValidPassword;
+exports.createTemporaryPassword = createTemporaryPassword;

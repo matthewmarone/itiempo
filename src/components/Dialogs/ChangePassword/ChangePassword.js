@@ -137,7 +137,7 @@ const ChangePassword = (props) => {
   };
   const { current, password, confirm } = formState;
   const valid =
-    current?.length > 4 && password?.length > 4 && password === confirm;
+    current?.length > 5 && password?.length > 5 && password === confirm;
 
   return (
     <DialogTemplate
