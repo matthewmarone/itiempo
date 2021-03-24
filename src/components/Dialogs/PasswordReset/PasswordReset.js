@@ -1,23 +1,71 @@
-import React, { useEffect } from "react";
-import { Button, CircularProgress, Typography } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Button, Grid, Typography, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
 import { useResetPassword } from "hooks";
+import { isValidPassword, createTemporaryPassword } from "helpers";
 
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
 const Content = (props) => {
-  const { loading, error, data } = props;
-
-  const text = loading
-    ? "Emailing temporary password..."
-    : !error && data?.resetPassword
-    ? "Done! Employee has been emaild a temporary password which they can use to login and set a new password."
-    : "An error occurred";
+  const {
+    saving,
+    onSubmit,
+    errorMessage,
+    success,
+    password,
+    onChange,
+    valid,
+  } = props;
 
   return (
-    <div>
-      {!loading || <CircularProgress />}
-      <Typography variant="body1">{text}</Typography>
-    </div>
+    <form
+      noValidate
+      autoComplete="off"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing={2}
+      >
+        <Grid item xs={12}>
+          <TextField
+            name="password"
+            value={password}
+            onChange={onChange}
+            label="Temporary Password"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography
+            color={errorMessage?.length > 0 ? "error" : "primary"}
+            variant="body1"
+          >
+            {errorMessage?.length > 0
+              ? errorMessage
+              : success
+              ? `Done! Employee has been emaild a temporary (${password}) password which they can use to login and then set a new password.`
+              : ""}
+          </Typography>
+          <Button
+            color="secondary"
+            disabled={!valid || saving || success}
+            type="submit"
+          >
+            {!saving ? "Email Temporary Password" : "Sending..."}
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 };
 
@@ -27,13 +75,44 @@ const Content = (props) => {
  */
 const PasswordReset = (props) => {
   const { open, onClose, employeeId } = props;
-  const [reset, { loading, error, data }] = useResetPassword();
+  const [changePassword, { loading, error, data }] = useResetPassword();
+  const [errorMessage, setErrorMessage] = useState();
+  const [success, setSuccess] = useState(false);
+  const [password, setPassword] = useState(createTemporaryPassword());
 
   console.log("Password reset", error, data);
+  useEffect(() => {
+    if (!loading && data?.resetPassword) {
+      setSuccess(true);
+      setErrorMessage(null);
+    } else if (!loading && error) {
+      setSuccess(false);
+      setErrorMessage("Failed to reset password, please try again");
+    }
+  }, [data, error, loading]);
+  /**
+   *
+   * @param {*} errMsg
+   */
+  const clear = (errMsg) => {
+    setErrorMessage(errMsg);
+    setSuccess(false);
+  };
 
-  // useEffect(() => {
-  //   if (open && employeeId) reset({ variables: { employeeId } });
-  // }, [employeeId, open, reset]);
+  useEffect(() => {
+    if (open) {
+      clear();
+      setPassword(createTemporaryPassword());
+    }
+  }, [open]);
+
+  const handleSubmit = () => {
+    changePassword({
+      variables: { employeeId, temporaryPassword: password },
+    });
+  };
+
+  const handleChange = ({ target: { value } }) => setPassword(value);
 
   const handleClose = () => {
     if (!loading) onClose();
@@ -43,10 +122,20 @@ const PasswordReset = (props) => {
       open={open}
       handleClose={onClose}
       title="Password Reset"
-      dialogContent={<Content loading={loading} error={error} data={data} />}
+      dialogContent={
+        <Content
+          saving={loading}
+          onSubmit={handleSubmit}
+          errorMessage={errorMessage}
+          success={success}
+          password={password}
+          onChange={handleChange}
+          valid={isValidPassword(password)}
+        />
+      }
       actions={[
         <Button key="close" autoFocus onClick={handleClose} disabled={loading}>
-          OK
+          Close
         </Button>,
       ]}
     />

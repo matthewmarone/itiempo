@@ -8,6 +8,7 @@ Amplify Params - DO NOT EDIT */
 const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
+const ses = require("./ses");
 const { EmployeeLookup } = require("./employeeLookup");
 const { createIdent, compareIdent } = require("./ident");
 const {
@@ -336,6 +337,11 @@ const resolvers = {
         identity: { claims },
         arguments: { employeeId, temporaryPassword },
       } = ctx;
+
+      // ses
+      //   .sendEmail()
+      //   .then((v) => console.log("Send email response", v))
+      //   .catch((e) => console.warn("send email error", e));
 
       const password = isValidPassword(temporaryPassword)
         ? temporaryPassword

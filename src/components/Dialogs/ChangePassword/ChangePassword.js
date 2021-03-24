@@ -4,6 +4,11 @@ import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
 import { Auth } from "aws-amplify";
 
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
 const Content = (props) => {
   const {
     onChange,
@@ -107,6 +112,7 @@ const ChangePassword = (props) => {
       return { ...curr, [name]: value };
     });
   const handleSubmit = () => {
+    setSaving(true);
     const { current, password } = formState;
     Auth.currentAuthenticatedUser()
       .then((user) => {
@@ -159,7 +165,7 @@ const ChangePassword = (props) => {
       }
       actions={[
         <Button key="close" onClick={handleClose}>
-          OK
+          Close
         </Button>,
       ]}
     />

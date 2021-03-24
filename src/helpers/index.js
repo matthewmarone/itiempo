@@ -1,5 +1,11 @@
 export { default as getInitials } from "./getInitials";
-export { getUserName, getClaim, getAttribute } from "./awsCognito";
+export {
+  getUserName,
+  getClaim,
+  getAttribute,
+  isValidPassword,
+  createTemporaryPassword,
+} from "./awsCognito";
 export {
   getEpoch,
   parseFullName,
