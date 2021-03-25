@@ -27,13 +27,30 @@ const sendPasswordRestEmail = async (email, password, firstName) => {
         /* required */
         Html: {
           Charset: "UTF-8",
-          Data: `Hello ${firstName},<br /><br /> Your iTiempo password has been re-set.  Your temporary password is ${password} `,
+          Data: `Hello ${firstName}, 
+          
+
+          Your iTiempo account has been re-set, and your temporary password is: <strong>${password}</strong> .  Go to <a href="https://app.itiempo.com">iTiempo.com</a> and login with your temporary password where you will then be prompted to create a new one.
+          
+
+          Have a great day,
+          
+
+          iTiempo!
+          `,
         },
         Text: {
           Charset: "UTF-8",
           Data: `Hello ${firstName}, 
-          
-          Your iTiempo password has been re-set.  Your temporary password is ${password} `,
+          <br /><br />
+          Your iTiempo account has been re-set, and your temporary password is: <strong>${password}</strong> .
+          Go to <a href="https://app.itiempo.com">iTiempo.com</a> and login with 
+          your temporary password where you will then be prompted to create a new one.
+          <br /><br />
+          Have a great day,
+          <br /><br />
+          iTiempo!
+          `,
         },
       },
       Subject: {
