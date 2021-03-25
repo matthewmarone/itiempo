@@ -338,10 +338,10 @@ const resolvers = {
         arguments: { employeeId, temporaryPassword },
       } = ctx;
 
-      // ses
-      //   .sendEmail()
-      //   .then((v) => console.log("Send email response", v))
-      //   .catch((e) => console.warn("send email error", e));
+      ses
+        .sendEmail()
+        .then((v) => console.log("Send email response", v))
+        .catch((e) => console.warn("send email error", e));
 
       const password = isValidPassword(temporaryPassword)
         ? temporaryPassword
