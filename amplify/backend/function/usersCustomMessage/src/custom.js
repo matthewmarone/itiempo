@@ -22,15 +22,15 @@ exports.handler = (event, context, callback) => {
 
     event.response.emailSubject = "Welcome to iTiempo!";
     event.response.emailMessage = `Hello ${name},<br ><br />
-    Welcome to iTiempo!  An account has been setup for you.<br /><br />
+    Welcome to iTiempo!  A new account has been created for you.<br /><br />
     Your user name is: ${event.request.usernameParameter}<br />
-    Your temporary password is: ${event.request.codeParameter}<br />
+    Your temporary password is: <strong>${event.request.codeParameter}</strong><br />
     <br />
-    Go to <a href="https://app.itiempo.com">iTiempo.com</a> and login with your temporary password to finish setting up your new account.
+    Go to <a href="https://app.itiempo.com">iTiempo.com</a> to finish setting up your new account.
     <br /><br />
     Have a great day,
     <br /><br />
-    iTiempo
+    iTiempo!
     `;
   } else if (event.triggerSource === "CustomMessage_ForgotPassword") {
     // Custom message – To send the confirmation code for Forgot Password request.

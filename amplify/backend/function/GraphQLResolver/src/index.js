@@ -809,12 +809,16 @@ const resolvers = {
         { Name: "email_verified", Value: "true" },
       ];
 
+      const ClientMetadata = {
+        name: input.firstName,
+      };
+
       // Attempt to create the user, the employeeId is also returned here
       // in the rare case that this is the second attempt and the user was created
       // before with a different employeeId because
       // the first attempt didn't fully complete, like if the API was down, etc.
       const username = await user
-        .createUser(email, UserAttributes)
+        .createUser(email, UserAttributes, ClientMetadata)
         .then(({ User: { Username } }) => Username)
         .catch(async (e) => {
           // Something went wrong creating a new user
