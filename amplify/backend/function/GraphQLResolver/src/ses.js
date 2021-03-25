@@ -12,16 +12,12 @@ var AWS = require("aws-sdk");
 // Set the region
 AWS.config.update({ region: process.env.REGION });
 
-/**
- *
- * @returns
- */
-const sendEmail = async () => {
+const sendPasswordRestEmail = async (email, password, firstName) => {
   // Create sendEmail params
   var params = {
     Destination: {
       ToAddresses: [
-        "mattmarone@itiempo.com",
+        email,
         /* more items */
       ],
     },
@@ -31,29 +27,37 @@ const sendEmail = async () => {
         /* required */
         Html: {
           Charset: "UTF-8",
-          Data: "HTML_FORMAT_BODY",
+          Data: `Hello ${firstName},<br /><br /> Your iTiempo password has been re-set.  Your temporary password is ${password} `,
         },
         Text: {
           Charset: "UTF-8",
-          Data: "Testing Amazon SES.",
+          Data: `Hello ${firstName}, 
+          
+          Your iTiempo password has been re-set.  Your temporary password is ${password} `,
         },
       },
       Subject: {
         Charset: "UTF-8",
-        Data: "Test email",
+        Data: "Your password has been changed",
       },
     },
-    Source: "mattmarone@itiempo.com" /* required */,
+    Source: "noreply@itiempo.com" /* required */,
     ReplyToAddresses: [
-      "mattmarone@itiempo.com",
+      "noreply@itiempo.com",
       /* more items */
     ],
   };
-
-  // Create the promise and SES service object
-  return await new AWS.SES({ apiVersion: "2010-12-01" })
-    .sendEmail(params)
-    .promise();
+  console.log("sending email: ", JSON.stringify(params, null, 4));
+  return await sendEmail(params);
 };
 
-exports.sendEmail = sendEmail;
+/**
+ *
+ * @returns
+ */
+const sendEmail = (params) => {
+  // Create the promise and SES service object
+  return new AWS.SES({ apiVersion: "2010-12-01" }).sendEmail(params).promise();
+};
+
+exports.sendPasswordRestEmail = sendPasswordRestEmail;

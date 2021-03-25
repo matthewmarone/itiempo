@@ -158,13 +158,13 @@ const isAuthorizedToUpdateRole = (requestorClaims, employee, newRole) => {
 const isValidPassword = (password) =>
   (typeof password === "string" || password instanceof String) &&
   password &&
-  password.length > 5;
+  password.length > 7;
 /**
  *
  * @returns
  */
 const createTemporaryPassword = () =>
-  Math.random().toString(36).substring(2, 9);
+  Math.random().toString(36).substring(2, 10);
 
 exports.OWNER_ROLE = OWNER_ROLE;
 exports.ADMIN_ROLE = ADMIN_ROLE;

@@ -338,11 +338,6 @@ const resolvers = {
         arguments: { employeeId, temporaryPassword },
       } = ctx;
 
-      ses
-        .sendEmail()
-        .then((v) => console.log("Send email response", v))
-        .catch((e) => console.warn("send email error", e));
-
       const password = isValidPassword(temporaryPassword)
         ? temporaryPassword
         : createTemporaryPassword();
@@ -351,7 +346,9 @@ const resolvers = {
       if (data && data.getEmployee) {
         if (isAuthorizedToUpdateEmployee(claims, data.getEmployee)) {
           try {
-            await user.setUserPassword(data.getEmployee.username, password);
+            const { username, email, firstName } = data.getEmployee;
+            await user.setUserPassword(username, password);
+            await ses.sendPasswordRestEmail(email, password, firstName);
             return true;
           } catch (e) {
             console.error(e);
