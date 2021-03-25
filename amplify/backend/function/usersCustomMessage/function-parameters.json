@@ -1,0 +1,20 @@
+{
+  "trigger": true,
+  "modules": [
+    "custom"
+  ],
+  "parentResource": "users",
+  "functionName": "usersCustomMessage",
+  "resourceName": "usersCustomMessage",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "/usr/local/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/triggers/CustomMessage",
+  "triggerTemplate": "CustomMessage.json.ejs",
+  "triggerEventPath": "CustomMessage.event.json",
+  "roleName": "usersCustomMessage",
+  "skipEdit": true,
+  "REDIRECTURL": "https://app.itiempo.com",
+  "EMAILSUBJECT": "Confirmed baby!",
+  "EMAILMESSAGE": "Click the link, I am the price of sudi: ",
+  "enableCors": false
+}

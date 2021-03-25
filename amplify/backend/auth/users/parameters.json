@@ -87,7 +87,7 @@
     ],
     "userPoolGroups": false,
     "adminQueries": false,
-    "triggers": "{\n  \"PreSignup\": [\n    \"custom\"\n  ],\n  \"PreTokenGeneration\": [\n    \"alter-claims\"\n  ]\n}",
+    "triggers": "{\n  \"CustomMessage\": [\n    \"custom\"\n  ],\n  \"PreSignup\": [\n    \"custom\"\n  ],\n  \"PreTokenGeneration\": [\n    \"alter-claims\"\n  ]\n}",
     "hostedUI": false,
     "userPoolGroupList": [],
     "serviceName": "Cognito",
@@ -109,6 +109,15 @@
         {
             "category": "function",
             "resourceName": "usersPreTokenGeneration",
+            "triggerProvider": "Cognito",
+            "attributes": [
+                "Arn",
+                "Name"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "usersCustomMessage",
             "triggerProvider": "Cognito",
             "attributes": [
                 "Arn",

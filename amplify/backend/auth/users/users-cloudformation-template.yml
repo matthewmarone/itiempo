@@ -31,6 +31,16 @@ Parameters:
   
   
   
+  functionusersCustomMessageArn:
+    Type: String
+    Default: functionusersCustomMessageArn
+  
+  functionusersCustomMessageName:
+    Type: String
+    Default: functionusersCustomMessageName
+  
+  
+  
 
     
   identityPoolName:
@@ -251,6 +261,8 @@ Resources:
       LambdaConfig:
         
         
+          CustomMessage: !Ref functionusersCustomMessageArn
+        
         
         
         
@@ -290,6 +302,15 @@ Resources:
     
   
   
+  
+  UserPoolCustomMessageLambdaInvokePermission:
+    Type: "AWS::Lambda::Permission"
+    DependsOn: UserPool
+    Properties:
+      Action: "lambda:invokeFunction"
+      Principal: "cognito-idp.amazonaws.com"
+      FunctionName: !Ref functionusersCustomMessageName
+      SourceArn: !GetAtt UserPool.Arn
   
   
   
