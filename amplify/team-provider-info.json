@@ -91,12 +91,14 @@
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-dev-133828-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-505068427a524a617234-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-4e7a334f454b2f537a51-build.zip"
         },
         "usersCustomMessage": {
           "REDIRECTURL": "https://app.itiempo.com",
           "EMAILSUBJECT": "Confirmed baby!",
-          "EMAILMESSAGE": "Click the link, I am the price of sudi: "
+          "EMAILMESSAGE": "Click the link, I am the price of sudi: ",
+          "deploymentBucketName": "amplify-itiempo-dev-133828-deployment",
+          "s3Key": "amplify-builds/usersCustomMessage-4a4c786a6c6b6736647a-build.zip"
         }
       }
     }

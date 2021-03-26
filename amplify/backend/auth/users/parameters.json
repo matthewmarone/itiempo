@@ -14,7 +14,7 @@
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
     "emailVerificationSubject": "Your verification code for iTiempo login",
-    "emailVerificationMessage": "Thank you for signing up for iTiempo.  Your verification code is < {####} >.  Have a great day!",
+    "emailVerificationMessage": "Thank you for signing up for iTiempo.  Your verification code is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
