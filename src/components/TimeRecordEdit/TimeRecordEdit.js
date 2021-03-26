@@ -60,6 +60,7 @@ const getInitialState = (record, eId) => {
 const CreateRecord = (props) => {
   const { initialState, open, onClose, onSaving } = props;
   const [formState, setFormState] = useState({ ...initialState });
+  const [errorMsg, setErrorMsg] = useState(null);
   const [create, { loading, error, data }] = useCreateTimeRecord();
   const handleChange = useCallback(
     (fv) =>
@@ -81,8 +82,14 @@ const CreateRecord = (props) => {
   }, [loading, onSaving]);
 
   useEffect(() => {
-    if (!loading && !error && data && data.createTimeRec) onClose();
+    if (!loading && !error && data?.createTimeRec) onClose();
   }, [data, error, loading, onClose]);
+
+  useEffect(() => {
+    if (!loading && error) {
+      setErrorMsg("An error occurred");
+    }
+  }, [error, loading]);
 
   return (
     <TimeRecordForm
@@ -92,6 +99,7 @@ const CreateRecord = (props) => {
       onClose={onClose}
       open={open}
       saving={loading}
+      error={errorMsg}
       singleNote
     />
   );
@@ -170,6 +178,7 @@ const TimeRecordForm = (props) => {
     open,
     saving,
     singleNote,
+    error,
   } = props;
 
   const handleEmployeeIdChange = useCallback(
@@ -226,6 +235,13 @@ const TimeRecordForm = (props) => {
               />
             ) : (
               <EmployeeName employeeId={employeeId} />
+            )}
+            {!error ? (
+              <React.Fragment />
+            ) : (
+              <Typography color="error" variant="body1">
+                {error}
+              </Typography>
             )}
           </Grid>
           <Grid item sm={6} xs={12}>

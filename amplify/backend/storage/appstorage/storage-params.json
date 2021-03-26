@@ -1,7 +1,8 @@
 {
     "groupPermissionMap": {
         "Founders": [
-            "create/update"
+            "create/update",
+            "read"
         ],
         "iTiempo": [
             "create/update",

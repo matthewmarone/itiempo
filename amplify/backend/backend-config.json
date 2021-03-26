@@ -126,7 +126,7 @@
     }
   },
   "storage": {
-    "sppcontent": {
+    "appstorage": {
       "service": "S3",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
