@@ -28,27 +28,27 @@ const sendPasswordRestEmail = async (email, password, firstName) => {
         Html: {
           Charset: "UTF-8",
           Data: `Hello ${firstName}, 
-          
-
-          Your iTiempo account has been re-set, and your temporary password is: <strong>${password}</strong> .  Go to <a href="https://app.itiempo.com">iTiempo.com</a> and login with your temporary password where you will then be prompted to create a new one.
-          
-
+          <br /><br />
+          Your iTiempo account has been re-set, and your temporary password is: <strong>${password}</strong> .
+          Go to <a href="https://app.itiempo.com">iTiempo.com</a> to login with 
+          your temporary password and create a new one.
+          <br /><br />
           Have a great day,
-          
-
+          <br /><br />
           iTiempo!
           `,
         },
         Text: {
           Charset: "UTF-8",
           Data: `Hello ${firstName}, 
-          <br /><br />
-          Your iTiempo account has been re-set, and your temporary password is: <strong>${password}</strong> .
-          Go to <a href="https://app.itiempo.com">iTiempo.com</a> and login with 
-          your temporary password where you will then be prompted to create a new one.
-          <br /><br />
+          
+
+          Your iTiempo account has been re-set, and your temporary password is: ${password} .  Go to https://app.iTiempo.com to login with your temporary password and create a new one.
+          
+
           Have a great day,
-          <br /><br />
+          
+
           iTiempo!
           `,
         },
@@ -58,9 +58,9 @@ const sendPasswordRestEmail = async (email, password, firstName) => {
         Data: "Your password has been changed",
       },
     },
-    Source: "noreply@itiempo.com" /* required */,
+    Source: "noreply@iTiempo.com" /* required */,
     ReplyToAddresses: [
-      "noreply@itiempo.com",
+      "noreply@iTiempo.com",
       /* more items */
     ],
   };
