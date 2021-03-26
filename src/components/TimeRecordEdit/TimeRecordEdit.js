@@ -203,13 +203,16 @@ const TimeRecordForm = (props) => {
     formatedTimeIn,
     formatedTimeOut,
     formatedTotalTime,
+    valid,
   ] = React.useMemo(() => {
     const ti = timestampIn ? getDateLocal(timestampIn) : "";
     const to = timestampOut ? getDateLocal(timestampOut) : "";
+    const v = (timestampIn && !timestampOut) || timestampIn < timestampOut;
     return [
       ti,
       to,
       getFormatedTime(getTimeDifference(timestampIn, timestampOut)),
+      v,
     ];
   }, [timestampIn, timestampOut]);
 
@@ -251,6 +254,7 @@ const TimeRecordForm = (props) => {
               type="datetime-local"
               label="Time In"
               name="timestampIn"
+              error={!valid && timestampOut}
               onChange={handleTextChange}
               variant="outlined"
               margin="dense"
@@ -267,6 +271,7 @@ const TimeRecordForm = (props) => {
               type="datetime-local"
               label="Time Out"
               name="timestampOut"
+              error={!valid && timestampOut}
               onChange={handleTextChange}
               variant="outlined"
               margin="dense"
@@ -311,11 +316,16 @@ const TimeRecordForm = (props) => {
 
   const saveButton = React.useMemo(
     () => (
-      <Button key="saveBtn" onClick={handleSave} color="secondary">
+      <Button
+        key="saveBtn"
+        onClick={handleSave}
+        color="secondary"
+        disabled={!valid}
+      >
         Save
       </Button>
     ),
-    [handleSave]
+    [handleSave, valid]
   );
   const closeBtn = React.useMemo(
     () => (
