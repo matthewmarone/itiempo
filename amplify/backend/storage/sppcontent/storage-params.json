@@ -1,1 +1,12 @@
-{}
+{
+    "groupPermissionMap": {
+        "Founders": [
+            "create/update"
+        ],
+        "iTiempo": [
+            "create/update",
+            "read",
+            "delete"
+        ]
+    }
+}
