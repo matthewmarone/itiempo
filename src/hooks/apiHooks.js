@@ -307,6 +307,8 @@ export const useClockedIn = (_employeeId) => {
     }
   }, [data]);
 
+  console.log("Data", data);
+
   logger.debug(
     "useClockedIn => ",
     loading,

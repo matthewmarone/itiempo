@@ -92,6 +92,7 @@ const CreateRecord = (props) => {
       onClose={onClose}
       open={open}
       saving={loading}
+      singleNote
     />
   );
 };
@@ -168,6 +169,7 @@ const TimeRecordForm = (props) => {
     onClose,
     open,
     saving,
+    singleNote,
   } = props;
 
   const handleEmployeeIdChange = useCallback(
@@ -258,11 +260,11 @@ const TimeRecordForm = (props) => {
               }}
             />
           </Grid>
-          <Grid item sm={6} xs={12}>
+          <Grid item sm={!singleNote ? 6 : 12} xs={12}>
             <TextField
               fullWidth
               multiline
-              label="Clock-in Note"
+              label={`${!singleNote ? `Clock In ` : ``}Note`}
               name="noteIn"
               onChange={handleTextChange}
               variant="outlined"
@@ -271,19 +273,21 @@ const TimeRecordForm = (props) => {
               rows={3}
             />
           </Grid>
-          <Grid item sm={6} xs={12}>
-            <TextField
-              fullWidth
-              multiline
-              label="Clock-out Note"
-              name="noteOut"
-              onChange={handleTextChange}
-              variant="outlined"
-              margin="dense"
-              value={noteOut || ""}
-              rows={3}
-            />
-          </Grid>
+          {singleNote || (
+            <Grid item sm={6} xs={12}>
+              <TextField
+                fullWidth
+                multiline
+                label="Clock Out Note"
+                name="noteOut"
+                onChange={handleTextChange}
+                variant="outlined"
+                margin="dense"
+                value={noteOut || ""}
+                rows={3}
+              />
+            </Grid>
+          )}
         </React.Fragment>
       )}
     </Grid>

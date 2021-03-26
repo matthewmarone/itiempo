@@ -68,15 +68,6 @@ const TimeRecord = (props) => {
     ],
     []
   );
-  const note = useMemo(() => {
-    const n1 = (noteIn || "").trim();
-    const n2 = (noteOut || "").trim();
-    const t = n1 && n2;
-    return `${t ? "@clock-in: " + n1 : n1} ${
-      t ? "@clock-out: " + n2 : n2
-    }`.trim();
-  }, [noteIn, noteOut]);
-
   const dialogContent = (
     <Grid container spacing={4}>
       {/** Start Row  */}
@@ -129,10 +120,17 @@ const TimeRecord = (props) => {
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Note:</Typography>
+        <Typography {...leftTxtProps}>Clock In Note:</Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography {...rightTxtProps}>{note}</Typography>
+        <Typography {...rightTxtProps}>{noteIn}</Typography>
+      </Grid>
+      {/** Start Row  */}
+      <Grid item xs={6}>
+        <Typography {...leftTxtProps}>Clock Out Note:</Typography>
+      </Grid>
+      <Grid item xs={6}>
+        <Typography {...rightTxtProps}>{noteOut}</Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>

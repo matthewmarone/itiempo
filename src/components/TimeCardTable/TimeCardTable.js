@@ -223,6 +223,8 @@ const TimeCardTableSingle = (props) => {
     employeeId,
   });
 
+  console.log("data 2", data);
+
   useEffect(() => {
     if (employeeId && fromDate && toDate) {
       logger.debug("RunQuery", employeeId, fromDate, toDate);

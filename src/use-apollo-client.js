@@ -50,7 +50,7 @@ const cache = new InMemoryCache({
                 "Time Records must always be queried in DESC order."
               );
               return undefined;
-            } else if (existing && timestampIn) {
+            } else if (existing) {
               // We have data and a timestamp filter to filter
               const { items } = existing;
 
@@ -58,18 +58,20 @@ const cache = new InMemoryCache({
 
               const filteredItems = items.filter((value) => {
                 const _deleted = readField("_deleted", value);
-                const v = readField("timestampIn", value);
-                const { between, gt, ge, lt, le, eq } = timestampIn;
                 let satisfies = !_deleted;
-                if (satisfies && between) {
-                  const [gTe, lTe] = between.sort();
-                  satisfies = v >= gTe && v <= lTe;
+                if (timestampIn && satisfies) {
+                  const v = readField("timestampIn", value);
+                  const { between, gt, ge, lt, le, eq } = timestampIn;
+                  if (satisfies && between) {
+                    const [gTe, lTe] = between.sort();
+                    satisfies = v >= gTe && v <= lTe;
+                  }
+                  if (satisfies && gt) satisfies = v > gt;
+                  if (satisfies && ge) satisfies = v >= ge;
+                  if (satisfies && lt) satisfies = v < lt;
+                  if (satisfies && le) satisfies = v <= le;
+                  if (satisfies && eq) satisfies = v === eq;
                 }
-                if (satisfies && gt) satisfies = v > gt;
-                if (satisfies && ge) satisfies = v >= ge;
-                if (satisfies && lt) satisfies = v < lt;
-                if (satisfies && le) satisfies = v <= le;
-                if (satisfies && eq) satisfies = v === eq;
                 return satisfies;
               });
               return { ...existing, items: filteredItems };
