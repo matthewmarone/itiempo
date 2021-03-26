@@ -75,16 +75,16 @@ const AuthLayout = ({ children }) => {
             <div className={classes.verse}>
               <div className={classes.verseInner}>
                 <Typography className={classes.verseText} variant="h1">
-                  For God so loved the world that he gave his one and only Son,
+                  "For God so loved the world that he gave his one and only Son,
                   that whoever believes in him shall not perish but have eternal
-                  life.
+                  life."
                 </Typography>
                 <div className={classes.verseReference}>
                   <Typography
                     className={classes.verseReferenceText}
                     variant="body1"
                   >
-                    John 3:16
+                    ~ John 3:16
                   </Typography>
                 </div>
               </div>
