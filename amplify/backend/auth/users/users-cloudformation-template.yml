@@ -41,6 +41,16 @@ Parameters:
   
   
   
+  functionusersPostConfirmationArn:
+    Type: String
+    Default: functionusersPostConfirmationArn
+  
+  functionusersPostConfirmationName:
+    Type: String
+    Default: functionusersPostConfirmationName
+  
+  
+  
 
     
   identityPoolName:
@@ -243,6 +253,11 @@ Resources:
     Type: AWS::Cognito::UserPool
     UpdateReplacePolicy: Retain
     Properties:
+      EmailConfiguration:
+        EmailSendingAccount: "DEVELOPER"
+        From: "iTiempo, no-reply <no-reply@iTiempo.com>"
+        ReplyToEmailAddress: "no-reply@iTiempo.com"
+        SourceArn: "arn:aws:ses:us-east-1:388597641926:identity/no-reply@iTiempo.com"
       UserPoolName: !If [ShouldNotCreateEnvResources, !Ref userPoolName, !Join ['',[!Ref userPoolName, '-', !Ref env]]]
       
       
@@ -265,6 +280,8 @@ Resources:
         
         
         
+        
+          PostConfirmation: !Ref functionusersPostConfirmationArn
         
         
         
@@ -315,6 +332,15 @@ Resources:
   
   
   
+  UserPoolPostConfirmationLambdaInvokePermission:
+    Type: "AWS::Lambda::Permission"
+    DependsOn: UserPool
+    Properties:
+      Action: "lambda:invokeFunction"
+      Principal: "cognito-idp.amazonaws.com"
+      FunctionName: !Ref functionusersPostConfirmationName
+      SourceArn: !GetAtt UserPool.Arn
+  
   
   
   UserPoolPreSignupLambdaInvokePermission:
@@ -338,6 +364,38 @@ Resources:
   
   
   # Updating lambda role with permissions to Cognito
+  
+  
+  usersPostConfirmationAddToGroupCognito:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: usersPostConfirmationAddToGroupCognito
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+            
+              - cognito-idp:AdminAddUserToGroup
+            
+              - cognito-idp:GetGroup
+            
+              - cognito-idp:CreateGroup
+            
+            
+            
+            Resource: !GetAtt
+            
+              - UserPool
+            
+              - Arn
+            
+            
+            
+
+      Roles:
+        - !Join ['',["usersPostConfirmation", '-', !Ref env]]
+  
   
   
   UserPoolClientWeb:

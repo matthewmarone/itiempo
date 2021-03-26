@@ -41,11 +41,65 @@
     },
     "Resources": {
     
+        "FoundersGroup": {
+          "Type" : "AWS::Cognito::UserPoolGroup",
+          "Properties" : {
+              "GroupName" : "Founders",
+              "Precedence" : 1,
+              
+              "RoleArn" : {
+                "Fn::GetAtt": [
+                    "FoundersGroupRole",
+                    "Arn"
+                ]
+              },
+              
+              "UserPoolId" : {
+                "Ref": "authusersUserPoolId"
+              }
+            }
+        },
+        
+        "FoundersGroupRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName":{
+                    "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Ref": "authusersUserPoolId"
+                          },
+                          "-FoundersGroupRole"
+                        ]
+                    ]
+                },
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Federated": "cognito-identity.amazonaws.com"
+                            },
+                            "Action": "sts:AssumeRoleWithWebIdentity",
+                            "Condition": {
+                              "StringEquals": {"cognito-identity.amazonaws.com:aud": {"Ref":"authusersIdentityPoolId"}},
+                              "ForAnyValue:StringLike": {"cognito-identity.amazonaws.com:amr": "authenticated"}
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+     
+    
         "iTiempoGroup": {
           "Type" : "AWS::Cognito::UserPoolGroup",
           "Properties" : {
               "GroupName" : "iTiempo",
-              "Precedence" : 1,
+              "Precedence" : 2,
               
               "RoleArn" : {
                 "Fn::GetAtt": [
@@ -294,6 +348,17 @@
     },
     
     "Outputs": {
+      
+        "FoundersGroupRole": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "FoundersGroupRole",
+                    "Arn"
+                ]
+            }
+        
+        },
+        
       
         "iTiempoGroupRole": {
             "Value": {

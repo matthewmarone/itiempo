@@ -99,6 +99,9 @@
           "EMAILMESSAGE": "Click the link, I am the price of sudi: ",
           "deploymentBucketName": "amplify-itiempo-dev-133828-deployment",
           "s3Key": "amplify-builds/usersCustomMessage-4a4c786a6c6b6736647a-build.zip"
+        },
+        "usersPostConfirmation": {
+          "GROUP": "Founders"
         }
       }
     }

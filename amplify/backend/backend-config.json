@@ -36,6 +36,11 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "usersPostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "auth": {
@@ -64,6 +69,15 @@
         {
           "category": "function",
           "resourceName": "usersCustomMessage",
+          "triggerProvider": "Cognito",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "usersPostConfirmation",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",

@@ -13,7 +13,7 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Your verification code for iTiempo login",
+    "emailVerificationSubject": "Your verification code for iTiempo",
     "emailVerificationMessage": "Thank you for signing up for iTiempo.  Your verification code is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
@@ -85,17 +85,22 @@
     "usernameAttributes": [
         "email"
     ],
-    "userPoolGroups": false,
+    "userPoolGroups": true,
     "adminQueries": false,
-    "triggers": "{\n  \"CustomMessage\": [\n    \"custom\"\n  ],\n  \"PreSignup\": [\n    \"custom\"\n  ],\n  \"PreTokenGeneration\": [\n    \"alter-claims\"\n  ]\n}",
+    "triggers": "{\n  \"CustomMessage\": [\n    \"custom\"\n  ],\n  \"PostConfirmation\": [\n    \"add-to-group\"\n  ],\n  \"PreSignup\": [\n    \"custom\"\n  ],\n  \"PreTokenGeneration\": [\n    \"alter-claims\"\n  ]\n}",
     "hostedUI": false,
-    "userPoolGroupList": [],
+    "userPoolGroupList": [
+        "Founders",
+        "iTiempo"
+    ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "parentStack": {
         "Ref": "AWS::StackId"
     },
-    "permissions": [],
+    "permissions": [
+        "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}"
+    ],
     "dependsOn": [
         {
             "category": "function",
@@ -118,6 +123,15 @@
         {
             "category": "function",
             "resourceName": "usersCustomMessage",
+            "triggerProvider": "Cognito",
+            "attributes": [
+                "Arn",
+                "Name"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "usersPostConfirmation",
             "triggerProvider": "Cognito",
             "attributes": [
                 "Arn",
