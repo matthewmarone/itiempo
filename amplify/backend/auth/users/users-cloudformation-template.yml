@@ -255,7 +255,7 @@ Resources:
     Properties:
       EmailConfiguration:
         EmailSendingAccount: "DEVELOPER"
-        From: "iTiempo, no-reply <no-reply@iTiempo.com>"
+        From: "no-reply@iTiempo.com"
         ReplyToEmailAddress: "no-reply@iTiempo.com"
         SourceArn: "arn:aws:ses:us-east-1:388597641926:identity/no-reply@iTiempo.com"
       UserPoolName: !If [ShouldNotCreateEnvResources, !Ref userPoolName, !Join ['',[!Ref userPoolName, '-', !Ref env]]]
