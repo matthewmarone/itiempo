@@ -13,7 +13,8 @@
     },
     "categories": {
       "auth": {
-        "users": {}
+        "users": {},
+        "userPoolGroups": {}
       },
       "hosting": {},
       "function": {
@@ -27,7 +28,15 @@
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-prod-92653-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-46796859704832327a65-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-777a6e6e53357256355a-build.zip"
+        },
+        "usersCustomMessage": {
+          "deploymentBucketName": "amplify-itiempo-prod-92653-deployment",
+          "s3Key": "amplify-builds/usersCustomMessage-4a4c786a6c6b6736647a-build.zip"
+        },
+        "usersPostConfirmation": {
+          "deploymentBucketName": "amplify-itiempo-prod-92653-deployment",
+          "s3Key": "amplify-builds/usersPostConfirmation-78725a486350696c7854-build.zip"
         }
       }
     }
