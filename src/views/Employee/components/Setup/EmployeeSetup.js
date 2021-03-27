@@ -90,7 +90,15 @@ const PayRate = (props) => {
 
 const EmployeeSetup = (props) => {
   const classes = useStyles();
-  const { className, employee, onChange, onSave, saving, ...rest } = props;
+  const {
+    className,
+    employee,
+    onChange,
+    onSave,
+    saving,
+    disableRole,
+    ...rest
+  } = props;
   const { companyId } = employee;
   const { data } = useListEmployeesByEmail(companyId);
   const {
@@ -143,6 +151,7 @@ const EmployeeSetup = (props) => {
                     onChange={handleChange}
                     label="Role"
                     name="role"
+                    disabled={disableRole}
                   >
                     <MenuItem value={"Owner"}>Owner</MenuItem>
                     <MenuItem value={"Admin"}>Admin</MenuItem>
@@ -250,6 +259,7 @@ EmployeeSetup.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   saving: PropTypes.bool,
+  disableRole: PropTypes.bool,
 };
 
 export default EmployeeSetup;

@@ -117,6 +117,8 @@ const EmployeeView = (props) => {
     (usrRoles.findIndex((v) => v === "Manager") !== -1 &&
       (managers || []).findIndex((v) => v === userEmplId) !== -1);
 
+  const isCurrentEmployee = userEmplId === employee?.id;
+
   return (
     <Grid container spacing={4}>
       <Grid container item xl={4} lg={4} md={6} xs={12} spacing={4}>
@@ -132,6 +134,7 @@ const EmployeeView = (props) => {
             onChange={handleChange}
             onSave={handleSave}
             saving={updating}
+            disableRole={isCurrentEmployee}
           />
         </Grid>
       </Grid>
