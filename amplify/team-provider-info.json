@@ -68,7 +68,7 @@
         },
         "usersPostConfirmation": {
           "deploymentBucketName": "amplify-itiempo-test-132349-deployment",
-          "s3Key": "amplify-builds/usersPostConfirmation-79465333783845374d4f-build.zip"
+          "s3Key": "amplify-builds/usersPostConfirmation-78725a486350696c7854-build.zip"
         }
       }
     }
