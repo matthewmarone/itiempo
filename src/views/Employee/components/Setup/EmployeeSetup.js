@@ -116,7 +116,7 @@ const EmployeeSetup = (props) => {
 
   const handlePayRateChange = (rate, idx) => {
     const newRates =
-      payRates && payRates.length > 0
+      payRates?.length > 0
         ? payRates.map((v, i) => (i === idx ? validRate(rate) : v))
         : [validRate(rate)];
     onChange({ payRates: newRates });

@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useContext,
+} from "react";
+import { Context } from "Store";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { Grid } from "@material-ui/core";
@@ -22,13 +29,21 @@ const useStyles = makeStyles((theme) => ({
     height: "50%",
     paddingLeft: theme.spacing(0),
   },
+  hidden: {
+    display: "none",
+    visibility: "hidden",
+  },
 }));
 const EmployeeView = (props) => {
   const { employee } = props;
+  const classes = useStyles();
   const [employeeState, setEmployeeState] = useState(employee);
   const [updatedFields, setUpdatedFields] = useState({});
   const [updateEmployee, { loading: updating, error }] = useUpdateEmployee();
   if (error) logger.warn(error);
+  const [{ user }] = useContext(Context);
+  const userEmplId = user?.employeeId || "nobody";
+  const usrRoles = user?.roles || [];
 
   /**
    *
@@ -60,6 +75,9 @@ const EmployeeView = (props) => {
           input: {
             ...currEmployee,
             ...changes,
+            payRates: changes?.payRates?.map((v) => {
+              return { ...v, __typename: undefined };
+            }),
             updateRoles,
             __typename: undefined,
           },
@@ -91,6 +109,14 @@ const EmployeeView = (props) => {
     return { ...employeeState, ...updatedFields };
   }, [employeeState, updatedFields]);
 
+  const { managers } = employeeState;
+
+  // Shows sensitive information only if the user is a Owner/Admin or the manager of the employee
+  const showSensitive =
+    usrRoles.findIndex((v) => v === "Owner" || v === "Admin") !== -1 ||
+    (usrRoles.findIndex((v) => v === "Manager") !== -1 &&
+      (managers || []).findIndex((v) => v === userEmplId) !== -1);
+
   return (
     <Grid container spacing={4}>
       <Grid container item xl={4} lg={4} md={6} xs={12} spacing={4}>
@@ -100,7 +126,7 @@ const EmployeeView = (props) => {
             onPhotoSave={handlePhotoSave}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={clsx(showSensitive || classes.hidden)}>
           <EmployeeSetup
             employee={employeeModal}
             onChange={handleChange}

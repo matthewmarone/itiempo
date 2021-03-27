@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Divider, Drawer } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import PeopleIcon from "@material-ui/icons/People";
+import PersonIcon from "@material-ui/icons/Person";
 // import DateRangeIcon from '@material-ui/icons/DateRange';
 import TimelineIcon from "@material-ui/icons/Timeline";
 import { Context } from "Store";
@@ -49,13 +50,16 @@ const Sidebar = (props) => {
   const classes = useStyles();
   const { open, variant, onClose, className, ...rest } = props;
   const [{ user }] = useContext(Context);
-  const { employeeId } = user || {};
+  const { employeeId, roles = [] } = user || {};
   const profileURL = `/employees/${employeeId}`;
   const [clockedIn, setEmployeeId] = useClockedIn(employeeId);
   const [setEmployeeId2, { data }] = useGetEmployee(employeeId);
   const { getEmployee: employee } = data || {};
   const { profilePhoto: key } = employee || {};
   const [setKey, { data: avatarURL }] = useDownloadImage({ key });
+  // Check if role includes more than employee
+  const isNotEmployee =
+    roles.findIndex((v) => v?.trim().length > 0 && v !== "Employee", []) >= 0;
 
   const handleLogout = useCallback(() => {
     Auth.signOut().catch((e) => logger.error(e));
@@ -76,22 +80,46 @@ const Sidebar = (props) => {
       href: "/home",
       icon: <HomeIcon />,
     },
-    {
-      title: "Employee",
-      href: "/employees",
-      icon: <PeopleIcon />,
-    },
+    // {
+    //   title: "Profile",
+    //   href: profileURL,
+    //   icon: <PersonIcon />,
+    // },
+    // {
+    //   title: "Employee",
+    //   href: "/employees",
+    //   icon: <PeopleIcon />,
+    // },
     // {
     //   title: 'Schedule',
     //   href: '/schedule',
     //   icon: <DateRangeIcon />
     // },
-    {
+    // {
+    //   title: "Report",
+    //   href: "/report",
+    //   icon: <TimelineIcon />,
+    // },
+  ];
+
+  if (isNotEmployee) {
+    pages.push({
+      title: "Employees",
+      href: "/employees",
+      icon: <PeopleIcon />,
+    });
+    pages.push({
       title: "Report",
       href: "/report",
       icon: <TimelineIcon />,
-    },
-  ];
+    });
+  } else {
+    pages.push({
+      title: "Profile",
+      href: profileURL,
+      icon: <PersonIcon />,
+    });
+  }
 
   return (
     <Drawer
@@ -104,7 +132,9 @@ const Sidebar = (props) => {
       <div {...rest} className={clsx(classes.root, className)}>
         <Profile
           profileName={
-            !employee ? "First Last Name" : `${employee.firstName} ${employee.lastName}`
+            !employee
+              ? "First Last Name"
+              : `${employee.firstName} ${employee.lastName}`
           }
           profileURL={profileURL}
           avatarURL={avatarURL}

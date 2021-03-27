@@ -34,7 +34,14 @@ const Reducer = (state, action) => {
           employeeId,
           email,
           emailVerified,
-          roles,
+          roles: Array.isArray(roles)
+            ? roles.reduce((ret, v) => {
+                // Ex: Owner-6313cc05-5b6f-48fd-a0ca-6a4e30e06354
+                if (v?.includes(`-${companyId}`))
+                  ret[ret.length] = v.split(`-${companyId}`)[0];
+                return ret;
+              }, [])
+            : ["Employee"],
           username,
           newAccount,
         },
