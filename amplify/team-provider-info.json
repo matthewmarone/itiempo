@@ -15,28 +15,29 @@
       "function": {
         "usersCustomMessage": {
           "deploymentBucketName": "amplify-itiempo-prod-113459-deployment",
-          "s3Key": "amplify-builds/usersCustomMessage-51337a5859496b454370-build.zip"
+          "s3Key": "amplify-builds/usersCustomMessage-703542494c33436d366a-build.zip"
         },
         "usersPostConfirmation": {
           "GROUP": "Founders",
           "deploymentBucketName": "amplify-itiempo-prod-113459-deployment",
-          "s3Key": "amplify-builds/usersPostConfirmation-65307537316475336d55-build.zip"
+          "s3Key": "amplify-builds/usersPostConfirmation-78725a486350696c7854-build.zip"
         },
         "usersPreSignup": {
           "deploymentBucketName": "amplify-itiempo-prod-113459-deployment",
-          "s3Key": "amplify-builds/usersPreSignup-363152646757526e6939-build.zip"
+          "s3Key": "amplify-builds/usersPreSignup-3632566a5a66514c6a79-build.zip"
         },
         "usersPreTokenGeneration": {
           "deploymentBucketName": "amplify-itiempo-prod-113459-deployment",
-          "s3Key": "amplify-builds/usersPreTokenGeneration-67614c426f6c366a3976-build.zip"
+          "s3Key": "amplify-builds/usersPreTokenGeneration-35706d2b484b33635a7a-build.zip"
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-prod-113459-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-62386641764339585649-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-6b47674f6b5367466a72-build.zip"
         }
       },
       "auth": {
-        "users": {}
+        "users": {},
+        "userPoolGroups": {}
       }
     }
   }
