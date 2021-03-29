@@ -100,14 +100,14 @@ type Verse
 type QuickPunch
   @model(subscriptions: { level: off })
   @key(
-    name: "byCompany"
-    fields: ["companyId", "nickName"]
-    queryField: "listQuickPunchByCompany"
-  )
-  @key(
     name: "byEmployee"
     fields: ["employeeId"]
     queryField: "listQuickPunchByEmployee"
+  )
+  @key(
+    name: "byCompany"
+    fields: ["companyId", "nickName"]
+    queryField: "listQuickPunchByCompany"
   )
   @auth(
     rules: [

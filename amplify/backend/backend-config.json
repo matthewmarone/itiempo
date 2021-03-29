@@ -1,5 +1,15 @@
 {
   "function": {
+    "usersCustomMessage": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "usersPostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "usersPreSignup": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -31,41 +41,29 @@
           ]
         }
       ]
-    },
-    "usersCustomMessage": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "usersPostConfirmation": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
     }
   },
   "auth": {
+    "userPoolGroups": {
+      "service": "Cognito-UserPool-Groups",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "users",
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ]
+        }
+      ]
+    },
     "users": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "usersPreSignup",
-          "triggerProvider": "Cognito",
-          "attributes": [
-            "Arn",
-            "Name"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "usersPreTokenGeneration",
-          "triggerProvider": "Cognito",
-          "attributes": [
-            "Arn",
-            "Name"
-          ]
-        },
         {
           "category": "function",
           "resourceName": "usersCustomMessage",
@@ -83,25 +81,27 @@
             "Arn",
             "Name"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "usersPreSignup",
+          "triggerProvider": "Cognito",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "usersPreTokenGeneration",
+          "triggerProvider": "Cognito",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
         }
       ],
       "customAuth": false
-    },
-    "userPoolGroups": {
-      "service": "Cognito-UserPool-Groups",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "users",
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ]
-        }
-      ]
     }
   },
   "api": {
@@ -126,7 +126,7 @@
     }
   },
   "storage": {
-    "appstorage": {
+    "itiempostore": {
       "service": "S3",
       "providerPlugin": "awscloudformation",
       "dependsOn": [

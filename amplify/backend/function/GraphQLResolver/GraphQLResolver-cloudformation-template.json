@@ -110,12 +110,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "itiempoLambdaRoleed9a8db0",
+            "itiempoLambdaRoleb61982f0",
             {
               "Fn::Join": [
                 "",
                 [
-                  "itiempoLambdaRoleed9a8db0",
+                  "itiempoLambdaRoleb61982f0",
                   "-",
                   {
                     "Ref": "env"
@@ -345,14 +345,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "ses:SendEmail",
-                "ses:SendRawEmail"
-              ],
-              "Resource": "*"
             }
           ]
         }

@@ -1,14 +1,12 @@
 {
-  "region": "us-east-1",
-  "callerContext": {
+    "region": "us-west-2",
+    "callerContext": {
     "clientId": "dummyId"
-  },
-  "userName": "mattmarone@itiempo.com",
-  "triggerSource": "CustomMessage_AdminCreateUser",
-  "request": {
-    "codeParameter": "0000",
-    "usernameParameter": "matthewmarone@itiempo.com",
-    "clientMetadata": { "name": "Matthew" }
-  },
-  "response": {}
-}
+    },
+    "userName": "testUser",
+    "triggerSource": "CustomMessage_SignUp",
+    "request": {
+    "codeParameter": "0000"
+    },
+    "response": {}
+  }

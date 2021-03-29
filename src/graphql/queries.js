@@ -100,42 +100,6 @@ export const listVerses = /* GraphQL */ `
     }
   }
 `;
-export const listVerseByMonthYear = /* GraphQL */ `
-  query ListVerseByMonthYear(
-    $monthYear: String
-    $sortDirection: ModelSortDirection
-    $filter: ModelVerseFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listVerseByMonthYear(
-      monthYear: $monthYear
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        monthYear
-        lang
-        book
-        chapter
-        verseStart
-        verseEnd
-        translation
-        text
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
 export const syncVerses = /* GraphQL */ `
   query SyncVerses(
     $filter: ModelVerseFilterInput
@@ -170,70 +134,6 @@ export const syncVerses = /* GraphQL */ `
     }
   }
 `;
-export const listQuickPunchByCompany = /* GraphQL */ `
-  query ListQuickPunchByCompany(
-    $companyId: ID
-    $nickName: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelQuickPunchFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listQuickPunchByCompany(
-      companyId: $companyId
-      nickName: $nickName
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        companyId
-        employeeId
-        nickName
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const listQuickPunchByEmployee = /* GraphQL */ `
-  query ListQuickPunchByEmployee(
-    $employeeId: ID
-    $sortDirection: ModelSortDirection
-    $filter: ModelQuickPunchFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listQuickPunchByEmployee(
-      employeeId: $employeeId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        companyId
-        employeeId
-        nickName
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
 export const syncQuickPunches = /* GraphQL */ `
   query SyncQuickPunches(
     $filter: ModelQuickPunchFilterInput
@@ -257,6 +157,7 @@ export const syncQuickPunches = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        ident
       }
       nextToken
       startedAt
@@ -275,6 +176,7 @@ export const getQuickPunch = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
+      ident
     }
   }
 `;
@@ -295,6 +197,7 @@ export const listQuickPunchs = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
+        ident
       }
       nextToken
       startedAt
@@ -476,65 +379,6 @@ export const listEmployees = /* GraphQL */ `
     }
   }
 `;
-export const listEmployeesByEmail = /* GraphQL */ `
-  query ListEmployeesByEmail(
-    $companyId: ID
-    $email: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelEmployeeFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listEmployeesByEmail(
-      companyId: $companyId
-      email: $email
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        username
-        profilePhoto
-        email
-        email_2
-        firstName
-        lastName
-        phone
-        phone_2
-        addressLine1
-        addressLine2
-        city
-        state
-        zip
-        country
-        jobTitle
-        payRates {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        roles
-        companyId
-        primaryManagerId
-        managerIds
-        inactive
-        managers
-        allowRead
-        allowFull
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
 export const syncEmployees = /* GraphQL */ `
   query SyncEmployees(
     $filter: ModelEmployeeFilterInput
@@ -635,118 +479,6 @@ export const listTimeRecords = /* GraphQL */ `
     $nextToken: String
   ) {
     listTimeRecords(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        employeeId
-        companyId
-        timestampIn
-        timestampOut
-        clockInDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        clockOutDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        rate {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        approved
-        approvedBy
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const listEmployeeTimeRecords = /* GraphQL */ `
-  query ListEmployeeTimeRecords(
-    $employeeId: ID
-    $timestampIn: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelTimeRecordFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listEmployeeTimeRecords(
-      employeeId: $employeeId
-      timestampIn: $timestampIn
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        employeeId
-        companyId
-        timestampIn
-        timestampOut
-        clockInDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        clockOutDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        rate {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        approved
-        approvedBy
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const listCompanyTimeRecords = /* GraphQL */ `
-  query ListCompanyTimeRecords(
-    $companyId: ID
-    $timestampIn: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelTimeRecordFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listCompanyTimeRecords(
-      companyId: $companyId
-      timestampIn: $timestampIn
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
       items {
         id
         employeeId

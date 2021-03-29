@@ -7,6 +7,14 @@
             "ConflictDetection": "VERSION"
         },
         "models": {
+            "Verse": {
+                "ConflictHandler": "OPTIMISTIC_CONCURRENCY",
+                "ConflictDetection": "VERSION"
+            },
+            "QuickPunch": {
+                "ConflictHandler": "OPTIMISTIC_CONCURRENCY",
+                "ConflictDetection": "VERSION"
+            },
             "Company": {
                 "ConflictHandler": "OPTIMISTIC_CONCURRENCY",
                 "ConflictDetection": "VERSION"
