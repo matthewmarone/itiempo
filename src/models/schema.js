@@ -497,22 +497,22 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
+                        "name": "byEmployee",
+                        "fields": [
+                            "employeeId"
+                        ],
+                        "queryField": "listQuickPunchByEmployee"
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
                         "name": "byCompany",
                         "fields": [
                             "companyId",
                             "nickName"
                         ],
                         "queryField": "listQuickPunchByCompany"
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byEmployee",
-                        "fields": [
-                            "employeeId"
-                        ],
-                        "queryField": "listQuickPunchByEmployee"
                     }
                 },
                 {
@@ -933,5 +933,5 @@ export const schema = {
             }
         }
     },
-    "version": "92ec721341b99a60e2edece39edc34c0"
+    "version": "d7d517a83c1bdd3091b7201e2bc915cf"
 };

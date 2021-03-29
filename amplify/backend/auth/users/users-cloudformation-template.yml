@@ -183,7 +183,6 @@ Parameters:
   userPoolGroupList:
     Type: CommaDelimitedList
       
-            
   serviceName:
     Type: String
   
@@ -202,6 +201,11 @@ Parameters:
       
         
   dependsOn:
+    Type: CommaDelimitedList
+      
+            
+        
+  authProviders:
     Type: CommaDelimitedList
       
 Conditions:
@@ -249,11 +253,6 @@ Resources:
     Type: AWS::Cognito::UserPool
     UpdateReplacePolicy: Retain
     Properties:
-      EmailConfiguration:
-        EmailSendingAccount: "DEVELOPER"
-        From: "no-reply@iTiempo.com"
-        ReplyToEmailAddress: "no-reply@iTiempo.com"
-        SourceArn: "arn:aws:ses:us-east-1:388597641926:identity/no-reply@iTiempo.com"
       UserPoolName: !If [ShouldNotCreateEnvResources, !Ref userPoolName, !Join ['',[!Ref userPoolName, '-', !Ref env]]]
       
       

@@ -1,10 +1,10 @@
 [
-  {
-    "groupName": "Founders",
-    "precedence": 1
-  },
-  {
-    "groupName": "iTiempo",
-    "precedence": 2
-  }
+    {
+        "groupName": "Founders",
+        "precedence": 1
+    },
+    {
+        "groupName": "iTiempo",
+        "precedence": 2
+    }
 ]
