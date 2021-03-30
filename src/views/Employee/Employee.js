@@ -105,21 +105,23 @@ const EmployeeView = (props) => {
    */
   const handelPayRateChange = useCallback(
     (payRatesArray) => {
-      const payRates = payRatesArray?.reduce((acc, v) => {
-        if (v?.name && v?.amount > 0) {
-          acc[acc.length] = {
-            name: v.name,
-            amount: v.amount,
-            isHourly: v?.isHourly === true || false,
-            isDefault: v?.isDefault === true || false,
-          };
-        }
-        return acc;
-      }, []);
-      handleChange({ payRates });
-      update(employeeState, { payRates });
+      if (!updating) {
+        const payRates = payRatesArray?.reduce((acc, v) => {
+          if (v?.name && v?.amount > 0) {
+            acc[acc.length] = {
+              name: v.name,
+              amount: v.amount,
+              isHourly: v?.isHourly === true || false,
+              isDefault: v?.isDefault === true || false,
+            };
+          }
+          return acc;
+        }, []);
+        handleChange({ payRates });
+        update(employeeState, { payRates });
+      }
     },
-    [employeeState, handleChange, update]
+    [employeeState, handleChange, update, updating]
   );
 
   // The employee data to render
