@@ -75,9 +75,6 @@ const EmployeeView = (props) => {
           input: {
             ...currEmployee,
             ...changes,
-            payRates: changes?.payRates?.map((v) => {
-              return { ...v, __typename: undefined };
-            }),
             updateRoles,
             __typename: undefined,
           },
@@ -103,11 +100,34 @@ const EmployeeView = (props) => {
     },
     [employeeState, update]
   );
+  /**
+   *
+   */
+  const handelPayRateChange = useCallback(
+    (payRatesArray) => {
+      const payRates = payRatesArray?.reduce((acc, v) => {
+        if (v?.name && v?.amount > 0) {
+          acc[acc.length] = {
+            name: v.name,
+            amount: v.amount,
+            isHourly: v?.isHourly === true || false,
+            isDefault: v?.isDefault === true || false,
+          };
+        }
+        return acc;
+      }, []);
+      handleChange({ payRates });
+      update(employeeState, { payRates });
+    },
+    [employeeState, handleChange, update]
+  );
 
   // The employee data to render
   const employeeModal = useMemo(() => {
     return { ...employeeState, ...updatedFields };
   }, [employeeState, updatedFields]);
+
+  console.log("employeeModal", employeeModal);
 
   const { managers } = employeeState;
 
@@ -132,6 +152,7 @@ const EmployeeView = (props) => {
           <EmployeeSetup
             employee={employeeModal}
             onChange={handleChange}
+            onPayRateChange={handelPayRateChange}
             onSave={handleSave}
             saving={updating}
             disableRole={isCurrentEmployee}

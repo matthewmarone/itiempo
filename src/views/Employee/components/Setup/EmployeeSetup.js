@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
@@ -18,40 +18,117 @@ import {
   InputLabel,
   FormControl,
   Select,
-  // Typography,
+  Typography,
   CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  ListItemIcon,
 } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Logger } from "aws-amplify";
 import { AvatarMenuItem } from "components";
 import { useListEmployeesByEmail } from "hooks";
 
 // eslint-disable-next-line
-const logger = new Logger("UserJobProfile.js", "ERROR");
+const logger = new Logger("EmployeeSetup.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: {},
 }));
 
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
 const PayRate = (props) => {
-  const { name, amount, isHourly = true, isDefault = false, onChange } = props;
-  const handleChange = (e) => {
-    if (typeof onChange === "function") {
-      const {
-        target: { name: k, type, value, checked },
-      } = e;
-      onChange({
-        name,
-        amount,
-        isHourly,
-        isDefault,
-        [k]: type === "checkbox" ? checked : value,
-      });
-    }
-  };
+  const { name, amount, isHourly, isDefault, onDelete } = props;
 
   return (
+    <List dense>
+      <ListItem>
+        <ListItemIcon>
+          <IconButton
+            edge="start"
+            aria-label="delete"
+            size="small"
+            onClick={onDelete}
+          >
+            <DeleteIcon fontSize="small" color="error" />
+          </IconButton>
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <Typography variant="body1">
+              {`${name} Rate: ${amount}/${isHourly ? `hour` : `year`}`}
+            </Typography>
+          }
+          secondary={isDefault ? "Default" : null}
+        />
+      </ListItem>
+    </List>
+  );
+};
+
+const initialPayRate = {
+  name: "",
+  isDefault: false,
+  isHourly: true,
+};
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
+const PayRateForm = (props) => {
+  const { onAdd } = props;
+  const [formState, setFormState] = useState({ ...initialPayRate });
+  const handleChange = (e) => {
+    const {
+      target: { name: k, type, value, checked },
+    } = e;
+    setFormState((curr) => {
+      return { ...curr, [k]: type === "checkbox" ? checked : value };
+    });
+  };
+  const handleAdd = () => {
+    onAdd({ ...formState });
+    setFormState({ ...initialPayRate });
+  };
+  const { name, amount, isHourly, isDefault } = formState;
+  const valid = useMemo(() => name?.trim().length > 0 && amount >= 0.01, [
+    amount,
+    name,
+  ]);
+  return (
     <React.Fragment>
+      <Grid item xs={8}>
+        <TextField
+          fullWidth
+          label="New Rate Name"
+          margin="dense"
+          name="name"
+          onChange={handleChange}
+          value={name || ""}
+          variant="outlined"
+          type="text"
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <FormControlLabel
+          label="Default"
+          control={
+            <Checkbox
+              checked={isDefault ? true : false}
+              onClick={handleChange}
+              name="isDefault"
+            />
+          }
+        />
+      </Grid>
       <Grid item xs>
         <TextField
           fullWidth
@@ -84,10 +161,24 @@ const PayRate = (props) => {
           }
         />
       </Grid>
+      <Grid item xs={12}>
+        <Button
+          size="small"
+          color="secondary"
+          onClick={handleAdd}
+          disabled={!valid}
+        >
+          Add Pay Rate
+        </Button>
+      </Grid>
     </React.Fragment>
   );
 };
-
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
 const EmployeeSetup = (props) => {
   const classes = useStyles();
   const {
@@ -97,6 +188,7 @@ const EmployeeSetup = (props) => {
     onSave,
     saving,
     disableRole,
+    onPayRateChange,
     ...rest
   } = props;
   const { companyId } = employee;
@@ -104,7 +196,7 @@ const EmployeeSetup = (props) => {
   const {
     listEmployeesByEmail: { items: employees = [] },
   } = data || { listEmployeesByEmail: {} };
-  const { primaryManagerId, jobTitle, payRates = [], roles } = employee;
+  const { primaryManagerId, jobTitle, payRates, roles } = employee;
   const role = roles && roles[0] ? roles[0] : "Employee";
 
   const handleChange = ({ target: { name, value } }) => {
@@ -112,22 +204,46 @@ const EmployeeSetup = (props) => {
     onChange({ [role ? "roles" : name]: role ? [value] : value });
   };
 
-  const validRate = (rate) => {
-    const { amount, isHourly = true, isDefault = false } = rate;
-    return {
-      ...rate,
-      amount: amount > 0 ? amount : 0,
-      isHourly: isHourly !== null ? isHourly : true,
-      isDefault: isDefault !== null ? isDefault : false,
-    };
+  /**
+   *
+   */
+  const handleAddPayRate = (rate) => {
+    const existingR = Array.isArray(payRates) ? payRates : [];
+    let newRates;
+    if (
+      rate.isDefault ||
+      existingR.findIndex((v) => v.isDefault === true) === -1
+    ) {
+      // This is the new default or there isn't already a default
+      newRates = [
+        { ...rate, isDefault: true },
+        ...existingR.map((r) => {
+          return { ...r, isDefault: false };
+        }),
+      ];
+    } else {
+      newRates = [...existingR, { ...rate, isDefault: false }];
+    }
+
+    onPayRateChange(newRates);
   };
 
-  const handlePayRateChange = (rate, idx) => {
-    const newRates =
-      payRates?.length > 0
-        ? payRates.map((v, i) => (i === idx ? validRate(rate) : v))
-        : [validRate(rate)];
-    onChange({ payRates: newRates });
+  /**
+   *
+   * @param {*} index
+   */
+  const handelPayRateDelete = (index) => {
+    const newDefault = index === 0 ? 1 : 0;
+    onPayRateChange(
+      (payRates || []).reduce((ret, val, idx) => {
+        if (idx !== index)
+          ret[ret.length] = {
+            ...val,
+            isDefault: idx === newDefault ? true : val.isDefault,
+          };
+        return ret;
+      }, [])
+    );
   };
 
   return (
@@ -159,50 +275,47 @@ const EmployeeSetup = (props) => {
                     <MenuItem value={"Employee"}>Employee</MenuItem>
                   </Select>
                 </FormControl>
-                {/* <Typography
-                  className={classes.locationText}
-                  color="textSecondary"
-                  variant="subtitle2"
-                >
-                  Saving role...
-                </Typography> */}
               </Grid>
               <Grid item xs={12}>
-                <Autocomplete
-                  id="select-employee-supervisor"
-                  disableClearable
-                  options={employees}
-                  value={
-                    primaryManagerId
-                      ? employees.find((e) => e.id === primaryManagerId)
-                      : null
-                  }
-                  onChange={(event, value, reason) => {
-                    if (value) onChange({ primaryManagerId: value.id });
-                  }}
-                  getOptionLabel={(option) =>
-                    option.firstName + " " + option.lastName
-                  }
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                      <Chip
-                        label={option.firstName + " " + option.lastName}
-                        {...getTagProps({ index })}
+                {employees?.find((e) => e.id === primaryManagerId) ? (
+                  <Autocomplete
+                    id="select-employee-supervisor"
+                    disableClearable
+                    options={employees}
+                    value={
+                      primaryManagerId
+                        ? employees.find((e) => e.id === primaryManagerId)
+                        : null
+                    }
+                    onChange={(event, value, reason) => {
+                      if (value) onChange({ primaryManagerId: value.id });
+                    }}
+                    getOptionLabel={(option) =>
+                      option.firstName + " " + option.lastName
+                    }
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip
+                          label={option.firstName + " " + option.lastName}
+                          {...getTagProps({ index })}
+                        />
+                      ))
+                    }
+                    renderOption={(option, { selected }) => (
+                      <AvatarMenuItem {...option} isSelected={selected} />
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Employee Supervisor"
+                        variant="outlined"
+                        placeholder="Select supervisor"
                       />
-                    ))
-                  }
-                  renderOption={(option, { selected }) => (
-                    <AvatarMenuItem {...option} isSelected={selected} />
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Employee Supervisor"
-                      variant="outlined"
-                      placeholder="Select supervisor"
-                    />
-                  )}
-                />
+                    )}
+                  />
+                ) : (
+                  <span>Loading....</span>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -215,21 +328,17 @@ const EmployeeSetup = (props) => {
                   variant="outlined"
                 />
               </Grid>
-              {payRates && payRates.length > 0 ? (
-                payRates.map((v, i) => (
+              <Grid item xs={12}>
+                <h5>Pay Rates:</h5>
+                {(payRates || []).map((r, i) => (
                   <PayRate
                     key={i}
-                    {...v}
-                    onChange={(v) => handlePayRateChange(v, i)}
+                    {...r}
+                    onDelete={() => handelPayRateDelete(i)}
                   />
-                ))
-              ) : (
-                <PayRate
-                  key={0}
-                  isDefault={true}
-                  onChange={(v) => handlePayRateChange(v, 0)}
-                />
-              )}
+                ))}
+              </Grid>
+              <PayRateForm onAdd={handleAddPayRate} />
             </Grid>
           </div>
         </CardContent>
@@ -257,6 +366,7 @@ EmployeeSetup.propTypes = {
   className: PropTypes.string,
   employee: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  onPayRateChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   saving: PropTypes.bool,
   disableRole: PropTypes.bool,
