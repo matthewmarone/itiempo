@@ -100,11 +100,26 @@
         "users": {}
       },
       "function": {
-        "usersCustomMessage": {},
-        "usersPostConfirmation": {},
-        "usersPreSignup": {},
-        "usersPreTokenGeneration": {},
-        "GraphQLResolver": {}
+        "usersCustomMessage": {
+          "deploymentBucketName": "amplify-itiempo-test-192925-deployment",
+          "s3Key": "amplify-builds/usersCustomMessage-703542494c33436d366a-build.zip"
+        },
+        "usersPostConfirmation": {
+          "deploymentBucketName": "amplify-itiempo-test-192925-deployment",
+          "s3Key": "amplify-builds/usersPostConfirmation-78725a486350696c7854-build.zip"
+        },
+        "usersPreSignup": {
+          "deploymentBucketName": "amplify-itiempo-test-192925-deployment",
+          "s3Key": "amplify-builds/usersPreSignup-3632566a5a66514c6a79-build.zip"
+        },
+        "usersPreTokenGeneration": {
+          "deploymentBucketName": "amplify-itiempo-test-192925-deployment",
+          "s3Key": "amplify-builds/usersPreTokenGeneration-35706d2b484b33635a7a-build.zip"
+        },
+        "GraphQLResolver": {
+          "deploymentBucketName": "amplify-itiempo-test-192925-deployment",
+          "s3Key": "amplify-builds/GraphQLResolver-6b47674f6b5367466a72-build.zip"
+        }
       }
     }
   }

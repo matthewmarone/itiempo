@@ -80,11 +80,11 @@ enum LANG {
 }
 type Verse
   @model(subscriptions: { level: off })
-  # @key(
-  #   name: "byMonthYear"
-  #   fields: ["monthYear"]
-  #   queryField: "listVerseByMonthYear"
-  # )
+  @key(
+    name: "byMonthYear"
+    fields: ["monthYear"]
+    queryField: "listVerseByMonthYear"
+  )
   @auth(rules: [{ allow: public, provider: iam }]) {
   id: ID!
   monthYear: String! # Ex: 01-01 jan 1st 12-31st for Dec 31st
@@ -99,11 +99,11 @@ type Verse
 
 type QuickPunch
   @model(subscriptions: { level: off })
-  # @key(
-  #   name: "byEmployee"
-  #   fields: ["employeeId"]
-  #   queryField: "listQuickPunchByEmployee"
-  # )
+  @key(
+    name: "byEmployee"
+    fields: ["employeeId"]
+    queryField: "listQuickPunchByEmployee"
+  )
   # @key(
   #   name: "byCompany"
   #   fields: ["companyId", "nickName"]
@@ -230,11 +230,11 @@ type Company
 }
 type Employee
   @model(subscriptions: { level: off })
-  # @key(
-  #   name: "byCompany"
-  #   fields: ["companyId", "email"]
-  #   queryField: "listEmployeesByEmail"
-  # )
+  @key(
+    name: "byCompany"
+    fields: ["companyId", "email"]
+    queryField: "listEmployeesByEmail"
+  )
   @auth(
     rules: [
       # Only allow GraphQLResolver (setupNewAccount, addUser) to create
@@ -308,11 +308,11 @@ type Employee
 }
 type TimeRecord
   @model(subscriptions: { level: off })
-  # @key(
-  #   name: "byEmployeeTimestamp"
-  #   fields: ["employeeId", "timestampIn"]
-  #   queryField: "listEmployeeTimeRecords"
-  # )
+  @key(
+    name: "byEmployeeTimestamp"
+    fields: ["employeeId", "timestampIn"]
+    queryField: "listEmployeeTimeRecords"
+  )
   # @key(
   #   name: "byCompanyTimestamp"
   #   fields: ["companyId", "timestampIn"]
