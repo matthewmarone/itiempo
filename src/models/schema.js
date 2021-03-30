@@ -92,28 +92,6 @@ export const schema = {
                     }
                 },
                 {
-                    "type": "key",
-                    "properties": {
-                        "name": "byEmployeeTimestamp",
-                        "fields": [
-                            "employeeId",
-                            "timestampIn"
-                        ],
-                        "queryField": "listEmployeeTimeRecords"
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byCompanyTimestamp",
-                        "fields": [
-                            "companyId",
-                            "timestampIn"
-                        ],
-                        "queryField": "listCompanyTimeRecords"
-                    }
-                },
-                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -355,17 +333,6 @@ export const schema = {
                     }
                 },
                 {
-                    "type": "key",
-                    "properties": {
-                        "name": "byCompany",
-                        "fields": [
-                            "companyId",
-                            "email"
-                        ],
-                        "queryField": "listEmployeesByEmail"
-                    }
-                },
-                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -495,27 +462,6 @@ export const schema = {
                     }
                 },
                 {
-                    "type": "key",
-                    "properties": {
-                        "name": "byEmployee",
-                        "fields": [
-                            "employeeId"
-                        ],
-                        "queryField": "listQuickPunchByEmployee"
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byCompany",
-                        "fields": [
-                            "companyId",
-                            "nickName"
-                        ],
-                        "queryField": "listQuickPunchByCompany"
-                    }
-                },
-                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -635,16 +581,6 @@ export const schema = {
                         "subscriptions": {
                             "level": "off"
                         }
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byMonthYear",
-                        "fields": [
-                            "monthYear"
-                        ],
-                        "queryField": "listVerseByMonthYear"
                     }
                 },
                 {
@@ -933,5 +869,5 @@ export const schema = {
             }
         }
     },
-    "version": "d7d517a83c1bdd3091b7201e2bc915cf"
+    "version": "96d05aa04f926b887d0efed9b8c86423"
 };
