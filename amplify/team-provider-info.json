@@ -81,5 +81,31 @@
         }
       }
     }
+  },
+  "test": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-itiempo-test-192925-authRole",
+      "UnauthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-test-192925-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::388597641926:role/amplify-itiempo-test-192925-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-itiempo-test-192925-deployment",
+      "UnauthRoleName": "amplify-itiempo-test-192925-unauthRole",
+      "StackName": "amplify-itiempo-test-192925",
+      "StackId": "arn:aws:cloudformation:us-east-1:388597641926:stack/amplify-itiempo-test-192925/c09e6b80-90ff-11eb-b810-0a400b84b661",
+      "AmplifyAppId": "d3tvt940qcasnn"
+    },
+    "categories": {
+      "auth": {
+        "userPoolGroups": {},
+        "users": {}
+      },
+      "function": {
+        "usersCustomMessage": {},
+        "usersPostConfirmation": {},
+        "usersPreSignup": {},
+        "usersPreTokenGeneration": {},
+        "GraphQLResolver": {}
+      }
+    }
   }
 }
