@@ -92,6 +92,17 @@ export const schema = {
                     }
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmployeeTimestamp",
+                        "fields": [
+                            "employeeId",
+                            "timestampIn"
+                        ],
+                        "queryField": "listEmployeeTimeRecords"
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -333,6 +344,17 @@ export const schema = {
                     }
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCompany",
+                        "fields": [
+                            "companyId",
+                            "email"
+                        ],
+                        "queryField": "listEmployeesByEmail"
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -462,6 +484,16 @@ export const schema = {
                     }
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmployee",
+                        "fields": [
+                            "employeeId"
+                        ],
+                        "queryField": "listQuickPunchByEmployee"
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -581,6 +613,16 @@ export const schema = {
                         "subscriptions": {
                             "level": "off"
                         }
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byMonthYear",
+                        "fields": [
+                            "monthYear"
+                        ],
+                        "queryField": "listVerseByMonthYear"
                     }
                 },
                 {
@@ -869,5 +911,5 @@ export const schema = {
             }
         }
     },
-    "version": "96d05aa04f926b887d0efed9b8c86423"
+    "version": "eddf1276058db4fd2f7e44af6e61f423"
 };
