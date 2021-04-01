@@ -1,17 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Grid, Typography, Button, makeStyles } from "@material-ui/core";
-import { Image } from "components";
+import { Image, Currency } from "components";
 import { DialogTemplate } from "components/Dialogs/components";
 import { default as TimeRecordEdit } from "../TimeRecordEdit";
 import { default as TimeRecordDelete } from "../TimeRecordDelete";
 import { default as DateLocal } from "../DateLocal";
-import { getFormatedTime, getTimeDifference } from "helpers";
+import { getEarnings, getFormatedTime, getTimeDifference } from "helpers";
 import { useDownloadImage } from "hooks";
 import PropTypes from "prop-types";
+import clsx from "clsx";
 
 const useStyles = makeStyles({
   imageSize: { maxHeight: "175px" },
   deleteBtn: { color: "red" },
+  noShow: { display: "none", visibility: "hidden" },
 });
 
 const scene = {
@@ -28,7 +30,13 @@ const TimeRecord = (props) => {
   const classes = useStyles();
   const [currentScene, setCurrentScene] = useState(scene.details);
   const { open, record, onClose } = props;
-  const { timestampIn, timestampOut, clockInDetails, clockOutDetails } = record;
+  const {
+    timestampIn,
+    timestampOut,
+    clockInDetails,
+    clockOutDetails,
+    rate,
+  } = record;
   const {
     photo: photoIn,
     note: noteIn,
@@ -38,11 +46,11 @@ const TimeRecord = (props) => {
     clockOutDetails || {};
   const [setClockInImageVars, { data: clockInImage }] = useDownloadImage();
   const [setClockOutImageVars, { data: clockOutImage }] = useDownloadImage();
+  const { name: payName, amount, isHourly } = rate || {};
 
-  const formatedTotalTime = React.useMemo(
-    () => getFormatedTime(getTimeDifference(timestampIn, timestampOut)),
-    [timestampIn, timestampOut]
-  );
+  const timeDifference = getTimeDifference(timestampIn, timestampOut);
+  const formatedTotalTime = getFormatedTime(timeDifference);
+  const earnings = getEarnings(timeDifference, amount);
 
   useEffect(() => {
     if (open) {
@@ -85,7 +93,8 @@ const TimeRecord = (props) => {
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>
-          <DateLocal epochSeconds={timestampIn} local="es" format="LT" /> -{" "}
+          <DateLocal epochSeconds={timestampIn} local="es" format="LT" />
+          {`${timestampOut > 0 ? ` - ` : ``}`}
           <DateLocal epochSeconds={timestampOut} local="es" format="LT" />
         </Typography>
       </Grid>
@@ -95,6 +104,24 @@ const TimeRecord = (props) => {
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>{formatedTotalTime}</Typography>
+      </Grid>
+      {/** Start Row  */}
+      <Grid item xs={6}>
+        <Typography {...leftTxtProps}>Rate</Typography>
+      </Grid>
+      <Grid item xs={6}>
+        <Typography {...rightTxtProps}>
+          {amount > 0 ? `${payName} - $${amount}` : `Unspecified - $0`}
+        </Typography>
+      </Grid>
+      {/** Start Row  */}
+      <Grid item xs={6} className={clsx(isHourly || classes.noShow)}>
+        <Typography {...leftTxtProps}>Earnings</Typography>
+      </Grid>
+      <Grid item xs={6} className={clsx(isHourly || classes.noShow)}>
+        <Typography {...rightTxtProps}>
+          <Currency amount={earnings} />
+        </Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>

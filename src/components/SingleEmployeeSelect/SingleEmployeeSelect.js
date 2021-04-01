@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react";
 import { Context } from "Store";
-import { Select, MenuItem } from "@material-ui/core";
+import { Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import { useListEmployeesByEmail } from "hooks";
 import PropTypes from "prop-types";
 
@@ -34,9 +34,12 @@ const SingleEmployeeSelect = (props) => {
   const value = menuItems.length ? employeeId : "";
 
   return (
-    <Select value={value} onChange={handleChange} classes={classes}>
-      {menuItems}
-    </Select>
+    <FormControl classes={classes}>
+      <InputLabel htmlFor="work-and-rate">Employee</InputLabel>
+      <Select value={value} onChange={handleChange}>
+        {menuItems}
+      </Select>
+    </FormControl>
   );
 };
 

@@ -30,3 +30,5 @@ export { default as SingleEmployeeSelect } from "./SingleEmployeeSelect";
 export { default as EmployeeName } from "./EmployeeName";
 export { default as CountUp } from "./CountUp";
 export { default as Verse } from "./Verse";
+export { default as Currency } from "./Currency";
+export { default as EmployeePayRateSelect } from "./EmployeePayRateSelect";

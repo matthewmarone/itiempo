@@ -80,19 +80,20 @@ enum LANG {
 }
 type Verse
   @model(subscriptions: { level: off })
-  @key(
-    name: "byMonthYear"
-    fields: ["monthYear"]
-    queryField: "listVerseByMonthYear"
-  )
+  # @key(
+  #   name: "byMonthYear"
+  #   fields: ["monthYear"]
+  #   queryField: "listVerseByMonthYear"
+  # )
   @auth(rules: [{ allow: public, provider: iam }]) {
   id: ID!
-  monthYear: String! # Ex: 01-01 jan 1st 12-31st for Dec 31st
+  # monthYear: String! # Ex: 01-01 jan 1st 12-31st for Dec 31st
+  yearDay: Int!
   lang: LANG!
   book: String!
   chapter: Int!
-  verseStart: String!
-  verseEnd: String
+  verseStart: Int!
+  verseEnd: Int
   translation: String!
   text: String!
 }

@@ -21,4 +21,5 @@ export {
   mergeSortedLists,
   isDigits,
   getCounterFromMiliSeconds,
+  getEarnings,
 } from "./common";

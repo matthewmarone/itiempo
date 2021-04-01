@@ -85,12 +85,21 @@ export const getFormatedTime = (timeInMinutes = 0) => {
     return "00:00";
   }
 };
+/**
+ * 
+ * @param {*} minute 
+ * @param {*} hourlyRate 
+ * @returns 
+ */
+export const getEarnings = (minute = 0, hourlyRate = 0) =>
+  (minute / 60) * hourlyRate;
 
 /**
  *
  * @param {*} epochSecondsStart
  * @param {*} epochSecondsEnd
  * @param {*} ignoreSeconds - default is true
+ * @returns the number of minutes that has passed, if ignoreSeconds than a clock out at 12:30.59 and a clock in at 12:45.01 whould show 15 minutes
  */
 export const getTimeDifference = (
   epochSecondsStart = 0,

@@ -9,6 +9,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { DialogTemplate } from "components/Dialogs/components";
+import { EmployeePayRateSelect, Currency } from "components";
 import { default as SingleEmployeeSelect } from "../SingleEmployeeSelect";
 import { default as EmployeeName } from "../EmployeeName";
 import {
@@ -16,6 +17,7 @@ import {
   getFormatedTime,
   getTimeDifference,
   dateTimeLocalToUnixTimestamp,
+  getEarnings,
 } from "helpers";
 import { useCreateTimeRecord, useUpdateTimeRecord } from "hooks";
 import PropTypes from "prop-types";
@@ -38,6 +40,7 @@ const getInitialState = (record, eId) => {
     timestampOut,
     clockInDetails,
     clockOutDetails,
+    rate,
     _version,
   } = record || {};
   const { note: noteIn } = clockInDetails || {};
@@ -49,6 +52,7 @@ const getInitialState = (record, eId) => {
     timestampOut,
     noteIn,
     noteOut,
+    rate,
     _version,
   };
 };
@@ -172,6 +176,7 @@ const TimeRecordForm = (props) => {
     timestampOut,
     noteIn,
     noteOut,
+    rate,
     onChange,
     onSave,
     onClose,
@@ -180,11 +185,16 @@ const TimeRecordForm = (props) => {
     singleNote,
     error,
   } = props;
+  const amount = 0;
 
   const handleEmployeeIdChange = useCallback(
     (v) => onChange({ employeeId: v }),
     [onChange]
   );
+
+  const handleRateChange = useCallback((v) => onChange({ rate: v }), [
+    onChange,
+  ]);
 
   const handleTextChange = useCallback(
     ({ target: { name, value } }) => {
@@ -204,17 +214,20 @@ const TimeRecordForm = (props) => {
     formatedTimeOut,
     formatedTotalTime,
     valid,
+    earnings,
   ] = React.useMemo(() => {
     const ti = timestampIn ? getDateLocal(timestampIn) : "";
     const to = timestampOut ? getDateLocal(timestampOut) : "";
     const v = (timestampIn && !timestampOut) || timestampIn < timestampOut;
+    const timeDifference = getTimeDifference(timestampIn, timestampOut);
     return [
       ti,
       to,
-      getFormatedTime(getTimeDifference(timestampIn, timestampOut)),
+      getFormatedTime(timeDifference),
       v,
+      getEarnings(timeDifference, rate?.amount),
     ];
-  }, [timestampIn, timestampOut]);
+  }, [rate?.amount, timestampIn, timestampOut]);
 
   const dialogContent = (
     <Grid container spacing={3}>
@@ -226,10 +239,10 @@ const TimeRecordForm = (props) => {
         <React.Fragment>
           <Grid item xs={12}>
             <Typography color="primary" variant="h4">
-              {formatedTotalTime}
+              {formatedTotalTime} / <Currency amount={earnings} />
             </Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item sm={6} xs={12}>
             {!id ? (
               <SingleEmployeeSelect
                 onChange={handleEmployeeIdChange}
@@ -248,13 +261,21 @@ const TimeRecordForm = (props) => {
             )}
           </Grid>
           <Grid item sm={6} xs={12}>
+            <EmployeePayRateSelect
+              employeeId={employeeId}
+              rate={rate}
+              onRateChange={handleRateChange}
+              classes={{ root: classes.selectRoot }}
+            />
+          </Grid>
+          <Grid item sm={6} xs={12}>
             <TextField
               required
               fullWidth
               type="datetime-local"
               label="Time In"
               name="timestampIn"
-              error={!valid && timestampOut}
+              error={!valid && !!timestampOut}
               onChange={handleTextChange}
               variant="outlined"
               margin="dense"
@@ -271,7 +292,7 @@ const TimeRecordForm = (props) => {
               type="datetime-local"
               label="Time Out"
               name="timestampOut"
-              error={!valid && timestampOut}
+              error={!valid && !!timestampOut}
               onChange={handleTextChange}
               variant="outlined"
               margin="dense"
