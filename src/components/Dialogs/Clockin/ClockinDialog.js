@@ -4,12 +4,14 @@ import {
   TextField,
   CircularProgress,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
 } from "@material-ui/core";
 import { DialogTemplate } from "../components";
-import { WebcamCapture, CenterContent, Verse } from "components";
+import {
+  WebcamCapture,
+  CenterContent,
+  Verse,
+  EmployeePayRateSelect,
+} from "components";
 import { getBlobFromDataURI } from "helpers";
 import PropTypes from "prop-types";
 import { useClockIn, useClockOut, useUploadImage } from "hooks";
@@ -33,7 +35,7 @@ const ClockInContent = (props) => {
   const classes = useStyles();
   const {
     webcamRef,
-    payRateIndex,
+    rate,
     payRates,
     onReady,
     onError,
@@ -41,30 +43,17 @@ const ClockInContent = (props) => {
     note,
     isClockedIn,
   } = props;
-  const dontShowPayRates =
-    !Array.isArray(payRates) || payRates.length === 0 || isClockedIn;
+  const handlePayRateChange = (value) =>
+    onChange({ target: { name: "rate", value } });
   return (
     <React.Fragment>
-      {dontShowPayRates || (
-        <FormControl className={classes.wageSelectRoot}>
-          <InputLabel htmlFor="work-and-rate">Job / Rate</InputLabel>
-          <Select
-            native
-            name="payRateIndex"
-            value={payRateIndex || "0"}
-            onChange={onChange}
-            inputProps={{
-              name: "payRateIndex",
-              id: "work-and-rate",
-            }}
-          >
-            {payRates.map((v, i) => (
-              <option key={i} value={`${i}`}>{`${v?.name || ``} - $${
-                v?.amount || ``
-              }`}</option>
-            ))}
-          </Select>
-        </FormControl>
+      {isClockedIn || (
+        <EmployeePayRateSelect
+          rate={rate}
+          payRates={payRates}
+          onChange={handlePayRateChange}
+          classes={{ root: classes.wageSelectRoot }}
+        />
       )}
       <WebcamCapture
         ref={webcamRef}
@@ -221,17 +210,10 @@ const ClockinDialog = (props) => {
 
   const webcamRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
-  const [formState, setFormState] = useState({ payRateIndex: "0" });
+  const [formState, setFormState] = useState({});
   const [timerecordInput, setTimerecordInput] = useState(null);
   const [imageVars, setImageVars] = useState(null);
   const [success, setSuccess] = useState(false);
-  const [availablePayRates, setAvailablePayRates] = useState(
-    () => employee?.payRates || []
-  );
-
-  useEffect(() => {
-    setAvailablePayRates(() => employee?.payRates || []);
-  }, [employee?.payRates]);
 
   const handleChange = useCallback(
     (e) => {
@@ -252,7 +234,7 @@ const ClockinDialog = (props) => {
 
   const handleClose = useCallback(() => {
     setIsReady(false);
-    setFormState({ payRateIndex: "0" });
+    setFormState({});
     setTimerecordInput(null);
     setImageVars(null);
     setSuccess(false);
@@ -263,9 +245,8 @@ const ClockinDialog = (props) => {
    * handles clock in or out
    */
   const handleClick = useCallback(() => {
-    const { companyId, payRates = [{}] } = employee;
-    const rate = payRates?.[formState.payRateIndex] || {};
-    const { __typename, ...rest } = rate;
+    const { companyId } = employee;
+    const { __typename, ...rest } = formState?.rate || {};
     const imgDataURI = webcamRef.current.getScreenshot();
     // TODO (): What if there isn't a photo because the camera was blocked
     const imgBlob = getBlobFromDataURI(imgDataURI);
@@ -274,7 +255,7 @@ const ClockinDialog = (props) => {
     const input = {
       photo: imgName,
       note: formState.note,
-      rate: !isClockedIn && __typename ? rest : undefined,
+      rate: !isClockedIn ? rest : undefined,
       id: !isClockedIn ? undefined : latestRecord.id,
       _version: !isClockedIn ? undefined : latestRecord._version,
     };
@@ -335,7 +316,7 @@ const ClockinDialog = (props) => {
             onReady={handleReady}
             onError={handleCameraError}
             onChange={handleChange}
-            payRates={availablePayRates}
+            payRates={employee?.payRates}
             isClockedIn={isClockedIn}
             {...formState}
           />

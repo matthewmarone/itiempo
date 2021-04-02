@@ -19,7 +19,11 @@ import {
   dateTimeLocalToUnixTimestamp,
   getEarnings,
 } from "helpers";
-import { useCreateTimeRecord, useUpdateTimeRecord } from "hooks";
+import {
+  useCreateTimeRecord,
+  useUpdateTimeRecord,
+  useGetEmployee,
+} from "hooks";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles({
@@ -43,6 +47,7 @@ const getInitialState = (record, eId) => {
     rate,
     _version,
   } = record || {};
+  console.log("record", record);
   const { note: noteIn } = clockInDetails || {};
   const { note: noteOut } = clockOutDetails || {};
   return {
@@ -74,10 +79,19 @@ const CreateRecord = (props) => {
     []
   );
   const handleSave = useCallback(() => {
-    const { noteIn, noteOut, ...rest } = formState;
+    const { noteIn, noteOut, rate: r, ...rest } = formState;
+    const rate =
+      r?.amount > 0
+        ? {
+            name: r.name,
+            amount: r.amount,
+            isHourly: r.isHourly,
+            isDefault: r.isDefault,
+          }
+        : null;
     const clockInDetails = { note: noteIn };
     const clockOutDetails = { note: noteOut };
-    const input = { ...rest, clockInDetails, clockOutDetails };
+    const input = { ...rest, rate, clockInDetails, clockOutDetails };
     create({ variables: { input } });
   }, [create, formState]);
 
@@ -130,10 +144,19 @@ const UpdateRecord = (props) => {
     []
   );
   const handleSave = useCallback(() => {
-    const { noteIn, noteOut, ...rest } = formState;
+    const { noteIn, noteOut, rate: r, ...rest } = formState;
+    const rate =
+      r?.amount > 0
+        ? {
+            name: r.name,
+            amount: r.amount,
+            isHourly: r.isHourly,
+            isDefault: r.isDefault,
+          }
+        : null;
     const clockInDetails = { note: noteIn };
     const clockOutDetails = { note: noteOut };
-    const input = { ...rest, clockInDetails, clockOutDetails };
+    const input = { ...rest, rate, clockInDetails, clockOutDetails };
     update({ variables: { input } });
   }, [update, formState]);
 
@@ -185,7 +208,10 @@ const TimeRecordForm = (props) => {
     singleNote,
     error,
   } = props;
-  const amount = 0;
+  const [setEId, { data }] = useGetEmployee(employeeId);
+  const { getEmployee: { payRates } = {} } = data || {};
+
+  useEffect(() => setEId(employeeId), [employeeId, setEId]);
 
   const handleEmployeeIdChange = useCallback(
     (v) => onChange({ employeeId: v }),
@@ -262,9 +288,9 @@ const TimeRecordForm = (props) => {
           </Grid>
           <Grid item sm={6} xs={12}>
             <EmployeePayRateSelect
-              employeeId={employeeId}
               rate={rate}
-              onRateChange={handleRateChange}
+              payRates={payRates}
+              onChange={handleRateChange}
               classes={{ root: classes.selectRoot }}
             />
           </Grid>
@@ -378,6 +404,7 @@ const TimeRecordEdit = (props) => {
   const [{ user }] = useContext(Context);
   const { employeeId: eId } = user || {};
   const formState = getInitialState(record, eId);
+  console.log("formState", formState);
 
   return !open || !formState.id ? (
     <CreateRecord
