@@ -118,7 +118,7 @@
         },
         "GraphQLResolver": {
           "deploymentBucketName": "amplify-itiempo-test-192925-deployment",
-          "s3Key": "amplify-builds/GraphQLResolver-6b47674f6b5367466a72-build.zip"
+          "s3Key": "amplify-builds/GraphQLResolver-7a767875687a337a495a-build.zip"
         }
       }
     }

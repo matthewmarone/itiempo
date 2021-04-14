@@ -86,10 +86,10 @@ export const getFormatedTime = (timeInMinutes = 0) => {
   }
 };
 /**
- * 
- * @param {*} minute 
- * @param {*} hourlyRate 
- * @returns 
+ *
+ * @param {*} minute
+ * @param {*} hourlyRate
+ * @returns
  */
 export const getEarnings = (minute = 0, hourlyRate = 0) =>
   (minute / 60) * hourlyRate;
@@ -106,6 +106,7 @@ export const getTimeDifference = (
   epochSecondsEnd = 0,
   ignoreSeconds = true
 ) => {
+  if (!epochSecondsEnd || epochSecondsEnd <= epochSecondsStart) return 0;
   return ignoreSeconds
     ? Math.floor(epochSecondsEnd / 60) - Math.floor(epochSecondsStart / 60)
     : epochSecondsEnd - epochSecondsStart;
