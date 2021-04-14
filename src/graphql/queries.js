@@ -52,11 +52,16 @@ export const quickClockIn = /* GraphQL */ `
     quickClockIn(companyId: $companyId, limit: $limit, nextToken: $nextToken)
   }
 `;
+export const employeePayRates = /* GraphQL */ `
+  query EmployeePayRates($employeeId: ID!) {
+    employeePayRates(employeeId: $employeeId)
+  }
+`;
 export const getVerse = /* GraphQL */ `
   query GetVerse($id: ID!) {
     getVerse(id: $id) {
       id
-      monthYear
+      yearDay
       lang
       book
       chapter
@@ -81,43 +86,7 @@ export const listVerses = /* GraphQL */ `
     listVerses(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        monthYear
-        lang
-        book
-        chapter
-        verseStart
-        verseEnd
-        translation
-        text
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const listVerseByMonthYear = /* GraphQL */ `
-  query ListVerseByMonthYear(
-    $monthYear: String
-    $sortDirection: ModelSortDirection
-    $filter: ModelVerseFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listVerseByMonthYear(
-      monthYear: $monthYear
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        monthYear
+        yearDay
         lang
         book
         chapter
@@ -151,7 +120,7 @@ export const syncVerses = /* GraphQL */ `
     ) {
       items {
         id
-        monthYear
+        yearDay
         lang
         book
         chapter
@@ -159,6 +128,37 @@ export const syncVerses = /* GraphQL */ `
         verseEnd
         translation
         text
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const listQuickPunchByEmployee = /* GraphQL */ `
+  query ListQuickPunchByEmployee(
+    $employeeId: ID
+    $sortDirection: ModelSortDirection
+    $filter: ModelQuickPunchFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listQuickPunchByEmployee(
+      employeeId: $employeeId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        companyId
+        employeeId
+        nickName
         _version
         _deleted
         _lastChangedAt
@@ -182,37 +182,6 @@ export const listQuickPunchByCompany = /* GraphQL */ `
     listQuickPunchByCompany(
       companyId: $companyId
       nickName: $nickName
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        companyId
-        employeeId
-        nickName
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const listQuickPunchByEmployee = /* GraphQL */ `
-  query ListQuickPunchByEmployee(
-    $employeeId: ID
-    $sortDirection: ModelSortDirection
-    $filter: ModelQuickPunchFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listQuickPunchByEmployee(
-      employeeId: $employeeId
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit

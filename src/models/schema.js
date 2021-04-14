@@ -567,10 +567,10 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "monthYear": {
-                    "name": "monthYear",
+                "yearDay": {
+                    "name": "yearDay",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Int",
                     "isRequired": true,
                     "attributes": []
                 },
@@ -600,14 +600,14 @@ export const schema = {
                 "verseStart": {
                     "name": "verseStart",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Int",
                     "isRequired": true,
                     "attributes": []
                 },
                 "verseEnd": {
                     "name": "verseEnd",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Int",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -635,16 +635,6 @@ export const schema = {
                         "subscriptions": {
                             "level": "off"
                         }
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byMonthYear",
-                        "fields": [
-                            "monthYear"
-                        ],
-                        "queryField": "listVerseByMonthYear"
                     }
                 },
                 {
@@ -906,7 +896,7 @@ export const schema = {
                     "name": "name",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "amount": {
@@ -933,5 +923,5 @@ export const schema = {
             }
         }
     },
-    "version": "d7d517a83c1bdd3091b7201e2bc915cf"
+    "version": "07677d21657c6bf1ca477872a5eac22c"
 };

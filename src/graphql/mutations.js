@@ -408,7 +408,7 @@ export const createVerse = /* GraphQL */ `
   ) {
     createVerse(input: $input, condition: $condition) {
       id
-      monthYear
+      yearDay
       lang
       book
       chapter
@@ -431,7 +431,7 @@ export const updateVerse = /* GraphQL */ `
   ) {
     updateVerse(input: $input, condition: $condition) {
       id
-      monthYear
+      yearDay
       lang
       book
       chapter
@@ -454,7 +454,7 @@ export const deleteVerse = /* GraphQL */ `
   ) {
     deleteVerse(input: $input, condition: $condition) {
       id
-      monthYear
+      yearDay
       lang
       book
       chapter

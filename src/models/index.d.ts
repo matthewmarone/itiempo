@@ -34,7 +34,7 @@ export declare class PunchCardDetails {
 }
 
 export declare class PayRate {
-  readonly name?: string;
+  readonly name: string;
   readonly amount: number;
   readonly isHourly: boolean;
   readonly isDefault: boolean;
@@ -98,12 +98,12 @@ export declare class QuickPunch {
 
 export declare class Verse {
   readonly id: string;
-  readonly monthYear: string;
+  readonly yearDay: number;
   readonly lang: Lang | keyof typeof Lang;
   readonly book: string;
   readonly chapter: number;
-  readonly verseStart: string;
-  readonly verseEnd?: string;
+  readonly verseStart: number;
+  readonly verseEnd?: number;
   readonly translation: string;
   readonly text: string;
   constructor(init: ModelInit<Verse>);
