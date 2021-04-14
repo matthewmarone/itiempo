@@ -75,6 +75,13 @@ const PunchMethod = {
  */
 const resolvers = {
   Query: {
+    employeePayRates: async (ctx) => {
+      const {
+        arguments: { employeeId },
+      } = ctx;
+
+      return [];
+    },
     quickClockIn: async (ctx) => {
       const {
         arguments: { companyId: cIdIn, limit, nextToken: ntIn },

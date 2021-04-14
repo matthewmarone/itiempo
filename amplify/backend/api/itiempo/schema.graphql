@@ -34,6 +34,9 @@ type Query {
   quickClockIn(companyId: ID!, limit: Int, nextToken: String): String
     @auth(rules: [{ allow: public, provider: iam }])
     @function(name: "GraphQLResolver-${env}")
+  employeePayRates(employeeId: ID!): [String!]
+    @auth(rules: [{ allow: public, provider: iam }])
+    @function(name: "GraphQLResolver-${env}")
 }
 
 input PunchInByPinInput {
