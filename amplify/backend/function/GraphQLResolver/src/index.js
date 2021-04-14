@@ -77,10 +77,19 @@ const resolvers = {
   Query: {
     employeePayRates: async (ctx) => {
       const {
-        arguments: { employeeId },
+        arguments: { employeeId: eId },
       } = ctx;
 
-      return [];
+      // Perhaps the Employee was already created
+      const { data: { getEmployee } = {} } = (await api.GetEmployee(eId)) || {};
+
+      // Reduce payrates just down to its names, or return an empty array
+      const retVal =
+        getEmployee && getEmployee.payRates
+          ? getEmployee.payRates.map((p) => p.name)
+          : [];
+
+      return retVal;
     },
     quickClockIn: async (ctx) => {
       const {

@@ -365,7 +365,7 @@ type PunchCardDetails {
   ipAddress: String
 }
 type PayRate {
-  name: String
+  name: String!
   amount: Float!
   isHourly: Boolean!
   isDefault: Boolean!
