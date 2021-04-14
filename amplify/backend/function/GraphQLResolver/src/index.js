@@ -83,6 +83,11 @@ const resolvers = {
       // Perhaps the Employee was already created
       const { data: { getEmployee } = {} } = (await api.GetEmployee(eId)) || {};
 
+      if (!getEmployee)
+        console.warn(
+          `Requested employeeId ${eId} does not exist, this should not happen often.`
+        );
+
       // Reduce payrates just down to its names, or return an empty array
       const retVal =
         getEmployee && getEmployee.payRates
