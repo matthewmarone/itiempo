@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { usePunchInByPin, useUploadImage } from "hooks";
+import { usePunchInByPin, useUploadImage, useEmployeePayRates } from "hooks";
 import { default as EnterPinDialog } from "../EnterPin";
 import { default as ClockinDialogTwo } from "../ClockinTwo";
 import { default as ClockSuccessDialog } from "../ClockSuccess";
@@ -26,6 +26,12 @@ const PinClockInDialog = (props) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [uploadImg, { error: imgError }] = useUploadImage();
   const [timeRecord, setTimeRecord] = useState(null);
+  const [setId, { data: { employeePayRates } = {} } = {}] = useEmployeePayRates(
+    selectedRecord?.employeeId
+  );
+  useEffect(() => {
+    setId(selectedRecord?.employeeId);
+  }, [selectedRecord, setId]);
 
   if (imgError) console.warn("Failed to upload image", imgError);
 
@@ -116,6 +122,7 @@ const PinClockInDialog = (props) => {
               open={open}
               onClose={handleClose}
               onSubmit={handleClockInSubmit}
+              payRates={employeePayRates}
             />
           );
         case scene.pinPad:
@@ -132,6 +139,7 @@ const PinClockInDialog = (props) => {
       }
     },
     [
+      employeePayRates,
       errorMessage,
       handleClockInSubmit,
       handleClose,

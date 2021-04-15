@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Button, TextField } from "@material-ui/core";
+import {
+  Button,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+} from "@material-ui/core";
 import { DialogTemplate } from "../components";
 import { WebcamCapture } from "components";
 import { getBlobFromDataURI } from "helpers";
@@ -14,9 +20,30 @@ const logger = new Logger("Clockin.js", "ERROR");
  * @param {*} props
  */
 const ClockInContent = (props) => {
-  const { webcamRef, onReady, onError, onChange, note } = props;
+  const { webcamRef, onReady, onError, onChange, note, payRates, rate } = props;
   return (
     <React.Fragment>
+      <FormControl>
+        <InputLabel htmlFor="pin-user-select">Pay Rate</InputLabel>
+        <Select
+          native
+          value={rate || ""}
+          onChange={onChange}
+          inputProps={{
+            name: "rate",
+            id: "rate-select",
+          }}
+          color="primary"
+          size="large"
+        >
+          <option aria-label="None" value="" />
+          {payRates?.map((v, i) => (
+            <option key={i} value={v}>
+              {v}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
       <WebcamCapture
         ref={webcamRef}
         onReady={onReady}
@@ -43,6 +70,8 @@ ClockInContent.propTypes = {
   onError: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   note: PropTypes.string.isRequired,
+  payRates: PropTypes.array,
+  rate: PropTypes.string,
 };
 
 /**
@@ -50,7 +79,7 @@ ClockInContent.propTypes = {
  * @param {*} props
  */
 const ClockinDialogTwo = (props) => {
-  const { open, onClose, onSubmit } = props;
+  const { open, onClose, onSubmit, payRates } = props;
   const webcamRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [formState, setFormState] = useState({});
@@ -104,11 +133,7 @@ const ClockinDialogTwo = (props) => {
     </Button>
   );
   const cancleBtn = (
-    <Button
-      key="cancel"
-      onClick={handleClose}
-      color="primary"
-    >
+    <Button key="cancel" onClick={handleClose} color="primary">
       Cancel
     </Button>
   );
@@ -126,7 +151,9 @@ const ClockinDialogTwo = (props) => {
           onReady={handleReady}
           onError={handleCameraError}
           onChange={handleChange}
+          payRates={payRates}
           note={formState.note || ""}
+          rate={formState.rate || ""}
         />
       }
       actions={actions}
@@ -139,6 +166,7 @@ ClockinDialogTwo.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  payRates: PropTypes.array,
 };
 
 export default ClockinDialogTwo;

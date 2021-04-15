@@ -5,6 +5,7 @@ import {
   getEmployee as getEmployeeGQL,
   timeRecordReport as timeRecordReportGQL,
   quickClockIn as quickClockInGQL,
+  employeePayRates as employeePayRatesGQL,
 } from "graphql/queries";
 import {
   setupNewAccount as setupNewAccountGQL,
@@ -401,6 +402,28 @@ export const useQuickClockIn = () => {
     [query]
   );
   return [setVariables, retVal];
+};
+
+/**
+ * 
+ * @param {*} employeeId 
+ * @returns 
+ */
+export const useEmployeePayRates = (_employeeId) => {
+  const [employeeId, setEmployeeId] = useState(_employeeId);
+  const [query, retVal] = useLazyQuery(gql(employeePayRatesGQL), {
+    context: { unAuthenticated: true },
+    fetchPolicy: "no-cache",
+  });
+
+  useEffect(() => {
+    if (employeeId)
+      query({
+        variables: { employeeId },
+      });
+  }, [employeeId, query]);
+
+  return [setEmployeeId, retVal];
 };
 
 /**
