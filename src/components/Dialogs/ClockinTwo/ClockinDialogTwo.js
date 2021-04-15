@@ -10,20 +10,24 @@ import { DialogTemplate } from "../components";
 import { WebcamCapture } from "components";
 import { getBlobFromDataURI } from "helpers";
 import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/styles";
 
-import { Logger } from "aws-amplify";
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("Clockin.js", "ERROR");
+const useStyles = makeStyles((theme) => ({
+  wageSelectRoot: {
+    minWidth: "15em",
+  },
+}));
 
 /**
  *
  * @param {*} props
  */
 const ClockInContent = (props) => {
+  const classes = useStyles();
   const { webcamRef, onReady, onError, onChange, note, payRates, rate } = props;
   return (
     <React.Fragment>
-      <FormControl>
+      <FormControl classes={{ root: classes.wageSelectRoot }}>
         <InputLabel htmlFor="pin-user-select">Pay Rate</InputLabel>
         <Select
           native
@@ -93,7 +97,7 @@ const ClockinDialogTwo = (props) => {
 
   const handleCameraError = useCallback((e) => {
     // TODO (): Implement case where users camera dosen't work
-    logger.warn(e);
+    console.warn(e);
     setIsReady(true);
   }, []);
 
@@ -116,8 +120,8 @@ const ClockinDialogTwo = (props) => {
     const imgDataURI = webcamRef.current.getScreenshot();
     // TODO (): What if there isn't a photo because the camera was blocked
     const photoBlob = getBlobFromDataURI(imgDataURI);
-    onSubmit({ photoBlob, note: formState.note });
-  }, [formState.note, onSubmit]);
+    onSubmit({ photoBlob, note: formState.note, rateName: formState.rate });
+  }, [formState, onSubmit]);
 
   const actions = [];
 

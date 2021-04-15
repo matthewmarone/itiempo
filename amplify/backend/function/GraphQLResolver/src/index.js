@@ -240,9 +240,10 @@ const resolvers = {
       const {
         identity: { sourceIp },
         arguments: {
-          input: { quickPunchId, base64Ident, photo, note, rate },
+          input: { quickPunchId, base64Ident, photo, note, rateName },
         },
       } = ctx;
+      // This will be the clock in our out time
       const timestamp = Math.round(new Date().getTime() / 1000);
 
       const { data: { getQuickPunch } = {} } =
@@ -253,14 +254,14 @@ const resolvers = {
       const { companyId, employeeId, ident } = getQuickPunch;
 
       const isMatchPromise = compareIdent(base64Ident, companyId, ident);
-      const variables = {
+      const timeRecordPromise = api.ListEmployeeTimeRecords({
         employeeId,
-        limit: 1,
+        limit: 3,
         sortDirection: "DESC",
-      };
-      const timeRecordPromise = api.ListEmployeeTimeRecords(variables);
+      });
+      const employeePromise = api.GetEmployee(employeeId);
 
-      const [match, lastRecord] = await Promise.all([
+      const [match, lastRecord, rate] = await Promise.all([
         isMatchPromise.catch((e) => {
           console.error("Failed to compare ident:", e);
           return false;
@@ -276,10 +277,25 @@ const resolvers = {
               throw new Error("Failed to lookup timerecord");
             }
             const { listEmployeeTimeRecords: { items } = {} } = data || {};
-            return items && items.length > 0 ? items[0] : null;
+            // TODO (BL-I18): What if more than three have been deleted?
+            return items && items.length > 0
+              ? items.find((i) => !i._deleted)
+              : null;
           })
           .catch((e) => {
             const msg = "Failed to lookup timerecord";
+            console.error(msg, e);
+            throw new Error(msg);
+          }),
+        employeePromise
+          .then(({ data }) => {
+            const { getEmployee } = data || {};
+            return getEmployee && getEmployee.payRates
+              ? getEmployee.payRates.find((v) => v.name === rateName)
+              : undefined;
+          })
+          .catch((e) => {
+            const msg = "Failed to validate employee pay rate";
             console.error(msg, e);
             throw new Error(msg);
           }),
@@ -289,7 +305,7 @@ const resolvers = {
 
       const { id, timestampOut, _version } = lastRecord || {};
 
-      if (!timestampOut) {
+      if (!timestampOut && id) {
         // Clock Out
         const clockOutDetails = {
           punchMethod: PunchMethod.TimeClock,
@@ -330,6 +346,7 @@ const resolvers = {
           note,
           ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
         };
+        if (rate) delete rate.__typename;
         const input = {
           employeeId,
           companyId,

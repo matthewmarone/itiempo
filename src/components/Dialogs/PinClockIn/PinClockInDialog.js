@@ -85,7 +85,7 @@ const PinClockInDialog = (props) => {
    *
    */
   const handleClockInSubmit = useCallback(
-    ({ photoBlob, note }) => {
+    ({ photoBlob, note, rateName }) => {
       console.log(pin, selectedRecord, photoBlob, note);
       const { id, companyId } = selectedRecord;
       const fileName = `accts/${companyId}/time-imgs/${uuidv4()}.png`;
@@ -95,6 +95,7 @@ const PinClockInDialog = (props) => {
         base64Ident: btoa(pin),
         photo: fileName,
         note,
+        rateName,
       };
 
       punchIn({ variables: { input } });
