@@ -15,7 +15,6 @@ export {
   useClockIn,
   useClockOut,
   useCreateQuickPunch,
-  useUpdateQuickPunch,
   useResetPassword,
   useQuickClockIn,
   usePunchInByPin,

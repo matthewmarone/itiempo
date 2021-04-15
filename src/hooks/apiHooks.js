@@ -15,7 +15,6 @@ import {
   clockIn as clockInGQL,
   clockOut as clockOutGQL,
   createQP as createQpGQL,
-  updateQP as updateQpGQL,
   resetPassword as resetPasswordGQL,
   punchInByPin as punchInByPinGQL,
   deleteTimeRec as deleteTimeRecGQL,
@@ -128,11 +127,6 @@ export const useSetupNewAccount = () => useMutation(gql(setupNewAccountGQL));
  *
  */
 export const useCreateQuickPunch = () => useMutation(gql(createQpGQL));
-
-/**
- *
- */
-export const useUpdateQuickPunch = () => useMutation(gql(updateQpGQL));
 
 /**
  *

@@ -9,6 +9,7 @@ const api = require("./api");
 const user = require("./cognito-user");
 const uuid = require("uuid");
 const ses = require("./ses");
+const { removeSensitive } = require("./logging");
 const { EmployeeLookup } = require("./employeeLookup");
 const { createIdent, compareIdent } = require("./ident");
 const {
@@ -477,9 +478,6 @@ const resolvers = {
       }
       const { ident: dontReturn, ...retVal } = createQuickPunch;
       return retVal;
-    },
-    updateQP: async (ctx) => {
-      return null;
     },
     clockIn: async (ctx) => {
       const {
@@ -1047,8 +1045,10 @@ const resolvers = {
 //   "prev": { /* If using the built-in pipeline resolver support, this contains the object returned by the previous function. */ },
 // }
 exports.handler = async (event) => {
-  // Log every request while under development
-  console.info(JSON.stringify(event, null, 4));
+  if (process.env.ENV !== "prod") {
+    // Log every request while under development
+    console.info(JSON.stringify(removeSensitive(event), null, 4));
+  }
   try {
     const typeHandler = resolvers[event.typeName];
     if (typeHandler) {
@@ -1064,7 +1064,7 @@ exports.handler = async (event) => {
         event.fieldName
     );
   } catch (e) {
-    console.error(e, JSON.stringify(event, null, 4));
+    console.warn(e, JSON.stringify(removeSensitive(event), null, 4));
     throw e;
   }
 };
