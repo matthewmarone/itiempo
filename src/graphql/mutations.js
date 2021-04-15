@@ -329,21 +329,6 @@ export const createQP = /* GraphQL */ `
     }
   }
 `;
-export const updateQP = /* GraphQL */ `
-  mutation UpdateQP($input: updateQPInput) {
-    updateQP(input: $input) {
-      id
-      companyId
-      employeeId
-      nickName
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const resetPassword = /* GraphQL */ `
   mutation ResetPassword($employeeId: ID!, $temporaryPassword: String) {
     resetPassword(

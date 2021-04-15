@@ -15,11 +15,11 @@ export {
   useClockIn,
   useClockOut,
   useCreateQuickPunch,
-  useUpdateQuickPunch,
   useResetPassword,
   useQuickClockIn,
   usePunchInByPin,
   useDeleteTimeRecord,
+  useEmployeePayRates,
 } from "./apiHooks";
 
 export { useEventListener } from "./commonHooks";

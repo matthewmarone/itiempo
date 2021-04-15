@@ -5,6 +5,7 @@ import {
   getEmployee as getEmployeeGQL,
   timeRecordReport as timeRecordReportGQL,
   quickClockIn as quickClockInGQL,
+  employeePayRates as employeePayRatesGQL,
 } from "graphql/queries";
 import {
   setupNewAccount as setupNewAccountGQL,
@@ -15,7 +16,6 @@ import {
   clockIn as clockInGQL,
   clockOut as clockOutGQL,
   createQP as createQpGQL,
-  updateQP as updateQpGQL,
   resetPassword as resetPasswordGQL,
   punchInByPin as punchInByPinGQL,
   deleteTimeRec as deleteTimeRecGQL,
@@ -128,11 +128,6 @@ export const useSetupNewAccount = () => useMutation(gql(setupNewAccountGQL));
  *
  */
 export const useCreateQuickPunch = () => useMutation(gql(createQpGQL));
-
-/**
- *
- */
-export const useUpdateQuickPunch = () => useMutation(gql(updateQpGQL));
 
 /**
  *
@@ -407,6 +402,28 @@ export const useQuickClockIn = () => {
     [query]
   );
   return [setVariables, retVal];
+};
+
+/**
+ * 
+ * @param {*} employeeId 
+ * @returns 
+ */
+export const useEmployeePayRates = (_employeeId) => {
+  const [employeeId, setEmployeeId] = useState(_employeeId);
+  const [query, retVal] = useLazyQuery(gql(employeePayRatesGQL), {
+    context: { unAuthenticated: true },
+    fetchPolicy: "no-cache",
+  });
+
+  useEffect(() => {
+    if (employeeId)
+      query({
+        variables: { employeeId },
+      });
+  }, [employeeId, query]);
+
+  return [setEmployeeId, retVal];
 };
 
 /**
