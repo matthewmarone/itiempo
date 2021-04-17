@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { AvatarMenuItem, Avatar, AddTimeButton } from "components";
-import { getWorkWeek, formateDate } from "helpers";
+import { getWorkWeek, formateDate, dateToUnixTimestamp } from "helpers";
 import { DateFilter } from "components";
 import { useListEmployeesByEmail } from "hooks";
 
@@ -47,12 +47,16 @@ const TimeTableFilter = (props) => {
     toDate: td,
   });
 
-  const handleDateChange = React.useCallback(
-    (e) => {
-      setSelectedDates({ ...selectedDates, [e.target.name]: e.target.value });
-    },
-    [selectedDates]
-  );
+  const handleDateChange = React.useCallback(({ target: { name, value } }) => {
+    setSelectedDates((curr) => {
+      const retVal = { ...curr, [name]: value };
+      const valid =
+        dateToUnixTimestamp(retVal.fromDate) <=
+        dateToUnixTimestamp(retVal.toDate);
+
+      return valid ? retVal : { fromDate: value, toDate: value };
+    });
+  }, []);
 
   const { fromDate, toDate } = selectedDates;
 
@@ -101,7 +105,7 @@ const TimeTableFilter = (props) => {
                   label={
                     selectedEmployees.length > 0
                       ? "Employee"
-                      : "Select Employee(s)"
+                      : "Showing All Employees"
                   }
                   variant="outlined"
                   placeholder="Select employees to include"

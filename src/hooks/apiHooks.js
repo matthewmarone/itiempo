@@ -405,9 +405,9 @@ export const useQuickClockIn = () => {
 };
 
 /**
- * 
- * @param {*} employeeId 
- * @returns 
+ *
+ * @param {*} employeeId
+ * @returns
  */
 export const useEmployeePayRates = (_employeeId) => {
   const [employeeId, setEmployeeId] = useState(_employeeId);
@@ -429,18 +429,51 @@ export const useEmployeePayRates = (_employeeId) => {
 /**
  *
  */
-export const useTimeRecordReport = (filter) => {
-  const [runQuery, retVal] = useLazyQuery(gql(timeRecordReportGQL));
-  const [filterState, updateFilter] = useState(filter);
+export const useTimeRecordReport = () => {
+  const [runQuery, retVal] = useLazyQuery(gql(timeRecordReportGQL), {
+    notifyOnNetworkStatusChange: true,
+  });
+  const { data, fetchMore, refetch, variables, called } = retVal || {};
+  const [nextToken, setNextToken] = useState(null);
 
+  /**
+   * For pagnation, if there is a nextToken
+   */
   useEffect(() => {
-    const { from, to } = filterState || {};
-    if (from < to) {
-      runQuery({
-        variables: { filter: filterState, limit: CONSTS.LIMIT_25 },
+    if (nextToken && fetchMore && variables) {
+      fetchMore({
+        variables: { ...variables, limit: CONSTS.LIMIT_50, nextToken },
       });
+      setNextToken(null);
     }
-  }, [filterState, runQuery]);
+  }, [fetchMore, nextToken, variables]);
 
-  return [updateFilter, retVal];
+  /**
+   * Detects the need to pagnate
+   */
+  useEffect(() => {
+    setNextToken(data?.timeRecordReport?.nextToken);
+  }, [data?.timeRecordReport?.nextToken]);
+
+  /**
+   *
+   */
+  const query = useCallback(
+    (filter) => {
+      const { from, to } = filter || {};
+
+      if (from < to) {
+        if (!called) {
+          runQuery({
+            variables: { filter: { from, to }, limit: CONSTS.LIMIT_25 },
+          });
+        } else {
+          refetch({ filter: { from, to }, limit: CONSTS.LIMIT_25 });
+        }
+      }
+    },
+    [called, refetch, runQuery]
+  );
+
+  return [query, retVal];
 };

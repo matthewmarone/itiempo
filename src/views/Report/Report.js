@@ -14,11 +14,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
 const Report = (props) => {
   const classes = useStyles();
   const [{ user }] = useContext(Context);
   const { companyId } = user || {};
-
+  const [refreshHack, setRefreshHack] = useState(0);
   const initialReportFilter = React.useMemo(
     () => ({
       selectedEmployees: [],
@@ -31,14 +36,15 @@ const Report = (props) => {
 
   const handleTimeTableFilterChange = React.useCallback((filter) => {
     setFilterState(filter);
+    setRefreshHack((c) => c + 1);
   }, []);
 
-  const { selectedEmployees, fromDate, toDate } = filterState;
   console.log("filterState", filterState);
+  const { selectedEmployees, fromDate, toDate } = filterState;
   const employeeIds = useMemo(() => selectedEmployees.map(({ id }) => id), [
     selectedEmployees,
   ]);
-  
+
   return (
     <div className={classes.root} id="reportRoot">
       <Grid container spacing={4} justify="center">
@@ -50,6 +56,7 @@ const Report = (props) => {
         </Grid>
         <Grid item xs>
           <TimeCardTable
+            refreshHack={refreshHack}
             companyId={companyId}
             employeeIds={employeeIds}
             fromDate={fromDate}

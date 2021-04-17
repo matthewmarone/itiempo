@@ -179,8 +179,18 @@ const createTimeSheetRow = (timeRecords, iconClassName) =>
   );
 
 const TimeCardTableMultiple = (props) => {
-  const { companyId, fromDate, toDate, employeeIds = [], ...rest } = props;
-  const [runQuery, { loading, data }] = useTimeRecordReport();
+  const {
+    companyId,
+    fromDate,
+    toDate,
+    employeeIds = [],
+    refreshHack,
+    ...rest
+  } = props;
+  const [runQuery, { data, networkStatus }] = useTimeRecordReport();
+
+  const loading = networkStatus ? networkStatus < 7 : false;
+
   const { timeRecordReport: { items } = {} } = data || {};
 
   useEffect(() => {
@@ -191,15 +201,20 @@ const TimeCardTableMultiple = (props) => {
       };
       runQuery(filter);
     }
-  }, [fromDate, runQuery, toDate]);
+  }, [fromDate, runQuery, toDate, refreshHack]);
 
   const timeRecords = useMemo(() => {
     const recordsMap = new Map();
-    employeeIds.forEach((id) => recordsMap.set(id, []));
+    const filtering = employeeIds?.length > 0;
+    if (filtering) employeeIds.forEach((id) => recordsMap.set(id, []));
 
     return (items || []).reduce((recMap, curr) => {
       const r = recMap.get(curr.employeeId);
-      if (r) r.push(curr);
+      if (r) {
+        r.push(curr);
+      } else if (!filtering) {
+        recMap.set(curr.employeeId, [curr]);
+      }
       return recMap;
     }, recordsMap);
   }, [employeeIds, items]);
@@ -460,6 +475,7 @@ TimeCardTable.propTypes = {
   fromDate: PropTypes.string,
   toDate: PropTypes.string,
   singleEmployee: PropTypes.bool,
+  refreshHack: PropTypes.number,
 };
 
 export default TimeCardTable;

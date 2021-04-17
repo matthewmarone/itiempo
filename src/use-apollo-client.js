@@ -14,21 +14,43 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
+        keyArgs: false,
         timeRecordReport: {
-          read(existing, { readField }) {
+          read(existing, { args: { filter }, readField }) {
             if (existing) {
+              const { from, to } = filter;
               // We have data and a timestamp filter to filter
               const { items } = existing;
 
               if (!items) return existing; // Could be an error obj
 
               const filteredItems = items.filter((value) => {
+                const clockIn = readField("timestampIn", value);
                 const _deleted = readField("_deleted", value);
-                return !_deleted;
+                return !_deleted && clockIn >= from && clockIn <= to;
               });
               return { ...existing, items: filteredItems };
             } else {
               return existing;
+            }
+          },
+          merge(existing, incoming, { readField }) {
+            const { items: existingItems } = existing || {};
+            const { items: incomingItems } = incoming || {};
+            if (existingItems && incomingItems) {
+              const itemsCombined = mergeSortedLists(
+                existingItems,
+                incomingItems,
+                (ref1, ref2) => {
+                  const t1 = readField("timestampIn", ref1);
+                  const t2 = readField("timestampIn", ref2);
+                  return t1 === t2 ? 0 : t1 < t2 ? -1 : 1;
+                },
+                false
+              );
+              return { ...incoming, items: itemsCombined };
+            } else {
+              return incomingItems ? incoming : existing;
             }
           },
         },
@@ -84,12 +106,6 @@ const cache = new InMemoryCache({
             }
           },
           merge(existing, incoming, { args: { sortDirection }, readField }) {
-            logger.debug(
-              "listEmployeeTimeRecords Policy (Merge)",
-              existing,
-              incoming,
-              sortDirection
-            );
             if (sortDirection !== "DESC") {
               logger.error(
                 "Time Records must always be queried in DESC order."
