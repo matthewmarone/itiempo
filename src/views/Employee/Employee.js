@@ -69,13 +69,16 @@ const EmployeeView = (props) => {
    */
   const update = useCallback(
     (currEmployee, updatedFields) => {
-      const { roles: updateRoles, ...changes } = updatedFields;
+      const { roles: updateRoles, payRates, ...changes } = updatedFields;
       if (changes) {
         const variables = {
           input: {
             ...currEmployee,
             ...changes,
             updateRoles,
+            payRates: payRates?.map((r) => {
+              return { ...r, __typename: undefined };
+            }),
             __typename: undefined,
           },
         };
