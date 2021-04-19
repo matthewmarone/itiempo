@@ -18,6 +18,7 @@ import {
   getTimeDifference,
   dateTimeLocalToUnixTimestamp,
   getEarnings,
+  isValidPayRate,
 } from "helpers";
 import {
   useCreateTimeRecord,
@@ -80,15 +81,14 @@ const CreateRecord = (props) => {
   );
   const handleSave = useCallback(() => {
     const { noteIn, noteOut, rate: r, ...rest } = formState;
-    const rate =
-      r?.amount > 0
-        ? {
-            name: r.name,
-            amount: r.amount,
-            isHourly: r.isHourly,
-            isDefault: r.isDefault,
-          }
-        : null;
+    const rate = isValidPayRate(r)
+      ? {
+          name: r.name,
+          amount: r.amount,
+          isHourly: r.isHourly,
+          isDefault: r.isDefault,
+        }
+      : null;
     const clockInDetails = { note: noteIn };
     const clockOutDetails = { note: noteOut };
     const input = { ...rest, rate, clockInDetails, clockOutDetails };
@@ -145,15 +145,14 @@ const UpdateRecord = (props) => {
   );
   const handleSave = useCallback(() => {
     const { noteIn, noteOut, rate: r, ...rest } = formState;
-    const rate =
-      r?.amount > 0
-        ? {
-            name: r.name,
-            amount: r.amount,
-            isHourly: r.isHourly,
-            isDefault: r.isDefault,
-          }
-        : null;
+    const rate = isValidPayRate(r)
+      ? {
+          name: r.name,
+          amount: r.amount,
+          isHourly: r.isHourly,
+          isDefault: r.isDefault,
+        }
+      : null;
     const clockInDetails = { note: noteIn };
     const clockOutDetails = { note: noteOut };
     const input = { ...rest, rate, clockInDetails, clockOutDetails };
@@ -406,7 +405,9 @@ const TimeRecordEdit = (props) => {
   const formState = getInitialState(record, eId);
   console.log("formState", formState);
 
-  return !open || !formState.id ? (
+  return !open ? (
+    <React.Fragment />
+  ) : !formState.id ? (
     <CreateRecord
       initialState={formState}
       open={open}

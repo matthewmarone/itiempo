@@ -22,4 +22,5 @@ export {
   isDigits,
   getCounterFromMiliSeconds,
   getEarnings,
+  isValidPayRate,
 } from "./common";

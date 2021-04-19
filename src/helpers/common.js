@@ -245,3 +245,19 @@ export const mergeSortedLists = (
  * @returns true if the string contains only digits (0-9) otherwise false
  */
 export const isDigits = (str) => /^\d+$/.test(str);
+
+/**
+ *
+ * @param {*} rate
+ * @returns
+ */
+export const isValidPayRate = (rate) => {
+  return (
+    rate?.name?.length > 0 &&
+    rate?.amount >= 0 &&
+    rate?.isHourly !== undefined &&
+    rate?.isHourly !== null &&
+    rate?.isDefault !== undefined &&
+    rate?.isDefault !== null
+  );
+};

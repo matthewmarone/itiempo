@@ -12,7 +12,7 @@ import {
   Verse,
   EmployeePayRateSelect,
 } from "components";
-import { getBlobFromDataURI } from "helpers";
+import { getBlobFromDataURI, isValidPayRate } from "helpers";
 import PropTypes from "prop-types";
 import { useClockIn, useClockOut, useUploadImage } from "hooks";
 import { v4 as uuidv4 } from "uuid";
@@ -255,7 +255,7 @@ const ClockinDialog = (props) => {
     const input = {
       photo: imgName,
       note: formState.note,
-      rate: !isClockedIn ? rest : undefined,
+      rate: !isClockedIn && isValidPayRate(rest) ? rest : undefined,
       id: !isClockedIn ? undefined : latestRecord.id,
       _version: !isClockedIn ? undefined : latestRecord._version,
     };
