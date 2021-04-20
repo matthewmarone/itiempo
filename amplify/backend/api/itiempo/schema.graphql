@@ -84,11 +84,11 @@ enum LANG {
 }
 type Verse
   @model(subscriptions: { level: off }, mutations: null)
-  # @key(
-  #   name: "byMonthYear"
-  #   fields: ["monthYear"]
-  #   queryField: "listVerseByMonthYear"
-  # )
+  @key(
+    name: "byYearDay"
+    fields: ["yearDay"]
+    queryField: "listVerseByYearDay"
+  )
   @auth(rules: [{ allow: public, provider: iam }]) {
   id: ID!
   # monthYear: String! # Ex: 01-01 jan 1st 12-31st for Dec 31st
