@@ -105,6 +105,42 @@ export const listVerses = /* GraphQL */ `
     }
   }
 `;
+export const listVerseByYearDay = /* GraphQL */ `
+  query ListVerseByYearDay(
+    $yearDay: Int
+    $sortDirection: ModelSortDirection
+    $filter: ModelVerseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listVerseByYearDay(
+      yearDay: $yearDay
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        yearDay
+        lang
+        book
+        chapter
+        verseStart
+        verseEnd
+        translation
+        text
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const syncVerses = /* GraphQL */ `
   query SyncVerses(
     $filter: ModelVerseFilterInput

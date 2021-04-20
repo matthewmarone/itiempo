@@ -634,7 +634,18 @@ export const schema = {
                     "properties": {
                         "subscriptions": {
                             "level": "off"
-                        }
+                        },
+                        "mutations": null
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byYearDay",
+                        "fields": [
+                            "yearDay"
+                        ],
+                        "queryField": "listVerseByYearDay"
                     }
                 },
                 {
@@ -923,5 +934,5 @@ export const schema = {
             }
         }
     },
-    "version": "07677d21657c6bf1ca477872a5eac22c"
+    "version": "baee7050d4b63f5d808f0baab6597f3f"
 };
