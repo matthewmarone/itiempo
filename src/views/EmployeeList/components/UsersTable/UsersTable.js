@@ -85,7 +85,11 @@ const NameContainer = (props) => {
     </div>
   );
 };
-
+/**
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 const UsersTable = (props) => {
   const { className, employees, ...rest } = props;
 

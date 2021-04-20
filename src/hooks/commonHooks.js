@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect } from "react";
 /**
  *
  * @param {*} eventName
@@ -40,29 +40,29 @@ export const useEventListener = (eventName, handler, element = window) => {
   );
 };
 
-/**
- * 
- * @returns 
- */
-export const useLogger = () => {
-  const logger = useMemo(() => {
-    return {
-      log(...msg) {
-        console.log(msg);
-      },
-      error(...msg) {
-        console.error(msg);
-      },
-      warn(...msg) {
-        console.warn(msg);
-      },
-      info(...msg) {
-        console.info(msg);
-      },
-      debug(...msg) {
-        console.debug(msg);
-      },
-    };
-  }, []);
-  return logger;
-};
+// /**
+//  *
+//  * @returns
+//  */
+// export const useLogger = () => {
+//   const logger = useMemo(() => {
+//     return {
+//       log(...msg) {
+//         console.log(msg);
+//       },
+//       error(...msg) {
+//         console.error(msg);
+//       },
+//       warn(...msg) {
+//         console.warn(msg);
+//       },
+//       info(...msg) {
+//         console.info(msg);
+//       },
+//       debug(...msg) {
+//         console.debug(msg);
+//       },
+//     };
+//   }, []);
+//   return logger;
+// };

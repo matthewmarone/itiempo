@@ -166,7 +166,6 @@ export const useCreateEmployee = () =>
         };
         // Create a new list from the existing cached data,
         // but adding in the new record where is should be
-        // timerecords are allways querried and stored in desc order of timestampIn
         const mergedItems = mergeSortedLists(
           [newRecord],
           prevRecords || [],
@@ -373,15 +372,33 @@ export const useGetEmployee = (employeeId) => {
 };
 /**
  *
+ * @param {*} companyId
+ * @returns
  */
-export const useListEmployeesByEmail = (companyId) =>
-  useQuery(gql(listEmployeesByEmailGQL), {
+export const useListEmployeesByEmail = (companyId) => {
+  const retVal = useQuery(gql(listEmployeesByEmailGQL), {
     variables: {
       companyId,
-      limit: CONSTS.LIMIT_25,
+      limit: CONSTS.LIMIT_DEFAULT,
       sortDirection: CONSTS.ASC,
     },
   });
+
+  const { data, fetchMore, variables } = retVal;
+
+  useEffect(() => {
+    if (data?.listEmployeesByEmail?.nextToken)
+      fetchMore({
+        variables: {
+          ...variables,
+          limit: CONSTS.LIMIT_50,
+          nextToken: data.listEmployeesByEmail.nextToken,
+        },
+      });
+  }, [data?.listEmployeesByEmail?.nextToken, fetchMore, variables]);
+
+  return retVal;
+};
 /**
  *
  */

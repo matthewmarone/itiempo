@@ -132,6 +132,44 @@ const cache = new InMemoryCache({
             }
           },
         },
+        listEmployeesByEmail: {
+          // In the future we could maintain a single list, regardless of sort
+          keyArgs: ["companyId", "sortDirection"],
+          read(existing, { readField }) {
+            if (existing) {
+              // We have data and a timestamp filter to filter
+              const { items } = existing;
+
+              if (!items) return existing; // Could be an error obj
+
+              const filteredItems = items.filter(
+                (value) => !readField("_deleted", value)
+              );
+              return { ...existing, items: filteredItems };
+            } else {
+              return existing;
+            }
+          },
+          merge(existing, incoming, { args: { sortDirection }, readField }) {
+            const { items: existingItems } = existing || {};
+            const { items: incomingItems } = incoming || {};
+            if (existingItems && incomingItems) {
+              const itemsCombined = mergeSortedLists(
+                existingItems,
+                incomingItems,
+                (ref1, ref2) => {
+                  const t1 = readField("email", ref1);
+                  const t2 = readField("email", ref2);
+                  return t1 === t2 ? 0 : t1 < t2 ? -1 : 1;
+                },
+                sortDirection === "ASC"
+              );
+              return { ...incoming, items: itemsCombined };
+            } else {
+              return incomingItems ? incoming : existing;
+            }
+          },
+        },
       },
     },
   },
