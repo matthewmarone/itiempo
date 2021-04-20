@@ -83,7 +83,7 @@ enum LANG {
   es # Spanish
 }
 type Verse
-  @model(subscriptions: { level: off })
+  @model(subscriptions: { level: off }, mutations: null)
   # @key(
   #   name: "byMonthYear"
   #   fields: ["monthYear"]
