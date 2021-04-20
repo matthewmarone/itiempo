@@ -1,12 +1,8 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Context } from "Store";
 import { makeStyles } from "@material-ui/styles";
 import { UsersToolbar, UsersTable } from "./components";
-import { Logger } from "aws-amplify";
 import { useListEmployeesByEmail } from "hooks";
-
-// eslint-disable-next-line
-const logger = new Logger("UserList.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,11 +18,32 @@ const EmployeeList = () => {
   const [{ user }] = useContext(Context);
   const { companyId } = user || {};
   const { data } = useListEmployeesByEmail(companyId);
-  const { listEmployeesByEmail: { items: employees } = {} } = data || {};
+  const { listEmployeesByEmail: { items } = {} } = data || {};
+
+  // State for UsersToolBar
+  const [usrSearchStr, setUserSearchStr] = useState("");
+  const handleSearchStrChange = useCallback(
+    ({ target: { value } }) => setUserSearchStr(value),
+    []
+  );
+
+  const employees = useMemo(() => {
+    if (usrSearchStr?.trim().length > 0) {
+      return (items || []).filter((i) => {
+        const str = `${i.firstName} ${i.lastName}`;
+        return str.includes(usrSearchStr);
+      });
+    } else {
+      return items || [];
+    }
+  }, [items, usrSearchStr]);
 
   return (
     <div className={classes.root}>
-      <UsersToolbar />
+      <UsersToolbar
+        searchValue={usrSearchStr}
+        onSearchChange={handleSearchStrChange}
+      />
       <div className={classes.content}>
         <UsersTable employees={employees || []} />
       </div>
