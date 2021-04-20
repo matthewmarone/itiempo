@@ -45,7 +45,7 @@ const EmployeeList = () => {
         onSearchChange={handleSearchStrChange}
       />
       <div className={classes.content}>
-        <UsersTable employees={employees || []} />
+        <UsersTable employees={employees} />
       </div>
     </div>
   );

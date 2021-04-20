@@ -378,7 +378,7 @@ export const useListEmployeesByEmail = (companyId) =>
   useQuery(gql(listEmployeesByEmailGQL), {
     variables: {
       companyId,
-      limit: CONSTS.LIMIT_DEFAULT,
+      limit: CONSTS.LIMIT_25,
       sortDirection: CONSTS.ASC,
     },
   });

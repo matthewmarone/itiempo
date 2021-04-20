@@ -97,12 +97,11 @@ const UsersTable = (props) => {
   const [open, setOpen] = useState(false);
 
   const handleSelectAll = (event) => {
-    const { users } = props;
 
     let selectedUsers;
 
     if (event.target.checked) {
-      selectedUsers = users.map((user) => user.id);
+      selectedUsers = employees.map((user) => user.id);
     } else {
       selectedUsers = [];
     }
