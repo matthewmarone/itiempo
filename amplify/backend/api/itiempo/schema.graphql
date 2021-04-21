@@ -47,59 +47,10 @@ input PunchInByPinInput {
   rateName: String
 }
 
-# type QuickPunchCard {
-#   id: ID!
-#   employeeId: ID!
-#   companyId: ID!
-#   timestampIn: AWSTimestamp!
-#   timestampOut: AWSTimestamp
-#   clockInDetails: PunchCardDetails!
-#   clockOutDetails: PunchCardDetails
-#   rate: PayRate
-#   approved: Boolean
-#   approvedBy: ID
-# }
-
-# type QuickDirectoryConnection {
-#   items: [QuickDirectory]
-#   nextToken: String
-#   startedAt: AWSTimestamp
-# }
-
-# type QuickDirectory {
-#   id: ID!
-#   companyId: ID!
-#   employeeId: ID!
-#   nickName: String!
-# }
-
 type ModelTimeRecConnection {
   items: [TimeRecord]
   nextToken: String
   startedAt: AWSTimestamp
-}
-enum LANG {
-  en # English
-  es # Spanish
-}
-type Verse
-  @model(subscriptions: { level: off }, mutations: null)
-  @key(
-    name: "byYearDay"
-    fields: ["yearDay"]
-    queryField: "listVerseByYearDay"
-  )
-  @auth(rules: [{ allow: public, provider: iam }]) {
-  id: ID!
-  # monthYear: String! # Ex: 01-01 jan 1st 12-31st for Dec 31st
-  yearDay: Int!
-  lang: LANG!
-  book: String!
-  chapter: Int!
-  verseStart: Int!
-  verseEnd: Int
-  translation: String!
-  text: String!
 }
 
 type QuickPunch
@@ -123,7 +74,6 @@ type QuickPunch
         operations: [create, update, read, delete]
       }
       {
-        # Allow all memebers of a company to read
         allow: owner
         ownerField: "employeeId"
         identityClaim: "eId"
