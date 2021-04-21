@@ -23,7 +23,7 @@ import {
 import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Storage } from "aws-amplify";
-import { mergeSortedLists } from "helpers";
+import { mergeSortedLists, daysIntoYear } from "helpers";
 // eslint-disable-next-line
 const logger = new Logger("hooks.js", "ERROR");
 
@@ -33,6 +33,38 @@ export const CONSTS = {
   LIMIT_50: 50,
   ASC: "ASC",
   DESC: "DESC",
+};
+
+/**
+ *
+ * @param {*} settings
+ * @returns [verseObj, setArgs]
+ */
+export const useVerse = (settings) => {
+  const [verseObj, setVerseObj] = useState();
+  const [args, setArgs] = useState({
+    lang: "en",
+    yearDay: daysIntoYear(),
+    ...(settings || {}),
+  });
+
+  useEffect(() => {
+    const { lang = "en", yearDay } = args;
+    import(`assets/verses/${lang}`)
+      .then((d) => {
+        const { default: allVerses } = d || {};
+        if (!Array.isArray(allVerses) || allVerses.length === 0)
+          throw new Error(`No verses availble for lang '${lang}'`);
+        // Get the verse for the day, or the last one on the list in none available
+        setVerseObj(allVerses[yearDay - 1] || allVerses[allVerses.length - 1]);
+      })
+      .catch((e) => {
+        console.error(e);
+        setVerseObj(null);
+      });
+  }, [args]);
+
+  return [verseObj, setArgs];
 };
 
 /**

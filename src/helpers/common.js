@@ -261,3 +261,20 @@ export const isValidPayRate = (rate) => {
     rate?.isDefault !== null
   );
 };
+
+/**
+ *
+ * @param {*} date
+ * @returns the day of the year 1-365/(366 when leap year)
+ */
+export const daysIntoYear = (date) => {
+  const d = date || new Date();
+  return (
+    (Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) -
+      Date.UTC(d.getFullYear(), 0, 0)) /
+    24 /
+    60 /
+    60 /
+    1000
+  );
+};

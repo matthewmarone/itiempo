@@ -20,6 +20,7 @@ export {
   usePunchInByPin,
   useDeleteTimeRecord,
   useEmployeePayRates,
+  useVerse,
 } from "./apiHooks";
 
 export { useEventListener } from "./commonHooks";

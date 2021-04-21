@@ -1,4 +1,17 @@
-import { mergeSortedLists, isDigits } from "../common";
+import { mergeSortedLists, isDigits, daysIntoYear } from "../common";
+
+test("daysIntoYear", () => {
+  [
+    { d: new Date(2016, 0, 1), e: 1 },
+    { d: new Date(2016, 1, 1), e: 32 },
+    { d: new Date(2016, 2, 1), e: 61 },
+    { d: new Date(2017, 2, 1), e: 60 },
+    { d: new Date(2016, 5, 1), e: 153 },
+    { d: new Date(2016, 11, 31), e: 366 },
+    { d: new Date(2017, 11, 31), e: 365 },
+    { d: new Date(2100, 11, 31), e: 365 },
+  ].forEach(({ d, e }) => expect(daysIntoYear(d)).toBe(e));
+});
 
 test("isDigit", () => {
   expect(isDigits("123")).toBeTruthy();

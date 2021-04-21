@@ -1,20 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import PropTypes from "prop-types";
-
-const defaultVerse = {
-  en: {
-    lang: "en",
-    book: "John",
-    chapter: 3,
-    verseStart: 16,
-    verseEnd: undefined,
-    translation: "NIV",
-    text:
-      "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
-  },
-};
+import { useVerse } from "hooks";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -32,14 +20,28 @@ const useStyles = makeStyles((theme) => ({
  */
 const Verse = (props) => {
   const classes = useStyles();
-  const { lang = "en" } = props;
-  const [verse] = useState(defaultVerse?.[lang] || defaultVerse.en);
+  const { lang } = props;
+  const [verse, setVerseOptions] = useVerse({ lang: lang || "en" });
+
+  useEffect(() => {
+    if (lang) setVerseOptions({ lang });
+  }, [lang, setVerseOptions]);
 
   const citation = useMemo(() => {
-    const { book, chapter, verseStart: vs, verseEnd: ve, translation } = verse;
-    return `${book} ${chapter}:${vs}${
-      !ve || ve === vs ? `` : `-${ve}`
-    } (${translation})`;
+    if (verse) {
+      const {
+        book,
+        chapter,
+        verseStart: vs,
+        verseEnd: ve,
+        translation,
+      } = verse;
+      return `${book} ${chapter}:${vs}${
+        !ve || ve === vs ? `` : `-${ve}`
+      } (${translation})`;
+    } else {
+      return "";
+    }
   }, [verse]);
 
   return (
@@ -53,7 +55,7 @@ const Verse = (props) => {
         gutterBottom
         className={classes.verse}
       >
-        <i>{verse.text}</i>
+        <i>{verse?.text || ""}</i>
       </Typography>
       <Typography
         variant="body1"

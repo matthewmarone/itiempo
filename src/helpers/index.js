@@ -23,4 +23,5 @@ export {
   getCounterFromMiliSeconds,
   getEarnings,
   isValidPayRate,
+  daysIntoYear,
 } from "./common";
