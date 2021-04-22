@@ -40,7 +40,7 @@ const ShowTime = (props) => {
 
 const Content = (props) => {
   const classes = useStyles();
-  const { timestampIn, timestampOut } = props;
+  const { timestampIn, timestampOut, employeeId } = props;
   return (
     <div className={classes.root}>
       <Grid
@@ -65,7 +65,7 @@ const Content = (props) => {
           )}
         </Grid>
         <Grid item xs={12}>
-          <Verse />
+          <Verse employeeId={employeeId} />
         </Grid>
       </Grid>
     </div>
@@ -78,7 +78,7 @@ Content.propTypes = { message: PropTypes.string };
  * @param {*} props
  */
 const ClockSuccessDialog = (props) => {
-  const { open, onClose, record } = props;
+  const { open, onClose, record, employeeId } = props;
 
   const { timestampIn, timestampOut } = record || {};
 
@@ -94,7 +94,11 @@ const ClockSuccessDialog = (props) => {
         !record ? `Loading` : `You're Clocked ${!timestampOut ? `In` : `Out`}`
       }
       dialogContent={
-        <Content timestampIn={timestampIn} timestampOut={timestampOut} />
+        <Content
+          timestampIn={timestampIn}
+          timestampOut={timestampOut}
+          employeeId={employeeId}
+        />
       }
       actions={[
         <Button key="close" onClick={handleClose} color="primary">

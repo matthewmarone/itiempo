@@ -132,5 +132,13 @@
     "verseEnd": 30,
     "translation": "NIV",
     "text": "I give them eternal life, and they shall never perish; no one will snatch them out of my hand. My Father, who has given them to me, is greater than all; no one can snatch them out of my Father’s hand. I and the Father are one."
+  },
+  {
+    "book": "Romans",
+    "chapter": 1,
+    "verseStart": 20,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "For since the creation of the world God’s invisible qualities—his eternal power and divine nature—have been clearly seen, being understood from what has been made, so that people are without excuse."
   }
 ]

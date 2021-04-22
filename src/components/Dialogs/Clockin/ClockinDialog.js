@@ -87,7 +87,7 @@ ClockInContent.propTypes = {
 };
 
 const Saving = (props) => {
-  const { saving, message } = props;
+  const { saving, message, employeeId } = props;
   return (
     <CenterContent>
       {!saving ? (
@@ -103,7 +103,7 @@ const Saving = (props) => {
       <Typography variant="body1" color={!saving ? "primary" : "textSecondary"}>
         {message}
       </Typography>
-      <Verse />
+      <Verse employeeId={employeeId} />
     </CenterContent>
   );
 };
@@ -117,7 +117,7 @@ Saving.propTypes = {
  * @param {*} props
  */
 const ClockingIn = (props) => {
-  const { input, onSuccess, onError = () => {} } = props;
+  const { input, onSuccess, onError = () => {}, employeeId } = props;
   const [runQuery, { loading, error, data }] = useClockIn();
 
   useEffect(() => {
@@ -131,8 +131,8 @@ const ClockingIn = (props) => {
   useEffect(() => {
     if (!loading && error) onError(error);
   }, [error, onError, loading]);
-
-  return <Saving saving message="Clocking you in..." />;
+  
+  return <Saving saving message="Clocking you in..." employeeId={employeeId} />;
 };
 ClockingIn.propTypes = {
   input: PropTypes.object,
@@ -145,7 +145,7 @@ ClockingIn.propTypes = {
  * @param {*} props
  */
 const ClockingOut = (props) => {
-  const { input, onSuccess, onError = () => {} } = props;
+  const { input, onSuccess, onError = () => {}, employeeId } = props;
   const [runQuery, { loading, error, data }] = useClockOut();
 
   useEffect(() => {
@@ -159,7 +159,10 @@ const ClockingOut = (props) => {
   useEffect(() => {
     if (!loading && error) onError(error);
   }, [error, onError, loading]);
-  return <Saving saving message="Clocking you out..." />;
+  
+  return (
+    <Saving saving message="Clocking you out..." employeeId={employeeId} />
+  );
 };
 ClockingOut.propTypes = {
   input: PropTypes.object,
@@ -172,7 +175,14 @@ ClockingOut.propTypes = {
  * @param {*} props
  */
 const ClockingInOrOut = (props) => {
-  const { input, imageVars, onSuccess, clockIn, onError = () => {} } = props;
+  const {
+    input,
+    imageVars,
+    onSuccess,
+    clockIn,
+    onError = () => {},
+    employeeId,
+  } = props;
   const [{ clockIn: clockingIn, ...propState }] = useState({
     clockIn,
     input,
@@ -184,13 +194,13 @@ const ClockingInOrOut = (props) => {
   useEffect(() => {
     if (imageVars) uploadImg(imageVars.fileName, imageVars.imgBlob);
   }, [imageVars, uploadImg]);
-
+  
   return imageVars && !response && !error ? (
-    <Saving saving message="Saving your selfie..." />
+    <Saving saving message="Saving your selfie..." employeeId={employeeId} />
   ) : clockingIn ? (
-    <ClockingIn {...propState} />
+    <ClockingIn {...propState} employeeId={employeeId} />
   ) : (
-    <ClockingOut {...propState} />
+    <ClockingOut {...propState} employeeId={employeeId} />
   );
 };
 ClockingInOrOut.propTypes = {
@@ -288,7 +298,7 @@ const ClockinDialog = (props) => {
   );
   if (!success) actions.push(clockInBtn);
   actions.push(cancleBtn);
-
+  
   return (
     <DialogTemplate
       open={open}
@@ -304,10 +314,12 @@ const ClockinDialog = (props) => {
               clockIn={!isClockedIn}
               imageVars={imageVars}
               onSuccess={() => setSuccess(true)}
+              employeeId={employee?.id}
             />
           ) : (
             <Saving
               message={`Done, you are clocked ${isClockedIn ? `in` : `out`}.`}
+              employeeId={employee?.id}
             />
           )
         ) : (

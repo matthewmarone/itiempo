@@ -115,6 +115,7 @@ const PinClockInDialog = (props) => {
               open={open}
               onClose={handleClose}
               record={timeRecord}
+              employeeId={selectedRecord?.employeeId}
             />
           );
         case scene.photoAndNote:
@@ -147,6 +148,7 @@ const PinClockInDialog = (props) => {
       handlePinSubmit,
       open,
       pinRecords,
+      selectedRecord?.employeeId,
       timeRecord,
     ]
   );
