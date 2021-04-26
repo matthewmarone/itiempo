@@ -140,5 +140,29 @@
     "verseEnd": null,
     "translation": "NIV",
     "text": "For since the creation of the world God’s invisible qualities—his eternal power and divine nature—have been clearly seen, being understood from what has been made, so that people are without excuse."
+  },
+  {
+    "book": "Romans",
+    "chapter": 14,
+    "verseStart": 11,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "It is written: “‘As surely as I live,’ says the Lord, ‘every knee will bow before me; every tongue will acknowledge God.’”"
+  },
+  {
+    "book": "1 Peter",
+    "chapter": 1,
+    "verseStart": 18,
+    "verseEnd": 19,
+    "translation": "NIV",
+    "text": "For you know that it was not with perishable things such as silver or gold that you were redeemed from the empty way of life handed down to you from your ancestors, but with the precious blood of Christ, a lamb without blemish or defect."
+  },
+  {
+    "book": "Hebrews",
+    "chapter": 7,
+    "verseStart": 25,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "Therefore he is able to save completely those who come to God through him, because he always lives to intercede for them."
   }
 ]
