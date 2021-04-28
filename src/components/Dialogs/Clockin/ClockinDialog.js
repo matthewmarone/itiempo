@@ -4,6 +4,7 @@ import {
   TextField,
   CircularProgress,
   Typography,
+  Grid,
 } from "@material-ui/core";
 import { DialogTemplate } from "../components";
 import {
@@ -17,6 +18,7 @@ import PropTypes from "prop-types";
 import { useClockIn, useClockOut, useUploadImage } from "hooks";
 import { v4 as uuidv4 } from "uuid";
 import { makeStyles } from "@material-ui/styles";
+import clsx from "clsx";
 import { Logger } from "aws-amplify";
 // eslint-disable-next-line no-unused-vars
 const logger = new Logger("Clockin.js", "ERROR");
@@ -24,6 +26,10 @@ const logger = new Logger("Clockin.js", "ERROR");
 const useStyles = makeStyles((theme) => ({
   wageSelectRoot: {
     minWidth: "15em",
+  },
+  hide: {
+    display: "none",
+    visibility: "hidden",
   },
 }));
 
@@ -46,33 +52,37 @@ const ClockInContent = (props) => {
   const handlePayRateChange = (value) =>
     onChange({ target: { name: "rate", value } });
   return (
-    <React.Fragment>
-      {isClockedIn || (
+    <Grid container>
+      <Grid item className={clsx(isClockedIn && classes.hide)} xs={12}>
         <EmployeePayRateSelect
           rate={rate}
           payRates={payRates}
           onChange={handlePayRateChange}
           classes={{ root: classes.wageSelectRoot }}
         />
-      )}
-      <WebcamCapture
-        ref={webcamRef}
-        onReady={onReady}
-        onUserMediaError={onError}
-        screenshotQuality={0.1}
-      />
-      <TextField
-        fullWidth
-        label="Notes"
-        name="note"
-        value={note || ""}
-        onChange={onChange}
-        margin="dense"
-        variant="outlined"
-        multiline
-        rows={3}
-      />
-    </React.Fragment>
+      </Grid>
+      <Grid item xs={12}>
+        <WebcamCapture
+          ref={webcamRef}
+          onReady={onReady}
+          onUserMediaError={onError}
+          screenshotQuality={0.1}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          label="Notes"
+          name="note"
+          value={note || ""}
+          onChange={onChange}
+          margin="dense"
+          variant="outlined"
+          multiline
+          rows={3}
+        />
+      </Grid>
+    </Grid>
   );
 };
 ClockInContent.propTypes = {
@@ -131,7 +141,7 @@ const ClockingIn = (props) => {
   useEffect(() => {
     if (!loading && error) onError(error);
   }, [error, onError, loading]);
-  
+
   return <Saving saving message="Clocking you in..." employeeId={employeeId} />;
 };
 ClockingIn.propTypes = {
@@ -159,7 +169,7 @@ const ClockingOut = (props) => {
   useEffect(() => {
     if (!loading && error) onError(error);
   }, [error, onError, loading]);
-  
+
   return (
     <Saving saving message="Clocking you out..." employeeId={employeeId} />
   );
@@ -194,7 +204,7 @@ const ClockingInOrOut = (props) => {
   useEffect(() => {
     if (imageVars) uploadImg(imageVars.fileName, imageVars.imgBlob);
   }, [imageVars, uploadImg]);
-  
+
   return imageVars && !response && !error ? (
     <Saving saving message="Saving your selfie..." employeeId={employeeId} />
   ) : clockingIn ? (
@@ -298,7 +308,7 @@ const ClockinDialog = (props) => {
   );
   if (!success) actions.push(clockInBtn);
   actions.push(cancleBtn);
-  
+
   return (
     <DialogTemplate
       open={open}
