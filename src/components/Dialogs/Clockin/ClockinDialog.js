@@ -52,7 +52,7 @@ const ClockInContent = (props) => {
   const handlePayRateChange = (value) =>
     onChange({ target: { name: "rate", value } });
   return (
-    <Grid container>
+    <Grid container spacing={1}>
       <Grid item className={clsx(isClockedIn && classes.hide)} xs={12}>
         <EmployeePayRateSelect
           rate={rate}
