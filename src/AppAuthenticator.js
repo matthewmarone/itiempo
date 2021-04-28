@@ -50,6 +50,7 @@ const AppAuthenticator = ({ children }) => {
   const [authorized, setAuthorized] = useState(false);
   const [{ user }, dispatch] = useContext(Context);
   const client = useApolloClient();
+
   /**
    *
    * @param {*} param0
@@ -80,7 +81,11 @@ const AppAuthenticator = ({ children }) => {
         goToAppOrWelcomeNewUser(payload);
       })
       .catch((e) => {
-        setAuthState(UIAuthState.SignIn); // Back to signin page
+        setAuthState(
+          window?.location?.search?.includes("signup=true")
+            ? UIAuthState.SignUp
+            : UIAuthState.SignIn
+        ); // Back to signin page
         if (e !== "No current user") logger.error(e);
       });
   }, [dispatch, goToAppOrWelcomeNewUser]);
