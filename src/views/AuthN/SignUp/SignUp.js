@@ -198,10 +198,30 @@ const SignUp = (props) => {
             color="textSecondary"
             variant="body1"
           >
-            I have read the{" "}
-            <Link color="primary" component="a" underline="always" variant="h6">
-              Terms and Conditions
+            I have read and agree to the{" "}
+            <Link
+              color="primary"
+              component="a"
+              underline="always"
+              variant="h6"
+              href="https://app.termly.io/document/privacy-policy/88234c62-28d5-4269-873f-e35902194e82"
+              target="_blank"
+            >
+              Privacy Policy
             </Link>
+            {", "}
+            and{" "}
+            <Link
+              color="primary"
+              component="a"
+              underline="always"
+              variant="h6"
+              href="https://app.termly.io/document/terms-of-use-for-ios-app/bffa37e4-1385-4f95-9022-f33c29520be7"
+              target="_blank"
+            >
+              Terms & Conditions
+            </Link>
+            .
           </Typography>
         </div>
         {hasError("policy") && (
