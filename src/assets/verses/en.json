@@ -180,5 +180,21 @@
     "verseEnd": 8,
     "translation": "NIV",
     "text": "In your relationships with one another, have the same mindset as Christ Jesus: Who, being in very nature God, did not consider equality with God something to be used to his own advantage; rather, he made himself nothing by taking the very nature of a servant, being made in human likeness. And being found in appearance as a man, he humbled himself by becoming obedient to death— even death on a cross!"
+  },
+  {
+    "book": "Job",
+    "chapter": 19,
+    "verseStart": 25,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "I know that my redeemer lives, and that in the end he will stand on the earth."
+  },
+  {
+    "book": "Ephesians",
+    "chapter": 4,
+    "verseStart": 15,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "Instead, speaking the truth in love, we will grow to become in every respect the mature body of him who is the head, that is, Christ."
   }
 ]
