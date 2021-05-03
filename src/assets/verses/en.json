@@ -212,5 +212,29 @@
     "verseEnd": 15,
     "translation": "NIV",
     "text": "Do everything without grumbling or arguing, so that you may become blameless and pure, “children of God without fault in a warped and crooked generation.” Then you will shine among them like stars in the sky"
+  },
+  {
+    "book": "1 John",
+    "chapter": 5,
+    "verseStart": 14,
+    "verseEnd": 15,
+    "translation": "NIV",
+    "text": "This is the confidence we have in approaching God: that if we ask anything according to his will, he hears us. And if we know that he hears us—whatever we ask—we know that we have what we asked of him."
+  },
+  {
+    "book": "Isaiah",
+    "chapter": 43,
+    "verseStart": 2,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you.  When you walk through the fire, you will not be burned; the flames will not set you ablaze."
+  },
+  {
+    "book": "Romans",
+    "chapter": 12,
+    "verseStart": 12,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "Be joyful in hope, patient in affliction, faithful in prayer."
   }
 ]
