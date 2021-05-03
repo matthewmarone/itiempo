@@ -269,6 +269,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "department": {
+                    "name": "department",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "payRates": {
                     "name": "payRates",
                     "isArray": true,
@@ -780,6 +787,34 @@ export const schema = {
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
+                },
+                "coordsLong": {
+                    "name": "coordsLong",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "coordsLat": {
+                    "name": "coordsLat",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "coordsAccuracy": {
+                    "name": "coordsAccuracy",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "coordsErrorCode": {
+                    "name": "coordsErrorCode",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
                 }
             }
         },
@@ -817,5 +852,5 @@ export const schema = {
             }
         }
     },
-    "version": "2866d38971a10e5891e6edb28f75698b"
+    "version": "62e0ef995b5956aa962a6c6caee559c1"
 };
