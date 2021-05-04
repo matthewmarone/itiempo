@@ -229,7 +229,11 @@ export const useCreateTimeRecord = () =>
 /**
  *
  */
-export const useUpdateTimeRecord = () => useMutation(gql(updateTimeRecordGQL));
+export const useUpdateTimeRecord = () =>
+  useMutation(gql(updateTimeRecordGQL), {
+    update: (cache, { data }) =>
+      updateListEmployeeTimeRecords(cache, data?.updateTimeRec, true),
+  });
 
 /**
  *
@@ -239,41 +243,67 @@ export const useDeleteTimeRecord = () => useMutation(gql(deleteTimeRecGQL));
 /**
  *
  * @param {*} cache
- * @param {*} newRecord
+ * @param {*} theRecord
+ * @param {*} isUpdate setting to true will cause the previous record to be removed from list
  */
-const updateListEmployeeTimeRecords = (cache, newRecord) => {
-  if (newRecord) {
-    // Variables needed for modifying cache
-    const { employeeId } = newRecord;
+const updateListEmployeeTimeRecords = (cache, theRecord, isUpdate) => {
+  if (theRecord) {
+    // // Variables needed for modifying cache
+    const { id: timeRecordId, employeeId } = theRecord;
     const query = gql(listEmployeeTimeRecordsGQL);
     const variables = {
       limit: CONSTS.LIMIT_DEFAULT,
       sortDirection: CONSTS.DESC,
       employeeId,
     };
-    // Get the current list from the cache
-    const {
-      listEmployeeTimeRecords: { items: prevRecords },
-    } = cache.readQuery({ query, variables }) || {
-      listEmployeeTimeRecords: {},
-    };
-    // Create a new list from the existing cached data,
-    // but adding in the new record where is should be
-    // timerecords are allways querried and stored in desc order of timestampIn
-    const mergedItems = mergeSortedLists(
-      [newRecord],
-      prevRecords || [],
-      ({ timestampIn: t1 }, { timestampIn: t2 }) =>
-        t1 === t2 ? 0 : t1 < t2 ? -1 : 1,
-      false
-    );
+    // // Get the current list from the cache
+    // const { listEmployeeTimeRecords } = cache.readQuery({
+    //   query,
+    //   variables,
+    // }) || {
+    //   listEmployeeTimeRecords: {},
+    // };
+    // // Create a new list from the existing cached data,
+    // // but adding in the new record where is should be
+    // // timerecords are allways querried and stored in desc order of timestampIn
+    // const mergedItems = mergeSortedLists(
+    //   [newRecord],
+    //   prevRecords || [],
+    //   ({ timestampIn: t1 }, { timestampIn: t2 }) =>
+    //     t1 === t2 ? 0 : t1 < t2 ? -1 : 1,
+    //   false
+    // );
     // Write the updated list w the new record to the cache
+
+    if (isUpdate) {
+      cache.modify({
+        id: "ROOT_QUERY",
+        fields: {
+          [`listEmployeeTimeRecords:{"employeeId":"${employeeId}"}`]: (
+            existing,
+            { readField }
+          ) => {
+            console.log("testing cache.modify", existing);
+            return Array.isArray(existing?.items)
+              ? {
+                  ...existing,
+                  items: existing.items.filter(
+                    (itemRef) => timeRecordId !== readField("id", itemRef)
+                  ),
+                }
+              : existing;
+          },
+        },
+      });
+    }
+
     cache.writeQuery({
       query,
       variables,
       data: {
         listEmployeeTimeRecords: {
-          items: mergedItems,
+          // items: mergedItems,
+          items: [theRecord],
         },
       },
     });
