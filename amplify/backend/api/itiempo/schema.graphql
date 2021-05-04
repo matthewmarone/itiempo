@@ -251,6 +251,7 @@ type Employee
   zip: String
   country: String
   jobTitle: String
+  department: String
   payRates: [PayRate!] # Restricted field, implemented in GraphQLResolver
   roles: [Role!]! # Restricted field, implemented in GraphQLResolver
   companyId: ID! # Write once, implemented in GraphQLResolver
@@ -314,6 +315,10 @@ type PunchCardDetails {
   photo: String
   note: String
   ipAddress: String
+  coordsLong: Float
+  coordsLat: Float
+  coordsAccuracy: Float
+  coordsErrorCode: Int
 }
 type PayRate {
   name: String!
@@ -347,6 +352,7 @@ input CreateUserInput {
   zip: String
   country: String
   jobTitle: String
+  department: String
   payRates: [PayRateUpsertInput!]
   roles: [Role!]!
   companyId: ID!
@@ -370,6 +376,7 @@ input UpdateEmplInput {
   zip: String
   country: String
   jobTitle: String
+  department: String
   payRates: [PayRateUpsertInput!] # Restricted field, implemented in GraphQLResolver
   roles: [Role!]! # Restricted field, implemented in GraphQLResolver
   updateRoles: [Role!]
@@ -401,11 +408,19 @@ input ClockInInput {
   photo: String
   note: String
   rate: PayRateUpsertInput
+  coordsLong: Float
+  coordsLat: Float
+  coordsAccuracy: Float
+  coordsErrorCode: Int
 }
 input ClockOutInput {
   id: ID!
   photo: String
   note: String
+  coordsLong: Float
+  coordsLat: Float
+  coordsAccuracy: Float
+  coordsErrorCode: Int
   _version: Int!
 }
 input CreateTimeRecInput {
@@ -446,4 +461,8 @@ input DeleteTimeRecInput {
 input PunchCardDetsInput {
   photo: String
   note: String
+  coordsLong: Float
+  coordsLat: Float
+  coordsAccuracy: Float
+  coordsErrorCode: Int
 }
