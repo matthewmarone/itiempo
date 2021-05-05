@@ -88,14 +88,15 @@ const PinClockInDialog = (props) => {
     ({ photoBlob, note, rateName }) => {
       console.log(pin, selectedRecord, photoBlob, note);
       const { id, companyId } = selectedRecord;
-      const fileName = `accts/${companyId}/time-imgs/${uuidv4()}.png`;
-      uploadImg(fileName, photoBlob);
+      const fileName = photoBlob
+        ? `accts/${companyId}/time-imgs/${uuidv4()}.png`
+        : undefined;
+      if (fileName) uploadImg(fileName, photoBlob);
       const input = {
         quickPunchId: id,
         base64Ident: btoa(pin),
-        photo: fileName,
-        note,
         rateName,
+        punchCardDetails: { photo: fileName, note },
       };
 
       punchIn({ variables: { input } });

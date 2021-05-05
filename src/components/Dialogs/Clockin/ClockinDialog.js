@@ -273,11 +273,11 @@ const ClockinDialog = (props) => {
     const fileName = `accts/${companyId}/time-imgs/${uuidv4()}.png`;
     const imgName = !imgBlob ? undefined : fileName;
     const input = {
-      photo: imgName,
-      note: formState.note,
       rate: !isClockedIn && isValidPayRate(rest) ? rest : undefined,
       id: !isClockedIn ? undefined : latestRecord.id,
       _version: !isClockedIn ? undefined : latestRecord._version,
+      // Always include these
+      punchCardDetails: { photo: imgName, note: formState.note },
     };
     if (imgName) setImageVars({ fileName, imgBlob });
     setTimerecordInput(input); // This will cause SavingTimeRecord to launch
