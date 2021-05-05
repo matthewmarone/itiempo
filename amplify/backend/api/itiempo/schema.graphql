@@ -436,8 +436,3 @@ input createQPInput {
   nickName: String!
   b64EncodedPin: String!
 }
-
-# PunchInByPinInput has been changed
-# ClockInInput/ClockOutInput has been changed
-# Requiring PunchCardDetsInput for Clockin/out, PunchInByPin
-# We can update Clockin/out, PunchInByPin, Create/UpdateTimeRecord to include cords

@@ -90,7 +90,6 @@ export const listQuickPunchByEmployee = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-        ident
       }
       nextToken
       startedAt

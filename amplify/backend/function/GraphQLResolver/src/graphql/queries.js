@@ -1,5 +1,37 @@
 /* eslint-disable */
-// this is an auto generated file. This will be overwritten
+
+const listQuickPunchByEmployee = /* GraphQL */ `
+  query ListQuickPunchByEmployee(
+    $employeeId: ID
+    $sortDirection: ModelSortDirection
+    $filter: ModelQuickPunchFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listQuickPunchByEmployee(
+      employeeId: $employeeId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        companyId
+        employeeId
+        nickName
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        ident
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 const listQuickPunchByCompany = /* GraphQL */ `
   query ListQuickPunchByCompany(
     $companyId: ID
@@ -27,38 +59,6 @@ const listQuickPunchByCompany = /* GraphQL */ `
         _lastChangedAt
         createdAt
         updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-const listQuickPunchByEmployee = /* GraphQL */ `
-  query ListQuickPunchByEmployee(
-    $employeeId: ID
-    $sortDirection: ModelSortDirection
-    $filter: ModelQuickPunchFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listQuickPunchByEmployee(
-      employeeId: $employeeId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        companyId
-        employeeId
-        nickName
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        ident
       }
       nextToken
       startedAt
@@ -121,6 +121,7 @@ const getEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -177,6 +178,7 @@ const listEmployeesByEmail = /* GraphQL */ `
         zip
         country
         jobTitle
+        department
         payRates {
           name
           amount
@@ -216,6 +218,10 @@ const getTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -223,6 +229,10 @@ const getTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -237,62 +247,6 @@ const getTimeRecord = /* GraphQL */ `
       _lastChangedAt
       createdAt
       updatedAt
-    }
-  }
-`;
-const listCompanyTimeRecords = /* GraphQL */ `
-  query ListCompanyTimeRecords(
-    $companyId: ID
-    $timestampIn: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelTimeRecordFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listCompanyTimeRecords(
-      companyId: $companyId
-      timestampIn: $timestampIn
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        employeeId
-        companyId
-        timestampIn
-        timestampOut
-        clockInDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        clockOutDetails {
-          punchMethod
-          createdBy
-          photo
-          note
-          ipAddress
-        }
-        rate {
-          name
-          amount
-          isHourly
-          isDefault
-        }
-        approved
-        approvedBy
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -325,6 +279,10 @@ const listEmployeeTimeRecords = /* GraphQL */ `
           photo
           note
           ipAddress
+          coordsLong
+          coordsLat
+          coordsAccuracy
+          coordsErrorCode
         }
         clockOutDetails {
           punchMethod
@@ -332,6 +290,74 @@ const listEmployeeTimeRecords = /* GraphQL */ `
           photo
           note
           ipAddress
+          coordsLong
+          coordsLat
+          coordsAccuracy
+          coordsErrorCode
+        }
+        rate {
+          name
+          amount
+          isHourly
+          isDefault
+        }
+        approved
+        approvedBy
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+const listCompanyTimeRecords = /* GraphQL */ `
+  query ListCompanyTimeRecords(
+    $companyId: ID
+    $timestampIn: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTimeRecordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCompanyTimeRecords(
+      companyId: $companyId
+      timestampIn: $timestampIn
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        employeeId
+        companyId
+        timestampIn
+        timestampOut
+        clockInDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+          coordsLong
+          coordsLat
+          coordsAccuracy
+          coordsErrorCode
+        }
+        clockOutDetails {
+          punchMethod
+          createdBy
+          photo
+          note
+          ipAddress
+          coordsLong
+          coordsLat
+          coordsAccuracy
+          coordsErrorCode
         }
         rate {
           name
