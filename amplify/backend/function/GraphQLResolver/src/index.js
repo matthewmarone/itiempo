@@ -240,7 +240,7 @@ const resolvers = {
       const {
         identity: { sourceIp },
         arguments: {
-          input: { quickPunchId, base64Ident, photo, note, rateName },
+          input: { quickPunchId, base64Ident, punchCardDetails, rateName },
         },
       } = ctx;
       // This will be the clock in our out time
@@ -308,10 +308,9 @@ const resolvers = {
       if (!timestampOut && id) {
         // Clock Out
         const clockOutDetails = {
+          ...punchCardDetails,
           punchMethod: PunchMethod.TimeClock,
           createdBy: employeeId,
-          photo,
-          note,
           ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
         };
         const input = {
@@ -340,10 +339,9 @@ const resolvers = {
       } else {
         //Clock in
         const clockInDetails = {
+          ...punchCardDetails,
           punchMethod: PunchMethod.TimeClock,
           createdBy: employeeId,
-          photo,
-          note,
           ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
         };
         if (rate) delete rate.__typename;
@@ -503,15 +501,14 @@ const resolvers = {
           sourceIp,
         },
         arguments: {
-          input: { photo, note, rate },
+          input: { rate, punchCardDetails },
         },
       } = ctx;
       const timestampIn = Math.round(new Date().getTime() / 1000);
       const clockInDetails = {
+        ...punchCardDetails,
         punchMethod: PunchMethod.TimeClock,
         createdBy: employeeId,
-        photo,
-        note,
         ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
       };
       const input = {
@@ -545,15 +542,14 @@ const resolvers = {
           sourceIp,
         },
         arguments: {
-          input: { id, photo, note, _version },
+          input: { id, punchCardDetails, _version },
         },
       } = ctx;
       const timestampOut = Math.round(new Date().getTime() / 1000);
       const clockOutDetails = {
+        ...punchCardDetails,
         punchMethod: PunchMethod.TimeClock,
         createdBy: employeeId,
-        photo,
-        note,
         ipAddress: sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined,
       };
       const input = {
@@ -590,8 +586,8 @@ const resolvers = {
       const {
         timestampIn,
         timestampOut,
-        clockInDetails: clockInDetailsUsrInput = {},
-        clockOutDetails: clockOutDetailsUsrInput = {},
+        clockInDetails: clockInDetailsUsrInput,
+        clockOutDetails: clockOutDetailsUsrInput,
       } = userInput;
 
       if (timestampOut && timestampOut <= timestampIn)
@@ -600,13 +596,13 @@ const resolvers = {
       const ipAddress =
         sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined;
       const clockInDetails = {
-        ...clockInDetailsUsrInput,
+        ...(clockInDetailsUsrInput || {}),
         punchMethod: PunchMethod.Manual,
         createdBy: eId,
         ipAddress,
       };
       const clockOutDetails = {
-        ...clockOutDetailsUsrInput,
+        ...(clockOutDetailsUsrInput || {}),
         punchMethod: PunchMethod.Manual,
         createdBy: eId,
         ipAddress,
@@ -644,8 +640,8 @@ const resolvers = {
       const {
         timestampIn,
         timestampOut,
-        clockInDetails: clockInDetailsUsrInput = {},
-        clockOutDetails: clockOutDetailsUsrInput = {},
+        clockInDetails: clockInDetailsUsrInput,
+        clockOutDetails: clockOutDetailsUsrInput,
       } = userInput;
 
       if (timestampOut && timestampOut <= timestampIn)
@@ -654,13 +650,13 @@ const resolvers = {
       const ipAddress =
         sourceIp && sourceIp.length > 0 ? sourceIp[0] : undefined;
       const clockInDetails = {
-        ...clockInDetailsUsrInput,
+        ...(clockInDetailsUsrInput || {}),
         punchMethod: PunchMethod.Manual,
         createdBy: eId,
         ipAddress,
       };
       const clockOutDetails = {
-        ...clockOutDetailsUsrInput,
+        ...(clockOutDetailsUsrInput || {}),
         punchMethod: PunchMethod.Manual,
         createdBy: eId,
         ipAddress,

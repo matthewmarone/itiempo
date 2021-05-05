@@ -16,8 +16,6 @@ type Mutation {
     @function(name: "GraphQLResolver-${env}")
   createQP(input: createQPInput): QuickPunch
     @function(name: "GraphQLResolver-${env}")
-  # updateQP(input: updateQPInput): QuickPunch
-  #   @function(name: "GraphQLResolver-${env}")
   resetPassword(employeeId: ID!, temporaryPassword: String): Boolean!
     @function(name: "GraphQLResolver-${env}")
   punchInByPin(input: PunchInByPinInput!): String
@@ -37,20 +35,6 @@ type Query {
   employeePayRates(employeeId: ID!): [String!]
     @auth(rules: [{ allow: public, provider: iam }])
     @function(name: "GraphQLResolver-${env}")
-}
-
-input PunchInByPinInput {
-  quickPunchId: ID!
-  base64Ident: String!
-  photo: String
-  note: String
-  rateName: String
-}
-
-type ModelTimeRecConnection {
-  items: [TimeRecord]
-  nextToken: String
-  startedAt: AWSTimestamp
 }
 
 type QuickPunch
@@ -107,27 +91,6 @@ type QuickPunch
       ]
     )
 }
-
-input createQPInput {
-  companyId: ID!
-  employeeId: ID!
-  nickName: String!
-  b64EncodedPin: String!
-}
-
-input updateQPInput {
-  id: ID!
-  companyId: ID!
-  employeeId: ID!
-  nickName: String
-  b64EncodedPin: String
-  _version: Int!
-  _deleted: Boolean
-  _lastChangedAt: AWSTimestamp
-  createdAt: AWSDateTime
-  updatedAt: AWSDateTime
-}
-
 type Company
   @model(subscriptions: { level: off })
   @auth(
@@ -251,6 +214,7 @@ type Employee
   zip: String
   country: String
   jobTitle: String
+  department: String
   payRates: [PayRate!] # Restricted field, implemented in GraphQLResolver
   roles: [Role!]! # Restricted field, implemented in GraphQLResolver
   companyId: ID! # Write once, implemented in GraphQLResolver
@@ -308,12 +272,21 @@ type TimeRecord
   approved: Boolean
   approvedBy: ID
 }
+type ModelTimeRecConnection {
+  items: [TimeRecord]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
 type PunchCardDetails {
   punchMethod: PunchMethod!
   createdBy: ID!
   photo: String
   note: String
   ipAddress: String
+  coordsLong: Float
+  coordsLat: Float
+  coordsAccuracy: Float
+  coordsErrorCode: Int
 }
 type PayRate {
   name: String!
@@ -347,6 +320,7 @@ input CreateUserInput {
   zip: String
   country: String
   jobTitle: String
+  department: String
   payRates: [PayRateUpsertInput!]
   roles: [Role!]!
   companyId: ID!
@@ -370,6 +344,7 @@ input UpdateEmplInput {
   zip: String
   country: String
   jobTitle: String
+  department: String
   payRates: [PayRateUpsertInput!] # Restricted field, implemented in GraphQLResolver
   roles: [Role!]! # Restricted field, implemented in GraphQLResolver
   updateRoles: [Role!]
@@ -398,14 +373,12 @@ input TimeRecordReportFilterInput {
   limitByEmployeeId: [ID!] # leaving blank includes all
 }
 input ClockInInput {
-  photo: String
-  note: String
   rate: PayRateUpsertInput
+  punchCardDetails: PunchCardDetsInput!
 }
 input ClockOutInput {
   id: ID!
-  photo: String
-  note: String
+  punchCardDetails: PunchCardDetsInput!
   _version: Int!
 }
 input CreateTimeRecInput {
@@ -446,4 +419,20 @@ input DeleteTimeRecInput {
 input PunchCardDetsInput {
   photo: String
   note: String
+  coordsLong: Float
+  coordsLat: Float
+  coordsAccuracy: Float
+  coordsErrorCode: Int
+}
+input PunchInByPinInput {
+  quickPunchId: ID!
+  base64Ident: String!
+  rateName: String
+  punchCardDetails: PunchCardDetsInput!
+}
+input createQPInput {
+  companyId: ID!
+  employeeId: ID!
+  nickName: String!
+  b64EncodedPin: String!
 }

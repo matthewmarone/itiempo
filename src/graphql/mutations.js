@@ -20,6 +20,7 @@ export const setupNewAccount = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -61,6 +62,7 @@ export const createUser = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -102,6 +104,7 @@ export const updateEmpl = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -138,6 +141,10 @@ export const clockIn = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -145,6 +152,10 @@ export const clockIn = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -176,6 +187,10 @@ export const clockOut = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -183,6 +198,10 @@ export const clockOut = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -214,6 +233,10 @@ export const createTimeRec = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -221,6 +244,10 @@ export const createTimeRec = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -252,6 +279,10 @@ export const updateTimeRec = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -259,6 +290,10 @@ export const updateTimeRec = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -290,6 +325,10 @@ export const deleteTimeRec = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -297,6 +336,10 @@ export const deleteTimeRec = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -359,6 +402,7 @@ export const deleteEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -534,6 +578,7 @@ export const createEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -578,6 +623,7 @@ export const updateEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -617,6 +663,10 @@ export const createTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -624,6 +674,10 @@ export const createTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -658,6 +712,10 @@ export const updateTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -665,6 +723,10 @@ export const updateTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -699,6 +761,10 @@ export const deleteTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -706,6 +772,10 @@ export const deleteTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name

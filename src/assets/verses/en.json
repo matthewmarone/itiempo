@@ -236,5 +236,29 @@
     "verseEnd": null,
     "translation": "NIV",
     "text": "Be joyful in hope, patient in affliction, faithful in prayer."
+  },
+  {
+    "book": "2 Chronicles",
+    "chapter": 7,
+    "verseStart": 14,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "if my people, who are called by my name, will humble themselves and pray and seek my face and turn from their wicked ways, then I will hear from heaven, and I will forgive their sin and will heal their land."
+  },
+  {
+    "book": "John",
+    "chapter": 10,
+    "verseStart": 10,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "The thief comes only to steal and kill and destroy; I have come that they may have life, and have it to the full."
+  },
+  {
+    "book": "Philippians",
+    "chapter": 4,
+    "verseStart": 6,
+    "verseEnd": 7,
+    "translation": "NIV",
+    "text": "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus."
   }
 ]

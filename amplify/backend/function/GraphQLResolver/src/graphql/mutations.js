@@ -1,5 +1,4 @@
 /* eslint-disable */
-// this is an auto generated file. This will be overwritten
 
 const deleteEmployee = /* GraphQL */ `
   mutation DeleteEmployee(
@@ -23,6 +22,7 @@ const deleteEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -193,6 +193,7 @@ const createEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -237,6 +238,7 @@ const updateEmployee = /* GraphQL */ `
       zip
       country
       jobTitle
+      department
       payRates {
         name
         amount
@@ -276,6 +278,10 @@ const createTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -283,6 +289,10 @@ const createTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -317,6 +327,10 @@ const updateTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -324,6 +338,10 @@ const updateTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -358,6 +376,10 @@ const deleteTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       clockOutDetails {
         punchMethod
@@ -365,6 +387,10 @@ const deleteTimeRecord = /* GraphQL */ `
         photo
         note
         ipAddress
+        coordsLong
+        coordsLat
+        coordsAccuracy
+        coordsErrorCode
       }
       rate {
         name
@@ -382,7 +408,6 @@ const deleteTimeRecord = /* GraphQL */ `
     }
   }
 `;
-
 
 exports.createCompany = createCompany;
 exports.updateCompany = updateCompany;

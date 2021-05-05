@@ -25,6 +25,10 @@ export declare class PunchCardDetails {
   readonly photo?: string;
   readonly note?: string;
   readonly ipAddress?: string;
+  readonly coordsLong?: number;
+  readonly coordsLat?: number;
+  readonly coordsAccuracy?: number;
+  readonly coordsErrorCode?: number;
   constructor(init: ModelInit<PunchCardDetails>);
 }
 
@@ -68,6 +72,7 @@ export declare class Employee {
   readonly zip?: string;
   readonly country?: string;
   readonly jobTitle?: string;
+  readonly department?: string;
   readonly payRates?: PayRate[];
   readonly roles: Role[] | keyof typeof Role;
   readonly companyId: string;
