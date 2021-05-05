@@ -93,9 +93,8 @@ const PinClockInDialog = (props) => {
       const input = {
         quickPunchId: id,
         base64Ident: btoa(pin),
-        photo: fileName,
-        note,
         rateName,
+        punchCardDetails: { photo: fileName, note },
       };
 
       punchIn({ variables: { input } });
