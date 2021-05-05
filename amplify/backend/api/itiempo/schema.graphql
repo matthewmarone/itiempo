@@ -374,11 +374,11 @@ input TimeRecordReportFilterInput {
 }
 input ClockInInput {
   rate: PayRateUpsertInput
-  punchCardDetails: PunchCardDetsInput
+  punchCardDetails: PunchCardDetsInput!
 }
 input ClockOutInput {
   id: ID!
-  punchCardDetails: PunchCardDetsInput
+  punchCardDetails: PunchCardDetsInput!
   _version: Int!
 }
 input CreateTimeRecInput {
@@ -428,7 +428,7 @@ input PunchInByPinInput {
   quickPunchId: ID!
   base64Ident: String!
   rateName: String
-  punchCardDetails: PunchCardDetsInput
+  punchCardDetails: PunchCardDetsInput!
 }
 input createQPInput {
   companyId: ID!
@@ -439,3 +439,5 @@ input createQPInput {
 
 # PunchInByPinInput has been changed
 # ClockInInput/ClockOutInput has been changed
+# Requiring PunchCardDetsInput for Clockin/out, PunchInByPin
+# We can update Clockin/out, PunchInByPin, Create/UpdateTimeRecord to include cords
