@@ -243,13 +243,13 @@ const SignUp = (props) => {
           )}
         </Button>
         {!authState.authError || (
-          <Typography color="error" variant="body2">
+          <Typography color="error" variant="body1">
             {authState.authError.message}
           </Typography>
         )}
         <Typography color="textSecondary" variant="body1">
           Have an account?{" "}
-          <Link component="a" variant="h6" onClick={handleSignIn}>
+          <Link component="a" variant="h5" onClick={handleSignIn}>
             Sign in
           </Link>
         </Typography>

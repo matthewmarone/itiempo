@@ -253,7 +253,7 @@ const WelcomeNewAccount = (props) => {
           )}
         </Button>
         {!(errorAcct && name) || (
-          <Typography color="error" variant="body2">
+          <Typography color="error" variant="body1">
             Could not setup account at this time.
           </Typography>
         )}

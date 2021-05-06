@@ -212,14 +212,14 @@ const SignIn = (props) => {
           variant="outlined"
           autoComplete="current-password"
         />
-        <Typography color="textSecondary" variant="body2">
+        <Typography color="textSecondary" variant="body1">
           Forgot your password?{" "}
-          <Link component="a" variant="body2" onClick={handleForgotPassword}>
+          <Link component="a" variant="body1" onClick={handleForgotPassword}>
             Reset password
           </Link>
         </Typography>
         {!authState.authError || (
-          <Typography color="error" variant="body2">
+          <Typography color="error" variant="body1">
             {authState.authError.message}
           </Typography>
         )}
@@ -253,7 +253,7 @@ const SignIn = (props) => {
         )}
         <Typography color="textSecondary" variant="body1">
           Don't have an account?{" "}
-          <Link component="a" variant="h6" onClick={handleSignUp}>
+          <Link component="a" variant="h5" onClick={handleSignUp}>
             Sign up
           </Link>
         </Typography>

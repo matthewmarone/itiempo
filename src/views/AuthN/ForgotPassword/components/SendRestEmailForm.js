@@ -151,9 +151,9 @@ const SendRestEmailForm = (props) => {
         autoComplete="email"
       />
 
-      <Typography color="textSecondary" variant="body2">
+      <Typography color="textSecondary" variant="body1">
         Remember your password?{" "}
-        <Link component="a" variant="body2" onClick={handleSignIn}>
+        <Link component="a" variant="body1" onClick={handleSignIn}>
           Sign In
         </Link>
       </Typography>
@@ -173,13 +173,13 @@ const SendRestEmailForm = (props) => {
         )}
       </Button>
       {!authState.authError || (
-        <Typography color="error" variant="body2">
+        <Typography color="error" variant="body1">
           {authState.authError.message}
         </Typography>
       )}
       <Typography color="textSecondary" variant="body1">
         Don't have an account?{" "}
-        <Link component="a" variant="h6" onClick={handleSignUp}>
+        <Link component="a" variant="h5" onClick={handleSignUp}>
           Sign up
         </Link>
       </Typography>

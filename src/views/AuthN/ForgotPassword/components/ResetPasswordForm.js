@@ -177,7 +177,7 @@ const ResetPasswordForm = (props) => {
       )}
       <Typography color="textSecondary" variant="body1">
         Didn't receive reset code?{" "}
-        <Link component="a" variant="h6" onClick={onTryAgain}>
+        <Link component="a" variant="h5" onClick={onTryAgain}>
           Try Again
         </Link>
       </Typography>

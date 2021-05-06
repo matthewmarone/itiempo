@@ -150,7 +150,7 @@ const NewPasswordRequired = (props) => {
           )}
         </Button>
         {!authState.authError || (
-          <Typography color="error" variant="body2">
+          <Typography color="error" variant="body1">
             {authState.authError.message}
           </Typography>
         )}
