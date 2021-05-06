@@ -48,7 +48,6 @@ const getInitialState = (record, eId) => {
     rate,
     _version,
   } = record || {};
-  console.log("record", record);
   const { note: noteIn } = clockInDetails || {};
   const { note: noteOut } = clockOutDetails || {};
   return {
@@ -213,7 +212,7 @@ const TimeRecordForm = (props) => {
   useEffect(() => setEId(employeeId), [employeeId, setEId]);
 
   const handleEmployeeIdChange = useCallback(
-    (v) => onChange({ employeeId: v }),
+    (v) => onChange({ employeeId: v, rate: null }),
     [onChange]
   );
 
@@ -409,7 +408,6 @@ const TimeRecordEdit = (props) => {
   const [{ user }] = useContext(Context);
   const { employeeId: eId } = user || {};
   const formState = getInitialState(record, eId);
-  console.log("formState", formState);
 
   return !open ? (
     <React.Fragment />
