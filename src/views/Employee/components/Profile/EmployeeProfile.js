@@ -112,7 +112,7 @@ const EmployeeProfile = (props) => {
       <Button
         key="setPin"
         color="primary"
-        variant="text"
+        variant="contained"
         onClick={() => setOpenPinDialog(true)}
       >
         Set Pin
@@ -121,7 +121,8 @@ const EmployeeProfile = (props) => {
     actions.push(
       <Button
         key="changePassword"
-        variant="text"
+        color="secondary"
+        variant="outlined"
         onClick={() => setOpenPsswdChangeDilog(true)}
       >
         Change Password
@@ -131,8 +132,8 @@ const EmployeeProfile = (props) => {
     actions.push(
       <Button
         key="restBtn"
-        color="primary"
-        variant="text"
+        color="secondary"
+        variant="outlined"
         onClick={() => setOpenPsswdRestDilog(true)}
       >
         Send New Password

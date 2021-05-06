@@ -35,7 +35,12 @@ const Loading = (props) => {
       title={title}
       dialogContent={<Content message={message || ""} />}
       actions={[
-        <Button key="cancel" onClick={handleClose} color="primary">
+        <Button
+          key="cancel"
+          onClick={handleClose}
+          color="secondary"
+          variant="outlined"
+        >
           Cancel
         </Button>,
       ]}

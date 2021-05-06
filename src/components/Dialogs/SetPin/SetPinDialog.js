@@ -130,7 +130,12 @@ const SetPinDialog = (props) => {
         )
       }
       actions={[
-        <Button key="cancel" autoFocus onClick={handleClose}>
+        <Button
+          key="cancel"
+          onClick={handleClose}
+          color="secondary"
+          variant="outlined"
+        >
           Cancel
         </Button>,
       ]}

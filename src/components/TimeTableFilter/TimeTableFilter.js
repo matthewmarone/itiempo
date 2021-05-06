@@ -125,7 +125,7 @@ const TimeTableFilter = (props) => {
         <Button
           className=""
           color="primary"
-          variant="text"
+          variant="contained"
           onClick={handleFilterUpdate}
         >
           Update report
@@ -133,8 +133,8 @@ const TimeTableFilter = (props) => {
         <AddTimeButton open={openAddTime} onClose={() => setOpenAddTime(false)}>
           <Button
             className={classes.addTimeButton}
-            color="primary"
-            variant="text"
+            color="secondary"
+            variant="outlined"
             onClick={() => setOpenAddTime(true)}
           >
             Add Time

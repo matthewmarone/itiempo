@@ -12,7 +12,7 @@ import clsx from "clsx";
 
 const useStyles = makeStyles({
   imageSize: { maxHeight: "175px" },
-  deleteBtn: { color: "red" },
+  deleteBtn: { backgroundColor: "red", color: "white" },
   noShow: { display: "none", visibility: "hidden" },
 });
 
@@ -182,7 +182,8 @@ const TimeRecord = (props) => {
         key="deleteBtn"
         onClick={() => setCurrentScene(scene.delete)}
         color="primary"
-        classes={{ textPrimary: classes.deleteBtn }}
+        variant="contained"
+        classes={{ containedPrimary: classes.deleteBtn }}
       >
         Delete
       </Button>
@@ -195,7 +196,8 @@ const TimeRecord = (props) => {
       <Button
         key="editBtn"
         onClick={() => setCurrentScene(scene.edit)}
-        color="secondary"
+        color="primary"
+        variant="contained"
       >
         Edit
       </Button>
@@ -204,13 +206,18 @@ const TimeRecord = (props) => {
   );
   const closeBtn = React.useMemo(
     () => (
-      <Button key="closeBtn" onClick={onClose} color="primary">
+      <Button
+        key="closeBtn"
+        onClick={onClose}
+        color="secondary"
+        variant="outlined"
+      >
         Close
       </Button>
     ),
     [onClose]
   );
-  const actions = [deleteButton, editButton, closeBtn];
+  const actions = [editButton, deleteButton, closeBtn];
 
   switch (currentScene) {
     case scene.delete:

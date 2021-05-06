@@ -165,6 +165,7 @@ const PayRateForm = (props) => {
         <Button
           size="small"
           color="secondary"
+          variant="outlined"
           onClick={handleAdd}
           disabled={!valid}
         >

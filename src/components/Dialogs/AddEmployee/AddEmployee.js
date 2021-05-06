@@ -80,7 +80,7 @@ const MySaveBtn = (props) => {
   }, [data, error, loading, onData, onError]);
 
   return (
-    <Button color="primary" disabled>
+    <Button color="primary" variant="contained" disabled>
       Saving...
     </Button>
   );
@@ -180,22 +180,16 @@ const AddEmployee = (props) => {
   }, [onClose, reset]);
 
   const actions = [
-    <Button
-      className={loading ? classes.hidden : classes.visibile}
-      key="cancel"
-      onClick={onClose}
-      color="primary"
-      disabled={loading}
-    >
-      Cancel
-    </Button>,
     !loading ? (
       <Button
         key="add"
         onClick={handleSave}
         color="primary"
+        variant="contained"
         disabled={!formState.isValid}
-      >Add</Button>
+      >
+        Add
+      </Button>
     ) : (
       <MySaveBtn
         key="add"
@@ -204,6 +198,16 @@ const AddEmployee = (props) => {
         onData={handleOnData}
       />
     ),
+    <Button
+      className={loading ? classes.hidden : classes.visibile}
+      key="cancel"
+      onClick={onClose}
+      color="secondary"
+      variant="outlined"
+      disabled={loading}
+    >
+      Cancel
+    </Button>,
   ];
 
   if (error) console.log("error", error);

@@ -86,9 +86,9 @@ const NameContainer = (props) => {
   );
 };
 /**
- * 
- * @param {*} props 
- * @returns 
+ *
+ * @param {*} props
+ * @returns
  */
 const UsersTable = (props) => {
   const { className, employees, ...rest } = props;
@@ -101,7 +101,6 @@ const UsersTable = (props) => {
   const [open, setOpen] = useState(false);
 
   const handleSelectAll = (event) => {
-
     let selectedUsers;
 
     if (event.target.checked) {
@@ -226,7 +225,7 @@ const UsersTable = (props) => {
               <Button
                 classes={{ text: classes.buttonText }}
                 color="primary"
-                variant="text"
+                variant="contained"
                 onClick={() => setOpen(true)}
               >
                 Add Employee

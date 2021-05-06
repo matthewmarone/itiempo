@@ -98,7 +98,12 @@ const EnterPinDialog = (props) => {
         </Grid>
       }
       actions={[
-        <Button key="cancel" autoFocus onClick={handleClose}>
+        <Button
+          key="cancel"
+          color="secondary"
+          variant="outlined"
+          onClick={handleClose}
+        >
           Cancel
         </Button>,
       ]}

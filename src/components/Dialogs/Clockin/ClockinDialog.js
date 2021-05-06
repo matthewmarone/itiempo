@@ -291,7 +291,8 @@ const ClockinDialog = (props) => {
       autoFocus
       disabled={!isReady || !!timerecordInput}
       onClick={handleClick}
-      color="secondary"
+      color="primary"
+      variant="contained"
     >
       {isReady ? `Clock ${!isClockedIn ? `In` : `Out`}` : "Loading camera..."}
     </Button>
@@ -301,7 +302,8 @@ const ClockinDialog = (props) => {
       key="cancel"
       disabled={!!timerecordInput && !success}
       onClick={handleClose}
-      color="primary"
+      color="secondary"
+      variant="outlined"
     >
       {!success ? "Cancel" : "Done"}
     </Button>

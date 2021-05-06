@@ -101,7 +101,12 @@ const ClockSuccessDialog = (props) => {
         />
       }
       actions={[
-        <Button key="close" onClick={handleClose} color="primary">
+        <Button
+          key="close"
+          onClick={handleClose}
+          color="secondary"
+          variant="outlined"
+        >
           Close
         </Button>,
       ]}

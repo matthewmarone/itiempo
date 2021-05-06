@@ -88,8 +88,8 @@ const Home = () => {
               >
                 <Button
                   className={classes.addTimeButton}
-                  color="primary"
-                  variant="text"
+                  color="secondary"
+                  variant="outlined"
                   onClick={() => setOpenAddTime(true)}
                 >
                   Add Time

@@ -57,7 +57,8 @@ const Content = (props) => {
               : ""}
           </Typography>
           <Button
-            color="secondary"
+            color="primary"
+            variant="contained"
             disabled={!valid || saving || success}
             type="submit"
           >
@@ -134,7 +135,13 @@ const PasswordReset = (props) => {
         />
       }
       actions={[
-        <Button key="close" autoFocus onClick={handleClose} disabled={loading}>
+        <Button
+          key="close"
+          color="secondary"
+          variant="outlined"
+          onClick={handleClose}
+          disabled={loading}
+        >
           Close
         </Button>,
       ]}

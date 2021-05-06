@@ -75,7 +75,12 @@ const Content = (props) => {
               ? "Your password has been changed."
               : ""}
           </Typography>
-          <Button color="secondary" disabled={!valid || saving} type="submit">
+          <Button
+            color="primary"
+            variant="contained"
+            disabled={!valid || saving}
+            type="submit"
+          >
             {!saving ? "Change" : "Saving"}
           </Button>
         </Grid>
@@ -164,7 +169,12 @@ const ChangePassword = (props) => {
         />
       }
       actions={[
-        <Button key="close" onClick={handleClose}>
+        <Button
+          key="close"
+          onClick={handleClose}
+          color="secondary"
+          variant="outlined"
+        >
           Close
         </Button>,
       ]}

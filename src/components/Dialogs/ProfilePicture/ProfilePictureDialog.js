@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
   middle: {
     height: "100%",
   },
+  deleteBtn: {
+    color: "red",
+  },
 }));
 
 const UploadScean = (props) => {
@@ -106,6 +109,7 @@ const WEBCAM_SCEAN = "WEBCAM_SCEAN";
 const EDIT_SCEAN = "EDIT_SCEAN";
 
 const ProfilePictureDialog = (props) => {
+  const classes = useStyles();
   const { open, onClose, onFile, onFileError, onRemovePhoto } = props;
   const [image, setImage] = useState(null);
   const [editor, setEditor] = useState(null);
@@ -169,7 +173,8 @@ const ProfilePictureDialog = (props) => {
           key="btnOne"
           autoFocus
           onClick={handleUseCamera}
-          color="secondary"
+          color="primary"
+          variant="contained"
         >
           Use Camera
         </Button>
@@ -184,6 +189,8 @@ const ProfilePictureDialog = (props) => {
               onClose();
             }}
             color="secondary"
+            variant="outlined"
+            classes={{ outlinedSecondary: classes.deleteBtn }}
           >
             Remove Photo
           </Button>
@@ -192,7 +199,13 @@ const ProfilePictureDialog = (props) => {
     case WEBCAM_SCEAN:
       dialogContent = webCamScean;
       actions.push(
-        <Button key="btnOne" autoFocus onClick={capture} color="secondary">
+        <Button
+          key="btnOne"
+          autoFocus
+          onClick={capture}
+          color="primary"
+          variant="contained"
+        >
           Take Photo
         </Button>
       );
@@ -200,7 +213,13 @@ const ProfilePictureDialog = (props) => {
     case EDIT_SCEAN:
       dialogContent = cropScean;
       actions.push(
-        <Button key="btnOne" autoFocus onClick={handleCrop} color="secondary">
+        <Button
+          key="btnOne"
+          autoFocus
+          onClick={handleCrop}
+          color="primary"
+          variant="contained"
+        >
           Save
         </Button>
       );
@@ -216,7 +235,8 @@ const ProfilePictureDialog = (props) => {
       key="btnTwo"
       autoFocus
       onClick={isWebcamScean ? handleUseFile : onClose}
-      color="primary"
+      color="secondary"
+      variant="outlined"
     >
       {isWebcamScean ? "Back" : "Cancel"}
     </Button>

@@ -116,7 +116,8 @@ const PinPad = (props) => {
       </Grid>
       <Grid item xs={12}>
         <Button
-          color="secondary"
+          color="primary"
+          variant="contained"
           size={size}
           disabled={!valid}
           onClick={onSubmit}

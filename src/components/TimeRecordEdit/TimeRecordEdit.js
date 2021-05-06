@@ -365,7 +365,8 @@ const TimeRecordForm = (props) => {
       <Button
         key="saveBtn"
         onClick={handleSave}
-        color="secondary"
+        color="primary"
+        variant="contained"
         disabled={!valid}
       >
         Save
@@ -375,7 +376,12 @@ const TimeRecordForm = (props) => {
   );
   const closeBtn = React.useMemo(
     () => (
-      <Button key="closeBtn" onClick={onClose} color="primary">
+      <Button
+        key="closeBtn"
+        onClick={onClose}
+        color="secondary"
+        variant="outlined"
+      >
         Back
       </Button>
     ),

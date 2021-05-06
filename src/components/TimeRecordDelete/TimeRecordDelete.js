@@ -71,17 +71,33 @@ const Confirm = (props) => {
           Are you sure, this cannot be undone?
         </Typography>
       </Grid>
-      <Grid item>
-        <Button
-          onClick={() => onChoice(true)}
-          color="primary"
-          classes={{ textPrimary: classes.deleteBtn }}
-        >
-          Yes, delete
-        </Button>
-        <Button onClick={() => onChoice(false)} color="secondary">
-          No
-        </Button>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing={2}
+        item
+      >
+        <Grid item xs={12}>
+          <Button
+            onClick={() => onChoice(true)}
+            color="secondary"
+            variant="outlined"
+            classes={{ outlinedSecondary: classes.deleteBtn }}
+          >
+            Yes, delete it
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            onClick={() => onChoice(false)}
+            color="primary"
+            variant="contained"
+          >
+            No, keep the record
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );
@@ -130,7 +146,12 @@ const TimeRecordDelete = (props) => {
 
   const cancelBtn = React.useMemo(
     () => (
-      <Button key="cancleBtn" onClick={onClose} color="primary">
+      <Button
+        key="cancleBtn"
+        onClick={onClose}
+        color="secondary"
+        variant="outlined"
+      >
         Cancel
       </Button>
     ),

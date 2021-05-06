@@ -135,16 +135,21 @@ const ClockinDialogTwo = (props) => {
   const clockInBtn = (
     <Button
       key="clockIn"
-      autoFocus
+      color="primary"
+      variant="contained"
       disabled={!isReady}
       onClick={handleSubmit}
-      color="secondary"
     >
       {isReady ? `Go` : "Loading camera..."}
     </Button>
   );
   const cancleBtn = (
-    <Button key="cancel" onClick={handleClose} color="primary">
+    <Button
+      key="cancel"
+      onClick={handleClose}
+      color="secondary"
+      variant="outlined"
+    >
       Cancel
     </Button>
   );
