@@ -260,5 +260,29 @@
     "verseEnd": 7,
     "translation": "NIV",
     "text": "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus."
+  },
+  {
+    "book": "Colossians",
+    "chapter": 4,
+    "verseStart": 5,
+    "verseEnd": 6,
+    "translation": "NIV",
+    "text": "Be wise in the way you act toward outsiders; make the most of every opportunity. Let your conversation be always full of grace, seasoned with salt, so that you may know how to answer everyone."
+  },
+  {
+    "book": "Romans",
+    "chapter": 8,
+    "verseStart": 1,
+    "verseEnd": 2,
+    "translation": "NIV",
+    "text": "Therefore, there is now no condemnation for those who are in Christ Jesus, because through Christ Jesus the law of the Spirit who gives life has set you free from the law of sin and death."
+  },
+  {
+    "book": "Matthew",
+    "chapter": 18,
+    "verseStart": 15,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "“If your brother or sister sins, go and point out their fault, just between the two of you. If they listen to you, you have won them over."
   }
 ]
