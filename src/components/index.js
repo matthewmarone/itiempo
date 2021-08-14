@@ -19,6 +19,7 @@ export { default as Image } from "./Image";
 export { default as RouteWithLayout } from "./RouteWithLayout";
 export { default as SearchInput } from "./SearchInput";
 export { default as TimeCardTable } from "./TimeCardTable";
+export { default as TimeTableReport } from "./TimeTableReport";
 export { default as TimeTableFilter } from "./TimeTableFilter";
 export { default as TimeRecord } from "./TimeRecord";
 export { default as TimeRecordEdit } from "./TimeRecordEdit";

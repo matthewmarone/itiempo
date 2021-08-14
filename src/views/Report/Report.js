@@ -2,7 +2,7 @@ import React, { useState, useContext, useMemo } from "react";
 import { Context } from "Store";
 import { makeStyles } from "@material-ui/styles";
 import { Grid } from "@material-ui/core";
-import { TimeCardTable, TimeTableFilter } from "components";
+import { TimeTableReport, TimeTableFilter } from "components";
 import { getWorkWeek, formateDate } from "helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,9 +41,10 @@ const Report = (props) => {
 
   console.log("filterState", filterState);
   const { selectedEmployees, fromDate, toDate } = filterState;
-  const employeeIds = useMemo(() => selectedEmployees.map(({ id }) => id), [
-    selectedEmployees,
-  ]);
+  const employeeIds = useMemo(
+    () => selectedEmployees.map(({ id }) => id),
+    [selectedEmployees]
+  );
 
   return (
     <div className={classes.root} id="reportRoot">
@@ -55,7 +56,7 @@ const Report = (props) => {
           />
         </Grid>
         <Grid item xs>
-          <TimeCardTable
+          <TimeTableReport
             refreshHack={refreshHack}
             companyId={companyId}
             employeeIds={employeeIds}
