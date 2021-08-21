@@ -10,6 +10,7 @@ import { Table } from "./components";
  *  <li>Dates</li>
  *  <li>Employees</li>
  *  <li>Employee Department</li>
+ *  <li>Employee Manager</li>
  * </ul>
  * <br />
  * The result provides the following insights & features:
@@ -21,6 +22,7 @@ import { Table } from "./components";
  *  <li>Shows total hours</li>
  *  <li>Shows total pay</li>
  *  <li>Shows department</li>
+ *  <li>Shows primary manager</li>
  *  <li>Weekly Overtime Hours & Pay</li>
  *  <li>Allows for Applying Rounding Rules</li>
  *  <li>Flags TimeSheet Approval status</li>
@@ -31,7 +33,7 @@ import { Table } from "./components";
  *  <li>Flags no photo</li>
  *  <li>Flags no gps location</li>
  *  <li>Flags if pay rate wasn't explicitly chosen</li>
- *  <li>Flags if there's a note</li>
+ *  <li>Flags note/no note</li>
  * </ul>
  *
  * @param {*} props

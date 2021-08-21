@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -38,9 +38,16 @@ function createData(name, calories, fat, carbs, protein, price) {
   };
 }
 
-function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
+const SummeryRow = (props) => {
+  const {
+    recordGroup: { category, records },
+  } = props;
+  const [open, setOpen] = useState(false);
   const classes = useRowStyles();
 
   return (
@@ -56,12 +63,70 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.name}
+          {category}
         </TableCell>
-        <TableCell align="right">{row.calories}</TableCell>
-        <TableCell align="right">{row.fat}</TableCell>
-        <TableCell align="right">{row.carbs}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell>
+        <TableCell align="right">{`rowGroup.calories`}</TableCell>
+        <TableCell align="right">{`rowGroup.fat`}</TableCell>
+        <TableCell align="right">{`rowGroup.carbs`}</TableCell>
+        <TableCell align="right">{`rowGroup.protein`}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography variant="h6" gutterBottom component="div">
+                Employees
+              </Typography>
+              <Table aria-label="employee table">
+                <TableBody>
+                  {records.map((row) => (
+                    <Row key={row.name} row={row} />
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+};
+SummeryRow.propTypes = {
+  recordGroup: PropTypes.shape({
+    category: PropTypes.string.isRequired,
+    records: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  }).isRequired,
+};
+
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
+const Row = (props) => {
+  const { record } = props;
+  const [open, setOpen] = useState(false);
+  const classes = useRowStyles();
+
+  return (
+    <React.Fragment>
+      <TableRow className={classes.root}>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {record.name}
+        </TableCell>
+        <TableCell align="right">{record.calories}</TableCell>
+        <TableCell align="right">{record.fat}</TableCell>
+        <TableCell align="right">{record.carbs}</TableCell>
+        <TableCell align="right">{record.protein}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -80,7 +145,7 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
+                  {record.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
                       <TableCell component="th" scope="row">
                         {historyRow.date}
@@ -88,7 +153,7 @@ function Row(props) {
                       <TableCell>{historyRow.customerId}</TableCell>
                       <TableCell align="right">{historyRow.amount}</TableCell>
                       <TableCell align="right">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
+                        {Math.round(historyRow.amount * record.price * 100) / 100}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -100,23 +165,29 @@ function Row(props) {
       </TableRow>
     </React.Fragment>
   );
-}
-
+};
 Row.propTypes = {
-  row: PropTypes.shape({
-    calories: PropTypes.number.isRequired,
-    carbs: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
+  record: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    employeeId: PropTypes.string.isRequired,
+    companyId: PropTypes.string.isRequired,
+    timestampIn: PropTypes.number.isRequired,
+    timestampOut: PropTypes.number,
+    clockInDetails: PropTypes.object.isRequired,
+    clockOutDetails: PropTypes.object,
+    rate: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+      isHourly: PropTypes.bool.isRequired,
+      isDefault: PropTypes.bool.isRequired,
+    }),
+    approved: PropTypes.bool,
+    approvedBy: PropTypes.string,
+    _version: PropTypes.number.isRequired,
+    _deleted: PropTypes.bool,
+    _lastChangedAt: PropTypes.number.isRequired,
+    createdAt: PropTypes.number.isRequired,
+    updatedAt: PropTypes.number.isRequired,
   }).isRequired,
 };
 
@@ -128,7 +199,18 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
 ];
 
-const CollapsibleTable = (props) => {
+const rowGroups = [
+  { category: "Frozen", rows: rows.slice(0, 2) },
+  { category: "Pastry", rows: rows.slice(2) },
+];
+
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
+const ReportTable = (props) => {
+  const { groupedRecords } = props;
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
@@ -143,13 +225,30 @@ const CollapsibleTable = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
+          {
+            // Show with SummeryRow(s) if there are categories
+            groupedRecords[0]?.category
+              ? groupedRecords.map((recGrp) => (
+                  <SummeryRow key={recGrp.category} recordGroup={recGrp} />
+                ))
+              : // Otherwise just show all records, which are still
+                // grouped by employees
+                groupedRecords[0]?.records.map((rec) => (
+                  <Row key={rec.id} record={rec} />
+                ))
+          }
         </TableBody>
       </Table>
     </TableContainer>
   );
 };
+ReportTable.propTypes = {
+  groupedRecords: PropTypes.arrayOf(
+    PropTypes.shape({
+      category: PropTypes.string,
+      records: PropTypes.array.isRequired,
+    })
+  ).isRequired,
+};
 
-export default CollapsibleTable;
+export default ReportTable;
