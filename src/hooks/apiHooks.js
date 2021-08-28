@@ -505,7 +505,7 @@ export const useTimeRecordReport = () => {
   const [nextToken, setNextToken] = useState(null);
 
   /**
-   * For pagnation, if there is a nextToken
+   * For pagination, if there is a nextToken
    */
   useEffect(() => {
     if (nextToken && fetchMore && variables) {
@@ -517,7 +517,7 @@ export const useTimeRecordReport = () => {
   }, [fetchMore, nextToken, variables]);
 
   /**
-   * Detects the need to pagnate
+   * Detects the need to paginate
    */
   useEffect(() => {
     setNextToken(data?.timeRecordReport?.nextToken);
