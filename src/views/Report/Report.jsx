@@ -1,9 +1,10 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, { useState, useContext, useMemo, useEffect } from "react";
 import { Context } from "Store";
 import { makeStyles } from "@material-ui/styles";
 import { Grid } from "@material-ui/core";
 import { TimeTableReport, TimeTableFilter } from "components";
-import { getWorkWeek, formateDate } from "helpers";
+import { getWorkWeek, formateDate, parseDate } from "helpers";
+import { usePayrollReport } from "hooks";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +34,9 @@ const Report = (props) => {
     []
   );
   const [filterState, setFilterState] = useState(initialReportFilter);
+  const [reportQuery, setQueryFilters] = usePayrollReport();
+
+  console.log({ reportQuery, setQueryFilters });
 
   const handleTimeTableFilterChange = React.useCallback((filter) => {
     setFilterState(filter);
@@ -40,11 +44,34 @@ const Report = (props) => {
   }, []);
 
   console.log("filterState", filterState);
-  const { selectedEmployees, fromDate, toDate } = filterState;
+  const {
+    selectedEmployees,
+    fromDate: fromDateStr,
+    toDate: toDateStr,
+  } = filterState;
   const employeeIds = useMemo(
     () => selectedEmployees.map(({ id }) => id),
     [selectedEmployees]
   );
+
+  const [fromDate, toDate] = useMemo(() => {
+    let from, to;
+    try {
+      from = parseDate(fromDateStr);
+      to = parseDate(toDateStr);
+    } catch (e) {
+      console.error(e); // Invalid date
+    }
+    return [from, to];
+  }, [fromDateStr, toDateStr]);
+
+  useEffect(() => {
+    if (fromDate < toDate) {
+      // left off here, next step is to
+      // query report with the date filters
+      console.log({ fromDate, toDate });
+    }
+  }, [fromDate, toDate]);
 
   return (
     <div className={classes.root} id="reportRoot">
@@ -60,8 +87,8 @@ const Report = (props) => {
             refreshHack={refreshHack}
             companyId={companyId}
             employeeIds={employeeIds}
-            fromDate={fromDate}
-            toDate={toDate}
+            fromDate={fromDateStr}
+            toDate={toDateStr}
           />
         </Grid>
       </Grid>

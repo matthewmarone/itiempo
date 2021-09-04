@@ -291,10 +291,23 @@ export const daysIntoYear = (date) => {
 /**
  *
  * @param {*} isoDateString
+ * @returns a Date representing the local time of the ISO String
+ * @throws Invalid Date
+ */
+export const parseDate = (isoDateString) => {
+  const date = parseISO(isoDateString);
+  // eslint-disable-next-line eqeqeq
+  if (date == "Invalid Date") throw new Error("Invalid Date");
+  return date;
+};
+
+/**
+ *
+ * @param {*} isoDateString
  * @returns
  */
 export const getDateContext = (isoDateString) => {
-  const date = parseISO(isoDateString);
+  const date = parseDate(isoDateString);
   return {
     startOfMonth: startOfMonth(date),
     endOfMonth: endOfMonth(date),

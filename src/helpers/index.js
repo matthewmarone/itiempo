@@ -25,5 +25,6 @@ export {
   isValidPayRate,
   daysIntoYear,
   getDateContext,
-  getWhenTimeOccursInAnotherTimeZone
+  getWhenTimeOccursInAnotherTimeZone,
+  parseDate
 } from "./common";

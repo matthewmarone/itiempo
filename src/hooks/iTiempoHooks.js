@@ -5,13 +5,12 @@ import { useTimeRecordReport } from "hooks";
  *
  * @param {} param0
  */
-export const usePayRollReport = (report_options) => {
+export const usePayrollReport = (report_options) => {
   const [query, queryResults] = useTimeRecordReport();
-  const [{fromDate, toDate, employeeIds, groupBy}, setReportOptions] = useState({
-    ...(report_options || {}),
-  });
+  const [{ fromDate, toDate, employeeIds, groupBy }, setReportOptions] =
+    useState({
+      ...(report_options || {}),
+    });
 
-  useEffect(()=>{
-      
-  }, [])
+  return [queryResults, setReportOptions];
 };

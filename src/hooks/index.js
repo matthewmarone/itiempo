@@ -24,3 +24,5 @@ export {
 } from "./apiHooks";
 
 export { useEventListener } from "./commonHooks";
+
+export { usePayrollReport } from "./iTiempoHooks";

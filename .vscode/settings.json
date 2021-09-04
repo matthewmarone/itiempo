@@ -12,5 +12,8 @@
   "prettier.documentSelectors": [
     "**/*.{ts,js,jsx,tsx}"
   ],
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "cSpell.words": [
+    "iTiempo"
+  ]
 }
