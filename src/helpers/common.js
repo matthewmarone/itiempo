@@ -1,4 +1,13 @@
-import moment from "moment";
+import moment from "moment"; // deprecated
+import {
+  parseISO,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  startOfDay,
+  endOfDay,
+} from "date-fns"; // Start using instead of moment
 import { Logger } from "aws-amplify";
 // eslint-disable-next-line no-unused-vars
 const logger = new Logger("common.js", "ERROR");
@@ -277,4 +286,37 @@ export const daysIntoYear = (date) => {
     60 /
     1000
   );
+};
+
+/**
+ *
+ * @param {*} isoDateString
+ * @returns
+ */
+export const getDateContext = (isoDateString) => {
+  const date = parseISO(isoDateString);
+  return {
+    startOfMonth: startOfMonth(date),
+    endOfMonth: endOfMonth(date),
+    startOfWeek: startOfWeek(date),
+    endOfWeek: endOfWeek(date),
+    startOfDay: startOfDay(date),
+    endOfDay: endOfDay(date),
+    date,
+  };
+};
+
+/**
+ *
+ * @param {*} date
+ * @param {*} utcOffsetMins ex: GMT-7 would be -420
+ * @returns
+ */
+export const getWhenTimeOccursInAnotherTimeZone = (date, utcOffsetMins) => {
+  const adjustedOffset =
+    (-utcOffsetMins - date.getTimezoneOffset()) * 60 * 1000;
+
+  const retVal = new Date();
+  retVal.setTime(date.getTime() + adjustedOffset);
+  return retVal;
 };

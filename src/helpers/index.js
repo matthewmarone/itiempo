@@ -24,4 +24,6 @@ export {
   getEarnings,
   isValidPayRate,
   daysIntoYear,
+  getDateContext,
+  getWhenTimeOccursInAnotherTimeZone
 } from "./common";
