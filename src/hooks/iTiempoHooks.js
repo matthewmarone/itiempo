@@ -13,11 +13,11 @@ export const usePayrollReport = (report_options) => {
       ...(report_options || {}),
     });
 
-  const [fromDate, toDate] = useMemo(() => {
+  const [from, to] = useMemo(() => {
     let from, to;
     try {
-      from = parseDate(fromDateStr);
-      to = parseDate(toDateStr);
+      from = parseDate(fromDateStr).getTime() / 1000;
+      to = parseDate(toDateStr).getTime() / 1000;
     } catch (e) {
       console.error(e); // Invalid date
     }
@@ -25,11 +25,18 @@ export const usePayrollReport = (report_options) => {
   }, [fromDateStr, toDateStr]);
 
   useEffect(() => {
-    if (fromDate < toDate) {
-      query({ from: fromDate, to: toDate });
-    }
-  }, [fromDate, query, toDate]);
+    query({ from, to });
+  }, [from, query, to]);
 
-  console.log({ fromDate, toDate, employeeIds, groupBy });
+  const report = useMemo(() => {
+    const { data } = queryResults() ?? {};
+    if (data?.timeRecordReport?.items.length > 0) {
+      // TODO: filter report and apply groupings
+    } else {
+      return [];
+    }
+  }, []);
+
+  console.log({ from, to, employeeIds, groupBy });
   return [queryResults, setReportOptions];
 };
