@@ -176,11 +176,12 @@ const ReportTable = (props) => {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell align="center">Issues</TableCell>
+            <TableCell align="center">Approved</TableCell>
+            <TableCell align="center">Breaks</TableCell>
+            <TableCell align="center">Overtime</TableCell>
+            <TableCell align="center">Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
