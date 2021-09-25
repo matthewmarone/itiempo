@@ -302,9 +302,10 @@ export const parseDate = (isoDateString) => {
 };
 
 /**
- *
+ * Returns an object of temporal boundaries surrounding the date
  * @param {*} isoDateString
  * @returns
+ * @throws Invalid Date
  */
 export const getDateContext = (isoDateString) => {
   const date = parseDate(isoDateString);

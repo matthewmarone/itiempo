@@ -426,13 +426,17 @@ export const useGetEmployee = (employeeId) => {
  * @param {*} companyId
  * @returns
  */
-export const useListEmployeesByEmail = (companyId) => {
+export const useListEmployeesByEmail = (
+  companyId,
+  notifyOnNetworkStatusChange
+) => {
   const retVal = useQuery(gql(listEmployeesByEmailGQL), {
     variables: {
       companyId,
       limit: CONSTS.LIMIT_DEFAULT,
       sortDirection: CONSTS.ASC,
     },
+    notifyOnNetworkStatusChange: !!notifyOnNetworkStatusChange,
   });
 
   const { data, fetchMore, variables } = retVal;
