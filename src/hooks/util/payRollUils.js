@@ -1,3 +1,5 @@
+import { PayRollReport } from "hooks/model";
+
 /**
  *
  * @param {Array<Object>} timeRecords expects the time records in descending order
@@ -20,10 +22,11 @@ export const getPayRollReport = (
     return employeeMap.set(employee.id, employee);
   }, new Map());
 
+  const report = new PayRollReport((eId) => employeeMap.get(eId));
+
   for (let i = timeRecords.length - 1; i >= 0; i--) {
-    const { timestampIn, timestampOut, employeeId,  } = timeRecords[i];
-    console.log(timestampIn);
+    report.addTimeRecord(timeRecords[i]);
   }
 
-  return null;
+  return report;
 };

@@ -183,6 +183,6 @@ export const usePayrollReport = (report_options) => {
       return null;
     }
   }, [employeeIds, employees, fromDateStr, groupBy, timeRecords, toDateStr]);
-
+  
   return [payRollReport, setReportOptions];
 };
