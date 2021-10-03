@@ -47,10 +47,8 @@ const updateEmployeesReport = (timeRecord, employeeReport) => {
     throw new Error("Expected time records to be added in ascending order.");
   }
 
-  reportRecords[reportRecords.length] = createAnalysedRecord(
-    previousRecord,
-    timeRecord
-  );
+  newRecord = createAnalysedRecord(previousRecord, timeRecord);
+  reportRecords[reportRecords.length] = newRecord;
 };
 
 /**
