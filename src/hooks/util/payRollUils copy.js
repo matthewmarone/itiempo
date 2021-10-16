@@ -33,10 +33,6 @@ export const getPayRollReport = (
   }
 
   // Returned the report filtered and grouped as requested by the client
-  return report.getReport(
-    fromIsoDate,
-    toIsoDate,
-    employeeIdsToLimitTo,
-    groupBy
-  );
+  report.getReport(fromIsoDate, toIsoDate, employeeIdsToLimitTo, groupBy);
+  return report;
 };

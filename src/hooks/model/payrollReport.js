@@ -1,55 +1,6 @@
+import { parseDate } from "helpers";
 import { Logger } from "aws-amplify";
-import { getTimeDifference } from "helpers";
 const logger = new Logger("payrollReport.js", "ERROR");
-
-const DEFAULT_STATS = {
-  minutes: 0,
-  runningTotalMinutes: 0,
-  // totalPay: 0,
-};
-
-const createNewEmployeesReportStats = () => ({
-  records: [],
-  ...DEFAULT_STATS,
-});
-
-/**
- *
- * @param {*} previousRecord
- * @param {*} record
- * @returns
- */
-const createAnalysedRecord = (previousRecord, record) => {
-  const { timestampIn, timestampOut } = record;
-  const previousStats = previousRecord?.stats ?? { ...DEFAULT_STATS };
-  const stats = { ...DEFAULT_STATS };
-  stats.minutes = getTimeDifference(timestampIn, timestampOut);
-  stats.runningTotalMinutes = stats.minutes + previousStats.runningTotalMinutes;
-
-  return { stats, record };
-};
-
-/**
- *
- * @param {*} timeRecord
- * @param {*} employeeReport
- */
-const updateEmployeesReport = (timeRecord, employeeReport) => {
-  const { timestampIn } = timeRecord;
-  const { records: reportRecords } = employeeReport;
-  const previousRecord =
-    reportRecords.length > 0 ? reportRecords[reportRecords.length - 1] : null;
-
-  if (
-    previousRecord != null &&
-    previousRecord.record.timestampIn > timestampIn
-  ) {
-    throw new Error("Expected time records to be added in ascending order.");
-  }
-
-  newRecord = createAnalysedRecord(previousRecord, timeRecord);
-  reportRecords[reportRecords.length] = newRecord;
-};
 
 /**
  * Employees with their records, totals and stats, and the
@@ -62,59 +13,85 @@ const updateEmployeesReport = (timeRecord, employeeReport) => {
  */
 class PayRollReport {
   #getEmployeeRecord;
-  #employeeReports;
-  #categoryReports;
+  #employeeTimeRecords;
 
   constructor(employeeLookupFunction) {
     this.#getEmployeeRecord = employeeLookupFunction;
-    this.#employeeReports = new Map();
-    this.#categoryReports = new Map();
+    this.#employeeTimeRecords = new Map();
   }
 
   /**
-   * Get's current report or initializes a new one for the
-   * employeeId.
-   * @param {String} employeeId
-   * @returns the associated time record report for the employeeId
+   *
+   * @param {Object<TimeRecord>} timeRecord
+   * @returns
    */
-  getEmployeesReport(employeeId) {
-    if (this.#employeeReports.has(employeeId)) {
-      return this.#employeeReports.get(employeeId);
-    } else {
-      const retVal = createNewEmployeesReportStats();
-      this.#employeeReports.set(employeeId, retVal);
-      return retVal;
-    }
-  }
-
   addTimeRecord(timeRecord) {
     if (timeRecord != null) {
-      const { employeeId, timestampIn, timestampOut } = timeRecord;
+      const { employeeId, timestampIn } = timeRecord;
       // Get's the associated employee record
       const employee = this.#getEmployeeRecord(employeeId);
-      if (employee == null) {
+      const primaryManager = this.#getEmployeeRecord(
+        employee?.primaryManagerId
+      );
+
+      if (employee == null || primaryManager == null) {
         logger.warn(
-          "Could not lookup employee record.  This employee will not be include in the report."
+          "Could not lookup employee and/or the associated manager record.  This employee will not be include in the report."
         );
         return;
-      } else {
-        const { department, primaryManagerId, payRates } = employee;
-        const employeeReport = this.getEmployeesReport(employeeId);
-        updateEmployeesReport(timeRecord, employeeReport);
       }
+
+      const timeRecords = this.#employeeTimeRecords.get(employeeId) ?? [];
+
+      if (
+        timeRecords.length > 0 &&
+        timeRecords[timeRecords.length - 1].timestampIn > timestampIn
+      ) {
+        throw new Error(
+          "Expected time records to be added in ascending order."
+        );
+      }
+
+      timeRecords[timeRecords.length] = timeRecord;
+      this.#employeeTimeRecords.set(employeeId, timeRecords);
     } else {
       throw new Error(`Expected type TimeRecord, but got ${timeRecord}`);
     }
   }
 
-  toString() {
-    let retVal = ``;
-    this.#employeeReports.forEach((value, key) => {
-      retVal = `${retVal}
-      __________________
-      ${key}: ${value}
-      `;
-    });
+  /**
+   *
+   * @param {String} fromIsoDate
+   * @param {String} toIsoDate
+   * @param {Array<String>} employeeIdsToLimitTo
+   * @param {String} groupBy
+   * @returns
+   */
+  getReport(fromIsoDate, toIsoDate, employeeIdsToLimitTo, groupBy) {
+    const from = parseDate(fromIsoDate);
+    const to = parseDate(toIsoDate);
+    const employeeIds =
+      employeeIdsToLimitTo?.length > 0
+        ? employeeIdsToLimitTo
+        : [...this.#employeeTimeRecords.keys()];
+
+    console.log({ from, to, employeeIds, pr: this });
+
+    // TODO: Left of here...
+    /**
+     * We essentially have a PayRollReport instance hydrated
+     * with time records in ascending order and mapped by employeeId.
+     * Now, we need to loop through them
+     * calculating/storing totals for each employee, like weekly over time
+     * and filtering
+     * the returned records to include those within the date boundaries
+     * as well as rolling up the records under a groupBy category, if
+     * applicable.
+     *
+     * Recommendation, start by defining the output we want.
+     */
+
+    return {};
   }
 }
 
