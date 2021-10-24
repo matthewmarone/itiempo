@@ -7,6 +7,8 @@ import {
   endOfMonth,
   startOfDay,
   endOfDay,
+  getWeek as _getWeek,
+  getMonth as _getMonth,
 } from "date-fns"; // Start using instead of moment
 import { Logger } from "aws-amplify";
 // eslint-disable-next-line no-unused-vars
@@ -108,8 +110,8 @@ export const getEarnings = (minute = 0, hourlyRate = 0) =>
  * @param {*} epochSecondsStart
  * @param {*} epochSecondsEnd
  * @param {*} ignoreSeconds - default is true
- * @returns the number of minutes that has passed, if ignoreSeconds then 
- * a clock out at 12:30.59 and a clock in at 12:45.01 would show 15 minutes. 
+ * @returns the number of minutes that has passed, if ignoreSeconds then
+ * a clock out at 12:30.59 and a clock in at 12:45.01 would show 15 minutes.
  * If epochSecondsEnd is null or <= to epochSecondsStart then 0 is returned.
  */
 export const getTimeDifference = (
@@ -336,3 +338,17 @@ export const getWhenTimeOccursInAnotherTimeZone = (date, utcOffsetMins) => {
   retVal.setTime(date.getTime() + adjustedOffset);
   return retVal;
 };
+
+/**
+ *
+ * @param {Number | Date} date
+ * @returns
+ */
+export const getWeek = (date) => _getWeek(date);
+
+/**
+ *
+ * @param {Number | Date} date
+ * @returns
+ */
+export const getMonth = (date) => _getMonth(date);

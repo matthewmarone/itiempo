@@ -26,5 +26,7 @@ export {
   daysIntoYear,
   getDateContext,
   getWhenTimeOccursInAnotherTimeZone,
-  parseDate
+  parseDate,
+  getMonth,
+  getWeek
 } from "./common";
