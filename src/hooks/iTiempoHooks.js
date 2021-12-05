@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import { useTimeRecordReport, useListEmployeesByEmail } from "hooks";
 import { getDateContext, getWhenTimeOccursInAnotherTimeZone } from "helpers";
 import { getPayRollReport } from "./util";
+import { PayRollReport } from "./model";
 import { Context } from "Store";
 import { Logger } from "aws-amplify";
 
@@ -171,18 +172,28 @@ export const usePayrollReport = (report_options) => {
 
   const payRollReport = useMemo(() => {
     if (employees != null && timeRecords != null) {
-      return getPayRollReport(
-        timeRecords,
-        employees,
+      return new PayRollReport(timeRecords, employees);
+    } else {
+      return null;
+    }
+  }, [employees, timeRecords]);
+
+  const report = useMemo(() => {
+    if (payRollReport != null) {
+      const testReport = payRollReport.getFlattenedReport(
+        fromDateStr,
+        toDateStr,
+        employeeIds
+      );
+      console.log({ testReport });
+      return payRollReport.getReport(
         fromDateStr,
         toDateStr,
         employeeIds,
         groupBy
       );
-    } else {
-      return null;
     }
-  }, [employeeIds, employees, fromDateStr, groupBy, timeRecords, toDateStr]);
-  
-  return [payRollReport, setReportOptions];
+  }, [employeeIds, fromDateStr, groupBy, payRollReport, toDateStr]);
+
+  return [report, setReportOptions];
 };

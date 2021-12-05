@@ -1,47 +1,95 @@
-import { parseDate, getMonth, getWeek, getTimeDifference } from "helpers";
+import { parseDate, getTimeDifference, getDateContext } from "helpers";
 import { Logger } from "aws-amplify";
 const logger = new Logger("payrollReport.js", "ERROR");
 
 /**
  *
- * @param {String} groupBy
- * @param {Object} employee
- * @param {Object} timeRecord
+ * @param {*} timeRecord
+ * @param {*?} previousEntry
  * @returns
  */
-const getCategory = (groupBy, employee, timeRecord) => "default";
+const createEntry = (timeRecord, previousEntry) => {
+  const { timestampIn, timestampOut } = timeRecord;
+  const minutes = getTimeDifference(timestampIn, timestampOut);
+  const {
+    runningTotals: { dayMins, weekMins, monthMins } = {},
+    timeRecord: { timestampIn: prevTimestampIn = -timestampIn } = {},
+  } = previousEntry ?? {};
+  const curDateCtx = getDateContext(timestampIn * 1000);
+  const prevDateCtx = getDateContext(prevTimestampIn * 1000);
+
+  const sameDay =
+    curDateCtx.startOfDay.getTime() === prevDateCtx.startOfDay.getTime();
+  const sameWeek =
+    curDateCtx.startOfWeek.getTime() === prevDateCtx.startOfWeek.getTime();
+  const sameMonth =
+    curDateCtx.startOfMonth.getTime() === prevDateCtx.startOfMonth.getTime();
+
+  const runningTotals = {
+    date: curDateCtx.startOfDay,
+    dayMins: sameDay ? dayMins + minutes : minutes,
+    weekMins: sameWeek ? weekMins + minutes : minutes,
+    monthMins: sameMonth ? monthMins + minutes : minutes,
+  };
+
+  return {
+    runningTotals,
+    timeRecord,
+  };
+};
 
 /**
  *
- * @param {Object} previousRecord
- * @param {Object} timeRecord
- * @returns
+ * @param {*} employeeRecord
+ * @param {*} managerRecord
+ * @param {*} prevTimeRecord
+ * @param {*} rowEntry
  */
-const analysisTimeRecord = (previousRecord, timeRecord) => {
-  const { timestampIn, timestampOut } = timeRecord;
-  const week = getWeek(timestampIn * 1000);
-  const month = getMonth(timestampIn * 1000);
-  const minutes = getTimeDifference(timestampIn, timestampOut);
+const createReportRow = (rowEntry, employeeRecord, managerRecord) => {
+  const { runningTotals, timeRecord } = rowEntry;
+  console.log({ rowEntry });
+  const {
+    id: employeeId,
+    firstName,
+    lastName,
+    email,
+    phone,
+    department,
+    jobTitle,
+  } = employeeRecord;
+  const {
+    id: primaryManagerId,
+    firstName: primaryManagerFirstName,
+    lastName: primaryManagerLastName,
+    email: primaryManagerEmail,
+  } = managerRecord;
+  const { id, timestampIn, timestampOut, approved, approvedBy, rate } =
+    timeRecord;
+  const { date, dayMins, weekMins, monthMins } = runningTotals;
 
-  const isSameWeek = previousRecord?.stats?.week === week;
-  const isSameMonth = previousRecord?.stats?.month === month;
-
-  const weekTotal = isSameWeek ? previousRecord.stats.week + minutes : minutes;
-  const monthTotal = isSameMonth
-    ? previousRecord.stats.month + minutes
-    : minutes;
-
-  const totalMinutes = (previousRecord?.stats?.totalMinutes ?? 0) + minutes;
-
-  return {
-    week,
-    month,
-    minutes,
-    weekTotal,
-    monthTotal,
-    totalMinutes,
-    record: timeRecord,
-  };
+  return [
+    id,
+    date,
+    employeeId,
+    firstName,
+    lastName,
+    email,
+    phone,
+    department,
+    jobTitle,
+    primaryManagerId,
+    primaryManagerFirstName,
+    primaryManagerLastName,
+    primaryManagerEmail,
+    timestampIn,
+    timestampOut,
+    approved,
+    approvedBy,
+    rate,
+    dayMins,
+    weekMins,
+    monthMins,
+  ];
 };
 
 /**
@@ -61,6 +109,9 @@ class PayRollReport {
     if (!Array.isArray(timeRecords) || !Array.isArray(employeeRecords)) {
       throw new Error("Expected Array for timeRecords and employeeRecords");
     }
+
+    this.#employeeTimeRecords = new Map();
+
     this.#employeeMap = employeeRecords.reduce((employeeMap, employee) => {
       return employeeMap.set(employee.id, employee);
     }, new Map());
@@ -69,10 +120,6 @@ class PayRollReport {
     for (let i = timeRecords.length - 1; i >= 0; i--) {
       this.addTimeRecord(timeRecords[i]);
     }
-
-    // TODO: Left off here, see excel spreadsheet for notes.
-    // Recommending removing getReport from payRollUtils in favor
-    // of direct instantiation of this class.
   }
 
   /**
@@ -103,8 +150,7 @@ class PayRollReport {
         );
       }
 
-      const wrappedTimeRecord = analysisTimeRecord(prevRec, timeRecord);
-      timeRecords[timeRecords.length] = wrappedTimeRecord;
+      timeRecords[timeRecords.length] = createEntry(timeRecord, prevRec);
       this.#employeeTimeRecords.set(employeeId, timeRecords);
     } else {
       throw new Error(`Expected type TimeRecord, but got ${timeRecord}`);
@@ -116,7 +162,7 @@ class PayRollReport {
    * @param {String} fromIsoDate
    * @param {String} toIsoDate
    * @param {Array<String>} employeeIdsToLimitTo
-   * @param {String} groupBy
+   * @param {String?} groupBy
    * @returns
    */
   getReport(fromIsoDate, toIsoDate, employeeIdsToLimitTo, groupBy) {
@@ -127,106 +173,30 @@ class PayRollReport {
         ? employeeIdsToLimitTo
         : [...this.#employeeTimeRecords.keys()];
 
-    // console.log({ from, to, employeeIds, pr: this });
+    console.log({ from, to, employeeIds, groupBy });
+    // TODO: return a copy
+    return this.#employeeTimeRecords;
+  }
 
-    // TODO: Left of here...
-    /**
-     * We essentially have a PayRollReport instance hydrated
-     * with time records in ascending order and mapped by employeeId.
-     * Now, we need to loop through them
-     * calculating/storing totals for each employee, like weekly over time
-     * and filtering
-     * the returned records to include those within the date boundaries
-     * as well as rolling up the records under a groupBy category, if
-     * applicable.
-     *
-     * Recommendation, start by defining the output we want.
-     */
+  getFlattenedReport(fromIsoDate, toIsoDate, employeeIdsToLimitTo) {
+    const records = this.getReport(
+      fromIsoDate,
+      toIsoDate,
+      employeeIdsToLimitTo,
+      null
+    );
 
-    const reportStats = {
-      totalMinutes: 0,
-    };
-    const categories = new Map();
-    const createNewCategory = (name) => ({
-      stats: {
-        month: new Map(),
-        week: new Map(),
-      },
-      name,
-      employeeTimeRecords: new Map(),
-    });
-    categories.set("default", createNewCategory("default"));
+    const csvRows = [];
 
-    employeeIds.forEach((employeeId) => {
+    records.forEach((entries, employeeId) => {
       const employee = this.#employeeMap.get(employeeId);
-      const wrappedTimeRecords = this.#employeeTimeRecords.get(employeeId);
-      wrappedTimeRecords.forEach((tr) => {
-        const { week, month, minutes, weekTotal, monthTotal, record } = tr;
-        // Add to report Total stats
-        reportStats.totalMinutes += minutes;
-        // Add to category stats
-        const categoryName = getCategory(groupBy, employee, tr);
-        const {
-          stats: { month: catMonths, week: catWeeks },
-          employeeTimeRecords: catEmpTimeRecs,
-        } =
-          categories.get(categoryName) ??
-          categories
-            .set(categoryName, createNewCategory(categoryName))
-            .get(categoryName);
-
-        const monthStat =
-          catMonths.get(month) ??
-          catMonths
-            .set(month, {
-              totalMinutes: 0,
-            })
-            .get(month);
-        monthStat.totalMinutes += minutes;
-
-        const weekStat =
-          catWeeks.get(week) ??
-          catWeeks
-            .set(week, {
-              totalMinutes: 0,
-            })
-            .get(week);
-        weekStat.totalMinutes += minutes;
-
-        const employeesRecords =
-          catEmpTimeRecs.get(employeeId) ??
-          catEmpTimeRecs.set(employeeId, []).get(employeeId);
-
-        employeesRecords[employeesRecords.length] = tr;
+      const manager = this.#employeeMap.get(employee.primaryManagerId);
+      entries.forEach((entry) => {
+        csvRows[csvRows.length] = createReportRow(entry, employee, manager);
       });
     });
 
-    // return {
-    //   stats: {},
-    //   categories: [
-    //     {
-    //       stats: {},
-    //       name: "default",
-    //       employeeTimeRecords: [
-    //         {
-    //           stats: {},
-    //           employee: {},
-    //           timeRecords: [
-    //             {
-    //               stats: {},
-    //               timeRecord: {},
-    //             },
-    //           ],
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // };
-
-    return {
-      stats: reportStats,
-      categories: [...categories.values()],
-    };
+    return csvRows;
   }
 }
 
