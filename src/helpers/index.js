@@ -27,6 +27,4 @@ export {
   getDateContext,
   getWhenTimeOccursInAnotherTimeZone,
   parseDate,
-  getMonth,
-  getWeek
 } from "./common";

@@ -307,20 +307,20 @@ export const parseDate = (isoDateString) => {
 
 /**
  * Returns an object of temporal boundaries surrounding the date
- * @param {*} isoDateString
+ * @param {number | string | Date} date - epoch, iso date str or Date
  * @returns
  * @throws Invalid Date
  */
-export const getDateContext = (isoDateString) => {
-  const date = parseDate(isoDateString);
+export const getDateContext = (date) => {
+  const d = typeof date === "string" ? parseDate(date) : new Date(date);
   return {
-    startOfMonth: startOfMonth(date),
-    endOfMonth: endOfMonth(date),
-    startOfWeek: startOfWeek(date),
-    endOfWeek: endOfWeek(date),
-    startOfDay: startOfDay(date),
-    endOfDay: endOfDay(date),
-    date,
+    startOfMonth: startOfMonth(d),
+    endOfMonth: endOfMonth(d),
+    startOfWeek: startOfWeek(d),
+    endOfWeek: endOfWeek(d),
+    startOfDay: startOfDay(d),
+    endOfDay: endOfDay(d),
+    date: d,
   };
 };
 
@@ -338,17 +338,3 @@ export const getWhenTimeOccursInAnotherTimeZone = (date, utcOffsetMins) => {
   retVal.setTime(date.getTime() + adjustedOffset);
   return retVal;
 };
-
-/**
- *
- * @param {Number | Date} date
- * @returns
- */
-export const getWeek = (date) => _getWeek(date);
-
-/**
- *
- * @param {Number | Date} date
- * @returns
- */
-export const getMonth = (date) => _getMonth(date);
