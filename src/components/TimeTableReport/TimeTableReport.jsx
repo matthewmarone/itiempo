@@ -55,6 +55,7 @@ function createData(id, name, calories, fat, carbs, protein, price) {
  * @param {*} props
  */
 const TimeTableReport = (props) => {
+  const { onDownload } = props;
   const rows = [
     createData(1, "Frozen yoghurt", 159, 6.0, 24, 4.0, 3.99),
     createData(2, "Ice cream sandwich", 237, 9.0, 37, 4.3, 4.99),
@@ -67,7 +68,7 @@ const TimeTableReport = (props) => {
     { category: "Frozen", records: rows.slice(0, 2) },
     { category: "Pastry", records: rows.slice(2) },
   ];
-  return <Table groupedRecords={groupedRecords} />;
+  return <Table groupedRecords={groupedRecords} onDownload={onDownload} />;
 };
 
 export default TimeTableReport;

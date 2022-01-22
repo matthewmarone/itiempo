@@ -178,22 +178,24 @@ export const usePayrollReport = (report_options) => {
     }
   }, [employees, timeRecords]);
 
-  const report = useMemo(() => {
+  const retVal = useMemo(() => {
     if (payRollReport != null) {
-      const testReport = payRollReport.getFlattenedReport(
-        fromDateStr,
-        toDateStr,
-        employeeIds
-      );
-      console.log({ testReport });
-      return payRollReport.getReport(
+      const downloadReport = () => {
+        payRollReport.getFlattenedReport(fromDateStr, toDateStr, employeeIds);
+      };
+
+      const report = payRollReport.getReport(
         fromDateStr,
         toDateStr,
         employeeIds,
         groupBy
       );
+
+      return [{ report, downloadReport }, setReportOptions];
+    } else {
+      return [{}, setReportOptions]
     }
   }, [employeeIds, fromDateStr, groupBy, payRollReport, toDateStr]);
 
-  return [report, setReportOptions];
+  return retVal;
 };

@@ -40,6 +40,34 @@ const createEntry = (timeRecord, previousEntry) => {
 
 /**
  *
+ * @returns
+ */
+const getReportHeaderRow = () => [
+  "id",
+  "date",
+  "employeeId",
+  "firstName",
+  "lastName",
+  "email",
+  "phone",
+  "department",
+  "jobTitle",
+  "primaryManagerId",
+  "primaryManagerFirstName",
+  "primaryManagerLastName",
+  "primaryManagerEmail",
+  "timestampIn",
+  "timestampOut",
+  "approved",
+  "approvedBy",
+  "rate",
+  "dayMins",
+  "weekMins",
+  "monthMins",
+];
+
+/**
+ *
  * @param {*} employeeRecord
  * @param {*} managerRecord
  * @param {*} prevTimeRecord
@@ -47,7 +75,6 @@ const createEntry = (timeRecord, previousEntry) => {
  */
 const createReportRow = (rowEntry, employeeRecord, managerRecord) => {
   const { runningTotals, timeRecord } = rowEntry;
-  console.log({ rowEntry });
   const {
     id: employeeId,
     firstName,
@@ -173,7 +200,6 @@ class PayRollReport {
         ? employeeIdsToLimitTo
         : [...this.#employeeTimeRecords.keys()];
 
-    console.log({ from, to, employeeIds, groupBy });
     // TODO: return a copy
     return this.#employeeTimeRecords;
   }
@@ -195,6 +221,12 @@ class PayRollReport {
         csvRows[csvRows.length] = createReportRow(entry, employee, manager);
       });
     });
+
+    const csv = csvRows.reduce((retVal, row) => {
+      return retVal + "\n" + row.join()
+    }, getReportHeaderRow().join())
+
+    navigator.clipboard.writeText(csv);
 
     return csvRows;
   }

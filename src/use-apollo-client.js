@@ -60,13 +60,13 @@ const cache = new InMemoryCache({
             existing,
             { args: { sortDirection, timestampIn, ...r }, readField }
           ) {
-            logger.debug(
-              "listEmployeeTimeRecords Policy (Read)",
-              existing,
-              sortDirection,
-              timestampIn,
-              r
-            );
+            // logger.debug(
+            //   "listEmployeeTimeRecords Policy (Read)",
+            //   existing,
+            //   sortDirection,
+            //   timestampIn,
+            //   r
+            // );
             if (sortDirection !== "DESC") {
               logger.error(
                 "Time Records must always be queried in DESC order."

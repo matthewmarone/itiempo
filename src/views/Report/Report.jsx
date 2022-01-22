@@ -34,9 +34,7 @@ const Report = (props) => {
     []
   );
   const [filterState, setFilterState] = useState(initialReportFilter);
-  const [reportQuery, setQueryFilters] = usePayrollReport();
-
-  console.log({ reportQuery });
+  const [{ report, downloadReport }, setQueryFilters] = usePayrollReport();
 
   const handleTimeTableFilterChange = React.useCallback((filter) => {
     setFilterState(filter);
@@ -55,7 +53,7 @@ const Report = (props) => {
   );
 
   useEffect(() => {
-      setQueryFilters({ fromDateStr, toDateStr });
+    setQueryFilters({ fromDateStr, toDateStr });
   }, [fromDateStr, setQueryFilters, toDateStr]);
 
   return (
@@ -69,11 +67,13 @@ const Report = (props) => {
         </Grid>
         <Grid item xs>
           <TimeTableReport
+            data={report}
             refreshHack={refreshHack}
             companyId={companyId}
             employeeIds={employeeIds}
             fromDate={fromDateStr}
             toDate={toDateStr}
+            onDownload={downloadReport}
           />
         </Grid>
       </Grid>
