@@ -942,7 +942,7 @@ const resolvers = {
         managers: curManagers,
         allowRead,
         allowFull,
-        inactive,
+        // inactive,
         _deleted,
         _lastChangedAt,
         createdAt,
