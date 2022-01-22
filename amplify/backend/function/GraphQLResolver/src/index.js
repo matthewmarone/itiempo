@@ -961,7 +961,7 @@ const resolvers = {
               managerIds,
               // primaryManagerId is a required GraphQL field
               managers: [primaryManagerId, ...(managerIds || [])],
-              inactive: deactivate == null ? undefined : !deactivate
+              inactive: deactivate == null ? undefined : deactivate
             }
           : {
               ...updateFields,
