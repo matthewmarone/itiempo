@@ -19,6 +19,12 @@ const EmployeeList = () => {
   const { companyId } = user || {};
   const { data } = useListEmployeesByEmail(companyId);
   const { listEmployeesByEmail: { items } = {} } = data || {};
+  const [showingActiveUsers, setShowingActiveUsers] = useState(true);
+  
+  // Handler for show inactive/active employee button
+  const handleInactiveUserButtonClick = useCallback(() => {
+    setShowingActiveUsers((v) => !v);
+  }, []);
 
   // State for UsersToolBar
   const [usrSearchStr, setUserSearchStr] = useState("");
@@ -43,6 +49,8 @@ const EmployeeList = () => {
       <UsersToolbar
         searchValue={usrSearchStr}
         onSearchChange={handleSearchStrChange}
+        showingActiveUsers={showingActiveUsers}
+        onInactiveUserButtonClick={handleInactiveUserButtonClick}
       />
       <div className={classes.content}>
         <UsersTable employees={employees} />
