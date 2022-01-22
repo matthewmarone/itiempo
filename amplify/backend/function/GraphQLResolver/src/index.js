@@ -976,7 +976,7 @@ const resolvers = {
       // Disable/Enable user if explicitly set
       if (input.inactive === true) {
         await user.deactivateUser(username)
-        user.globalSignOut(username);
+        await user.globalSignOut(username);
       } else if (input.inactive === false) {
         await user.activateUser(username)
       }
