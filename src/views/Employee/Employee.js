@@ -103,6 +103,17 @@ const EmployeeView = (props) => {
     },
     [employeeState, update]
   );
+
+  /**
+   * Updates the users to active/inactive
+   */
+   const handleDeactivateActivate = useCallback(
+    () => {
+      update(employeeState, { inactive: !employeeState.inactive });
+    },
+    [employeeState, update]
+  );
+
   /**
    *
    */
@@ -151,6 +162,7 @@ const EmployeeView = (props) => {
           <EmployeeProfile
             employee={employeeModal}
             onPhotoSave={handlePhotoSave}
+            onDeactivateActivate={handleDeactivateActivate}
           />
         </Grid>
         <Grid item xs={12} className={clsx(showSensitive || classes.hidden)}>
