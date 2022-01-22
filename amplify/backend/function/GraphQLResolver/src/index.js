@@ -942,7 +942,8 @@ const resolvers = {
         managers: curManagers,
         allowRead,
         allowFull,
-        // inactive,
+        inactive,
+        deactivate,
         _deleted,
         _lastChangedAt,
         createdAt,
@@ -960,6 +961,7 @@ const resolvers = {
               managerIds,
               // primaryManagerId is a required GraphQL field
               managers: [primaryManagerId, ...(managerIds || [])],
+              inactive: deactivate == null ? undefined : !deactivate
             }
           : {
               ...updateFields,
@@ -968,6 +970,7 @@ const resolvers = {
               payRates: undefined,
               primaryManagerId: undefined,
               managerIds: undefined,
+              inactive: undefined
             };
 
       const doRoleUpdate =

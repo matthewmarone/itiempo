@@ -109,7 +109,7 @@ const EmployeeView = (props) => {
    */
    const handleDeactivateActivate = useCallback(
     () => {
-      update(employeeState, { inactive: !employeeState.inactive });
+      update(employeeState, { deactivate: !employeeState.inactive });
     },
     [employeeState, update]
   );
