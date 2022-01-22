@@ -973,6 +973,13 @@ const resolvers = {
               inactive: undefined
             };
 
+      // Disable/Enable user if explicitly set
+      if (input.inactive === true) {
+        await user.deactivateUser(username)
+      } else if (input.inactive === false) {
+        await user.activateUser(username)
+      }
+
       const doRoleUpdate =
         updateRoles &&
         updateRoles.reduce(
