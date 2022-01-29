@@ -962,7 +962,7 @@ const resolvers = {
               managerIds,
               // primaryManagerId is a required GraphQL field
               managers: [primaryManagerId, ...(managerIds || [])],
-              inactive: deactivate == null ? undefined : deactivate
+              inactive: deactivate == null ? undefined : deactivate,
             }
           : {
               ...updateFields,
@@ -971,7 +971,7 @@ const resolvers = {
               payRates: undefined,
               primaryManagerId: undefined,
               managerIds: undefined,
-              inactive: undefined
+              inactive: undefined,
             };
 
       const doRoleUpdate =
@@ -1005,26 +1005,27 @@ const resolvers = {
 
       // Disable/Enable user if explicitly set
       if (input.inactive === true) {
-        await user.deactivateUser(username)
-        user.globalSignOut(username);
+        await user.deactivateUser(username);
+        await user.globalSignOut(username);
       } else if (input.inactive === false) {
-        await user.activateUser(username)
+        await user.activateUser(username);
       }
 
+      let sendPasswordRest = false;
       // Change the employee email and login
-      if (newEmail != null && newEmail.includes('@')) {
+      if (newEmail != null && newEmail.includes("@")) {
         // Throws error if unsuccessfully
         await user.updateUserAttributes(username, [
           { Name: "email", Value: newEmail },
+          { Name: "email_verified", Value: "true" },
         ]);
         // Update Employee record with same email
         input.email = newEmail;
+        sendPasswordRest = true;
       }
 
-      const {
-        data: { updateEmployee } = {},
-        errors,
-      } = await api.UpdateEmployee({ input, condition });
+      const { data: { updateEmployee } = {}, errors } =
+        await api.UpdateEmployee({ input, condition });
 
       // console.log(JSON.stringify({ updateEmployee, errors }, null, 4)); // for testing
 
@@ -1061,6 +1062,19 @@ const resolvers = {
             e
           );
           // TODO: reset the employee role back to the original
+        }
+      }
+
+      // Send reset password email
+      if (sendPasswordRest) {
+        try {
+          await resolvers.Mutation.resetPassword({
+            identity: { claims },
+            arguments: { employeeId: input.id },
+          });
+        } catch (e) {
+          // We'll continue even if password reset fails
+          console.error(e);
         }
       }
 
