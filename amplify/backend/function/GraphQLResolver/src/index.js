@@ -936,6 +936,7 @@ const resolvers = {
       const {
         username,
         email,
+        newEmail,
         roles,
         updateRoles,
         companyId,
@@ -973,14 +974,6 @@ const resolvers = {
               inactive: undefined
             };
 
-      // Disable/Enable user if explicitly set
-      if (input.inactive === true) {
-        await user.deactivateUser(username)
-        await user.globalSignOut(username);
-      } else if (input.inactive === false) {
-        await user.activateUser(username)
-      }
-
       const doRoleUpdate =
         updateRoles &&
         updateRoles.reduce(
@@ -1009,6 +1002,24 @@ const resolvers = {
       }
 
       console.log(JSON.stringify({ input, condition }, null, 4));
+
+      // Disable/Enable user if explicitly set
+      if (input.inactive === true) {
+        await user.deactivateUser(username)
+        user.globalSignOut(username);
+      } else if (input.inactive === false) {
+        await user.activateUser(username)
+      }
+
+      // Change the employee email and login
+      if (newEmail != null && newEmail.includes('@')) {
+        // Throws error if unsuccessfully
+        await user.updateUserAttributes(username, [
+          { Name: "email", Value: newEmail },
+        ]);
+        // Update Employee record with same email
+        input.email = newEmail;
+      }
 
       const {
         data: { updateEmployee } = {},

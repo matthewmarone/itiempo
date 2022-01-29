@@ -332,6 +332,7 @@ input UpdateEmplInput {
   username: String! # Write once, implemented in GraphQLResolver
   profilePhoto: String
   email: AWSEmail # Restricted field, implemented in GraphQLResolver
+  new_email: AWSEmail # For changing email and login email
   email_2: AWSEmail
   firstName: String
   lastName: String
