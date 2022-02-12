@@ -18,6 +18,16 @@ import clsx from "clsx";
 // eslint-disable-next-line no-unused-vars
 const logger = new Logger("Employee.js", "ERROR");
 
+/**
+ *
+ * @param {*} employeeState
+ * @param {*} updatedFields
+ * @returns
+ */
+const isNewEmail = (employeeState, updatedFields) =>
+  (employeeState?.email || false) !==
+  (updatedFields.email || employeeState?.email);
+
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(4),
@@ -69,12 +79,20 @@ const EmployeeView = (props) => {
    */
   const update = useCallback(
     (currEmployee, updatedFields) => {
-      const { roles: updateRoles, payRates, ...changes } = updatedFields;
+      const { roles: updateRoles, payRates, email, ...changes } = updatedFields;
+
+      // Did we update the email, and is it a vaild email?
+      const newEmail =
+        isNewEmail(currEmployee, updatedFields) && email?.includes("@")
+          ? email
+          : undefined;
+
       if (changes) {
         const variables = {
           input: {
             ...currEmployee,
             ...changes,
+            newEmail,
             updateRoles,
             payRates: payRates?.map((r) => {
               return { ...r, __typename: undefined };
@@ -103,6 +121,14 @@ const EmployeeView = (props) => {
     },
     [employeeState, update]
   );
+
+  /**
+   * Updates the users to active/inactive
+   */
+  const handleDeactivateActivate = useCallback(() => {
+    update(employeeState, { deactivate: !employeeState.inactive });
+  }, [employeeState, update]);
+
   /**
    *
    */
@@ -151,6 +177,7 @@ const EmployeeView = (props) => {
           <EmployeeProfile
             employee={employeeModal}
             onPhotoSave={handlePhotoSave}
+            onDeactivateActivate={handleDeactivateActivate}
           />
         </Grid>
         <Grid item xs={12} className={clsx(showSensitive || classes.hidden)}>
@@ -171,6 +198,7 @@ const EmployeeView = (props) => {
             onChange={handleChange}
             onSave={handleSave}
             saving={updating}
+            newEmail={isNewEmail(employeeState, updatedFields)}
           />
         </Grid>
       </Grid>

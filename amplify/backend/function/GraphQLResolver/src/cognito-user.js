@@ -192,6 +192,38 @@ const globalSignOut = async (Username) => {
   }
 };
 
+/**
+ *
+ * @param {*} Username
+ */
+ const activateUser = async (Username) => {
+  const params = {
+    Username,
+    UserPoolId: COGNITO_USERPOOL_ID,
+  };
+  try {
+    return await cognitoIdentityServiceProvider.adminEnableUser(params).promise();
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ *
+ * @param {*} Username
+ */
+ const deactivateUser = async (Username) => {
+  const params = {
+    Username,
+    UserPoolId: COGNITO_USERPOOL_ID,
+  };
+  try {
+    return await cognitoIdentityServiceProvider.adminDisableUser(params).promise();
+  } catch (e) {
+    throw e;
+  }
+};
+
 exports.getUser = getUser;
 exports.createUser = createUser;
 exports.addUserToGroup = addUserToGroup;
@@ -201,3 +233,5 @@ exports.updateUserAttributes = updateUserAttributes;
 exports.addCustomAttributes = addCustomAttributes;
 exports.globalSignOut = globalSignOut;
 exports.setUserPassword = setUserPassword;
+exports.activateUser = activateUser;
+exports.deactivateUser = deactivateUser;

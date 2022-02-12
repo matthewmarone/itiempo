@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
  */
 const EmployeeProfile = (props) => {
   const classes = useStyles();
-  const { employee, onPhotoSave, ...rest } = props;
+  const { employee, onPhotoSave, onDeactivateActivate, ...rest } = props;
   const {
     id,
     className,
@@ -58,10 +58,12 @@ const EmployeeProfile = (props) => {
     jobTitle,
     roles,
     profilePhoto,
+    inactive,
   } = employee;
   const role = roles && roles[0] ? roles[0] : "Employee";
   const [{ user }] = useContext(Context);
   const isCurrentUser = id === user?.employeeId;
+  const userRole = user?.roles?.length >= 1 ? user.roles[0] : "Employee";
 
   const [upload, { loading, error, response }] = useUploadImage();
   const [setPhotoVars, { data: avatarUrl }] = useDownloadImage({
@@ -140,6 +142,18 @@ const EmployeeProfile = (props) => {
       </Button>
     );
   }
+  console.log("My role", userRole);
+  if (userRole !== "Employee")
+    actions.push(
+      <Button
+        key="deactivateBtn"
+        color="secondary"
+        variant="outlined"
+        onClick={onDeactivateActivate}
+      >
+        {inactive ? "Re-activate" : "Deactivate"}
+      </Button>
+    );
 
   return (
     <React.Fragment>
@@ -211,6 +225,7 @@ EmployeeProfile.propTypes = {
   className: PropTypes.string,
   employee: PropTypes.object.isRequired,
   onPhotoSave: PropTypes.func.isRequired,
+  onDeactivateActivate: PropTypes.func.isRequired,
 };
 
 export default EmployeeProfile;

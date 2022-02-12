@@ -19,6 +19,12 @@ const EmployeeList = () => {
   const { companyId } = user || {};
   const { data } = useListEmployeesByEmail(companyId);
   const { listEmployeesByEmail: { items } = {} } = data || {};
+  const [showingActiveUsers, setShowingActiveUsers] = useState(true);
+
+  // Handler for show inactive/active employee button
+  const handleInactiveUserButtonClick = useCallback(() => {
+    setShowingActiveUsers((v) => !v);
+  }, []);
 
   // State for UsersToolBar
   const [usrSearchStr, setUserSearchStr] = useState("");
@@ -27,22 +33,34 @@ const EmployeeList = () => {
     []
   );
 
-  const employees = useMemo(() => {
-    if (usrSearchStr?.trim().length > 0) {
-      return (items || []).filter((i) => {
-        const str = `${i.firstName} ${i.lastName}`;
-        return str.includes(usrSearchStr);
-      });
-    } else {
-      return items || [];
-    }
-  }, [items, usrSearchStr]);
+  const employees = useMemo(
+    () =>
+      (items || [])
+        .filter((i) => {
+          // Filter by show active/inactive toggle
+          const active = !i.inactive; // null is considered active
+          return active === showingActiveUsers;
+        })
+        .filter((i) => {
+          // Filter by text search if applicable
+          const stringFilter = usrSearchStr?.trim().toLowerCase();
+          if (stringFilter) {
+            const str = `${i.firstName} ${i.lastName}`;
+            return str.toLowerCase().includes(stringFilter);
+          } else {
+            return true;
+          }
+        }),
+    [items, usrSearchStr, showingActiveUsers]
+  );
 
   return (
     <div className={classes.root}>
       <UsersToolbar
         searchValue={usrSearchStr}
         onSearchChange={handleSearchStrChange}
+        showingActiveUsers={showingActiveUsers}
+        onInactiveUserButtonClick={handleInactiveUserButtonClick}
       />
       <div className={classes.content}>
         <UsersTable employees={employees} />

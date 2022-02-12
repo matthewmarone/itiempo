@@ -24,8 +24,6 @@ const ClockInButton = (props) => {
     setEmployeeId2(employeeId);
   }, [employeeId, setEmployeeId, setEmployeeId2]);
 
-  logger.debug("clockedIn", clockedIn);
-
   return (
     <React.Fragment>
       <Button

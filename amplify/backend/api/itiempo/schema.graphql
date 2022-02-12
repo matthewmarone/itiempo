@@ -332,6 +332,7 @@ input UpdateEmplInput {
   username: String! # Write once, implemented in GraphQLResolver
   profilePhoto: String
   email: AWSEmail # Restricted field, implemented in GraphQLResolver
+  newEmail: AWSEmail # For changing email and login email
   email_2: AWSEmail
   firstName: String
   lastName: String
@@ -351,7 +352,8 @@ input UpdateEmplInput {
   companyId: ID! # Write once, implemented in GraphQLResolver
   primaryManagerId: ID! # Restricted field, implemented in GraphQLResolver
   managerIds: [ID!] # Restricted field, implemented in GraphQLResolver
-  inactive: Boolean
+  inactive: Boolean # Restricted field, implemented in GraphQLResolver
+  deactivate: Boolean # Set to true to deactivate user, set to false to re-activate
   managers: [ID!]! # Restricted field, implemented in GraphQLResolver
   allowRead: [String!] # Write once, implemented in GraphQLResolver
   allowFull: [String!] # Write once, implemented in GraphQLResolver

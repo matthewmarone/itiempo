@@ -19,7 +19,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const EmployeeDetails = (props) => {
-  const { className, employee, onSave, onChange, saving, ...rest } = props;
+  const { className, employee, onSave, onChange, saving, newEmail, ...rest } =
+    props;
   const classes = useStyles();
 
   const {
@@ -36,6 +37,10 @@ const EmployeeDetails = (props) => {
     zip,
     country,
   } = employee;
+
+  const handleEmailChange = (e) => {
+    onChange({ [e.target.name]: e.target.value?.toLowerCase() });
+  };
 
   const handleUserChange = (e) => {
     onChange({ [e.target.name]: e.target.value });
@@ -81,9 +86,12 @@ const EmployeeDetails = (props) => {
                 label="Email Address"
                 margin="dense"
                 name="email"
-                disabled
+                required
+                onChange={handleEmailChange}
                 value={email || ""}
                 variant="outlined"
+                helperText={newEmail ? "Note, also changes login email." : null}
+                error={newEmail}
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -217,6 +225,7 @@ EmployeeDetails.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   saving: PropTypes.bool,
+  newEmail: PropTypes.bool.isRequired,
 };
 
 export default EmployeeDetails;
