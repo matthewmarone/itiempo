@@ -20,12 +20,9 @@ import {
   punchInByPin as punchInByPinGQL,
   deleteTimeRec as deleteTimeRecGQL,
 } from "graphql/mutations";
-import { Logger } from "aws-amplify";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Storage } from "aws-amplify";
 import { daysIntoYear } from "helpers";
-// eslint-disable-next-line
-const logger = new Logger("hooks.js", "ERROR");
 
 export const CONSTS = {
   LIMIT_DEFAULT: 10,
@@ -100,7 +97,7 @@ export const useDownloadImage = ({
           setLoading(false);
           setError(e);
           setData(null);
-          logger.error(e);
+          console.error(e);
         });
     }
   }, [variables]);
@@ -132,7 +129,7 @@ export const useUploadImage = () => {
     Storage.put(fileName, imgBlob, {
       level: "public",
       contentType: imgBlob.type,
-      // progressCallback: (v) => logger.debug("Upload Progress", v),
+      // progressCallback: (v) => console.log("Upload Progress", v),
     })
       .then((v) => {
         setLoading(false);
@@ -141,7 +138,7 @@ export const useUploadImage = () => {
       .catch((e) => {
         setLoading(false);
         setError(e);
-        logger.error(e);
+        console.error(e);
       });
   }, []);
   return [upload, { loading, error, response }];
@@ -325,7 +322,7 @@ export const CLOCK_IN_STATE = {
  */
 export const useClockedIn = (_employeeId) => {
   const [employeeId, setEmployeeId] = useState(_employeeId);
-  const [runQuery, { loading, error, data }] = useListEmployeeTimeRecord({
+  const [runQuery, { data }] = useListEmployeeTimeRecord({
     employeeId,
   });
 
@@ -353,15 +350,6 @@ export const useClockedIn = (_employeeId) => {
   }, [data]);
 
   console.log("Data", data);
-
-  logger.debug(
-    "useClockedIn => ",
-    loading,
-    error,
-    data,
-    clockInState,
-    latestRecord
-  );
 
   return [clockInState, setEmployeeId, latestRecord];
 };
@@ -396,8 +384,6 @@ export const useListEmployeeTimeRecord = (queryVariables) => {
       fetchMore({
         variables: v,
       });
-      // for testing
-      logger.debug("RunQuery", { variables: v });
     }
   }, [getVariables, fetchMore, variables]);
 

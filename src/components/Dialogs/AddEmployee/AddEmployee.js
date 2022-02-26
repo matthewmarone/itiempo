@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Context } from "Store";
 import { DialogTemplate } from "../components";
 import PropTypes from "prop-types";
-import { Logger } from "aws-amplify";
 import {
   Grid,
   Button,
@@ -19,8 +18,6 @@ import { makeStyles } from "@material-ui/styles";
 import { useCreateEmployee } from "hooks";
 import validate from "validate.js";
 
-// eslint-disable-next-line
-const logger = new Logger("AddEmployee.js", "ERROR");
 
 const useStyles = makeStyles(() => ({
   helperText: { textAlign: "right", marginRight: 0, marginLeft: 0 },

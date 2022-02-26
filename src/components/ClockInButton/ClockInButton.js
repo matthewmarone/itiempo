@@ -3,11 +3,8 @@ import PropTypes from "prop-types";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import { Button } from "@material-ui/core";
 import { ClockinDialog } from "components";
-import { Logger } from "aws-amplify";
 import { CLOCK_IN_STATE, useClockedIn, useGetEmployee } from "hooks";
 
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("ClockInButton.js", "ERROR");
 /**
  *
  * @param {*} props

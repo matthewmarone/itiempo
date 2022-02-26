@@ -28,12 +28,8 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Logger } from "aws-amplify";
 import { AvatarMenuItem } from "components";
 import { useListEmployeesByEmail } from "hooks";
-
-// eslint-disable-next-line
-const logger = new Logger("EmployeeSetup.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: {},

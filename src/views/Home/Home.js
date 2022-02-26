@@ -10,7 +10,6 @@ import {
   Divider,
   Button,
 } from "@material-ui/core";
-import { Logger } from "aws-amplify";
 import {
   TimeCardTable,
   ClockInButton,
@@ -18,9 +17,6 @@ import {
   AddTimeButton,
 } from "components";
 import { getWorkWeek, formateDate } from "helpers";
-
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("Home.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +50,6 @@ const Home = () => {
   const classes = useStyles();
   const [{ user }] = useContext(Context);
   const { companyId, employeeId } = user || {};
-  logger.debug("Context.user", user, companyId, employeeId);
   const [openAddTime, setOpenAddTime] = useState(false);
 
   const [{ fromDate, toDate }, setFilterState] = useState({

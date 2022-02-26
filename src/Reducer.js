@@ -1,7 +1,4 @@
-import { Logger } from "aws-amplify";
 import { initialState } from "Store";
-
-const logger = new Logger("Reducer.js", "ERROR");
 
 export const AppActions = {
   SET_USER: "SET_USER",
@@ -10,7 +7,6 @@ export const AppActions = {
 };
 
 const Reducer = (state, action) => {
-  logger.debug("Dispatch action", action);
   switch (action.type) {
     case AppActions.SET_USER:
       const {
@@ -25,7 +21,7 @@ const Reducer = (state, action) => {
       try {
         localStorage.setItem("itiempo.ac", JSON.stringify([companyId]));
       } catch (e) {
-        logger.warn(e);
+        console.warn(e);
       }
       return {
         ...state,
@@ -54,7 +50,7 @@ const Reducer = (state, action) => {
       try {
         localStorage.setItem(un, JSON.stringify(userLocalAppData));
       } catch (e) {
-        logger.warn(e);
+        console.warn(e);
       }
       return {
         ...state,
@@ -63,7 +59,7 @@ const Reducer = (state, action) => {
     case AppActions.CLEAR_CONTEXT:
       return initialState;
     default:
-      logger.warn("Action Type not implemented");
+      console.warn("Action Type not implemented");
       return state;
   }
 };
