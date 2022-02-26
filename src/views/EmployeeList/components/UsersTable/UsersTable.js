@@ -23,12 +23,8 @@ import {
 import { getInitials } from "helpers";
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
-import { Logger } from "aws-amplify";
 import { AddEmployeeDialog } from "components";
 import { useDownloadImage } from "hooks";
-
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("UserTable.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: {},

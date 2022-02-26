@@ -10,15 +10,13 @@ import PersonIcon from "@material-ui/icons/Person";
 import TimelineIcon from "@material-ui/icons/Timeline";
 import { Context } from "Store";
 import { Profile, SidebarNav } from "./components";
-import { Auth, Logger } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import {
   useClockedIn,
   CLOCK_IN_STATE as cState,
   useGetEmployee,
   useDownloadImage,
 } from "hooks";
-// eslint-disable-next-line
-const logger = new Logger("Sidebar.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -62,7 +60,7 @@ const Sidebar = (props) => {
     roles.findIndex((v) => v?.trim().length > 0 && v !== "Employee", []) >= 0;
 
   const handleLogout = useCallback(() => {
-    Auth.signOut().catch((e) => logger.error(e));
+    Auth.signOut().catch((e) => console.error(e));
   }, []);
 
   useEffect(() => {

@@ -1,12 +1,10 @@
 import React from "react";
 import { ApolloClient, InMemoryCache, ApolloLink } from "@apollo/client";
-import { Auth, Logger } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { AUTH_TYPE, createAuthLink } from "aws-appsync-auth-link";
 import { createSubscriptionHandshakeLink } from "aws-appsync-subscription-link";
 import { mergeSortedLists } from "helpers";
 
-// eslint-disable-next-line
-const logger = new Logger("App.js", "ERROR");
 /**
  *
  */
@@ -60,15 +58,8 @@ const cache = new InMemoryCache({
             existing,
             { args: { sortDirection, timestampIn, ...r }, readField }
           ) {
-            logger.debug(
-              "listEmployeeTimeRecords Policy (Read)",
-              existing,
-              sortDirection,
-              timestampIn,
-              r
-            );
             if (sortDirection !== "DESC") {
-              logger.error(
+              console.error(
                 "Time Records must always be queried in DESC order."
               );
               return undefined;
@@ -98,16 +89,12 @@ const cache = new InMemoryCache({
               });
               return { ...existing, items: filteredItems };
             } else {
-              logger.debug(
-                "listEmployeeTimeRecords Policy (Read)",
-                "Returning unfiltered"
-              );
               return existing;
             }
           },
           merge(existing, incoming, { args: { sortDirection }, readField }) {
             if (sortDirection !== "DESC") {
-              logger.error(
+              console.error(
                 "Time Records must always be queried in DESC order."
               );
               return undefined;

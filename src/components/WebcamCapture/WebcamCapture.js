@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Webcam from "react-webcam";
-import { Logger } from "aws-amplify";
 import { CircularProgress, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { VideocamOffTwoTone } from "@material-ui/icons";
-
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("WebcamCapture.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +56,7 @@ const WebcamCapture = React.forwardRef((props, webcamRef) => {
 
   const onUserMediaError = React.useCallback(
     (error) => {
-      logger.error(error);
+      console.error(error);
       if (onUsrMediaError) onUsrMediaError(error);
       setIsLoading(false);
       setError(error);

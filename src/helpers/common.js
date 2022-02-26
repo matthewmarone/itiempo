@@ -1,7 +1,4 @@
 import moment from "moment";
-import { Logger } from "aws-amplify";
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("common.js", "ERROR");
 
 /**
  * For getting the start of and end of any given week based on the users calendar and timezone.
@@ -151,7 +148,7 @@ export const getBlobFromDataURI = (dataURI) => {
     var blob = new Blob([ab], { type: mimeString });
     return blob;
   } catch (e) {
-    logger.debug("Failed to proccess dataURI", e);
+    console.warn("Failed to process dataURI", e);
     return null;
   }
 };
