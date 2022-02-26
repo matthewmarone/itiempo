@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import validate from "validate.js";
 import { makeStyles } from "@material-ui/styles";
 import { UIAuthState } from "AppAuthenticator";
-import { Logger } from "aws-amplify";
 import { AuthLayout } from "./../components";
 import {
   Button,
@@ -15,8 +14,6 @@ import {
 } from "@material-ui/core";
 import { parseFullName } from "helpers";
 import { useUpdateEmployee, useSetupNewAccount } from "hooks";
-// eslint-disable-next-line
-const logger = new Logger("WelcomeNewAccount.js", "ERROR");
 
 // Form validation schema
 const schema = {
@@ -105,7 +102,6 @@ const WelcomeNewAccount = (props) => {
   // Update employee after account setup, and name form is submitted
   useEffect(() => {
     if (calledAcct && !loadingAcct && !errorAcct && dataAcct && name) {
-      logger.debug("dataAcct", dataAcct);
       const { setupNewAccount: { __typename, ...reqFields } = {} } = dataAcct;
       if (reqFields) {
         const { firstName, lastName } = name;
@@ -127,7 +123,6 @@ const WelcomeNewAccount = (props) => {
   // The reducer also stores this in localstorage
   useEffect(() => {
     if (calledEmpl && !errorEmpl && !loadingEmpl && dataEmpl) {
-      logger.debug("dataEmpl", dataEmpl);
       dispatch({
         type: AppActions.UPDATE_LOCAL_APP_DATA,
         payload: { accountSetup: true },
@@ -199,8 +194,8 @@ const WelcomeNewAccount = (props) => {
   const hasError = (field) =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
-  if (errorAcct) logger.warn(errorAcct);
-  if (errorEmpl) logger.warn(errorEmpl);
+  if (errorAcct) console.warn(errorAcct);
+  if (errorEmpl) console.warn(errorEmpl);
 
   return (
     <AuthLayout>

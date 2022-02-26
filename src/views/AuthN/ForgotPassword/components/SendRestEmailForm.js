@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import validate from "validate.js";
 import { makeStyles } from "@material-ui/styles";
 import { UIAuthState } from "AppAuthenticator";
-import { Auth, Logger } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import {
   Button,
   TextField,
@@ -11,8 +11,6 @@ import {
   Typography,
   CircularProgress,
 } from "@material-ui/core";
-// eslint-disable-next-line
-const logger = new Logger("SendRestEmailForm.js", "ERROR");
 
 const schema = {
   email: {
@@ -126,7 +124,7 @@ const SendRestEmailForm = (props) => {
   const hasError = (field) =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
-  if (authState.authError) logger.warn(authState.authError);
+  if (authState.authError) console.warn(authState.authError);
   return (
     <form
       className={classes.form}

@@ -3,7 +3,6 @@ import { Button, Grid } from "@material-ui/core";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import PropTypes from "prop-types";
 import AvatarEditor from "react-avatar-editor";
-import { Logger } from "aws-amplify";
 import { ZoomSlider } from "components";
 import { DialogTemplate } from "../components";
 import { WebcamCapture } from "components";
@@ -11,8 +10,6 @@ import CropRotateIcon from "@material-ui/icons/CropRotate";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import { makeStyles } from "@material-ui/styles";
 import { useDropzone } from "react-dropzone";
-
-const logger = new Logger("ProfilePictureDialog.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   middle: {
@@ -126,12 +123,10 @@ const ProfilePictureDialog = (props) => {
   }, [open]);
 
   const onFileChange = (files) => {
-    logger.debug("files", files);
     if (files && files.length > 0) {
       // const {
       //   preview: { url },
       // } = files[0];
-      logger.debug("file", files[0]);
       setImage(files[0]);
       setScean(EDIT_SCEAN);
     }
@@ -225,7 +220,7 @@ const ProfilePictureDialog = (props) => {
       );
       break;
     default:
-      logger.error("Unknow scean, deafulting to UPLOAD_SCEAN", scean);
+      console.error("Unknown scene, defaulting to UPLOAD_SCEAN", scean);
       dialogContent = uploadScean;
       break;
   }

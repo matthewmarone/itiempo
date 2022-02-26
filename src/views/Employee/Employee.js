@@ -10,13 +10,9 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { Grid } from "@material-ui/core";
 import { EmployeeProfile, EmployeeDetails, EmployeeSetup } from "./components";
-import { Logger } from "aws-amplify";
 import { useGetEmployee, useUpdateEmployee } from "hooks";
 import { Loading } from "views";
 import clsx from "clsx";
-
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("Employee.js", "ERROR");
 
 /**
  *
@@ -50,7 +46,7 @@ const EmployeeView = (props) => {
   const [employeeState, setEmployeeState] = useState(employee);
   const [updatedFields, setUpdatedFields] = useState({});
   const [updateEmployee, { loading: updating, error }] = useUpdateEmployee();
-  if (error) logger.warn(error);
+  if (error) console.warn(error);
   const [{ user }] = useContext(Context);
   const userEmplId = user?.employeeId || "nobody";
   const usrRoles = user?.roles || [];
@@ -217,7 +213,7 @@ const Employee = (props) => {
   const classes = useStyles();
   const { match: { params: { id: employeeId } = {} } = {} } = props;
   const [setId, { error, data }] = useGetEmployee(employeeId);
-  if (error) logger.warn(error);
+  if (error) console.warn(error);
   const { getEmployee: employee } = data || {};
 
   useEffect(() => {

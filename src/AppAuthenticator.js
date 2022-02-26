@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Context } from "Store";
 import { AppActions } from "Reducer";
-import { Hub, Logger, Auth } from "aws-amplify";
+import { Hub, Auth } from "aws-amplify";
 import { useApolloClient } from "@apollo/client";
 import {
   SignIn,
@@ -11,8 +11,6 @@ import {
   AuthNLoading,
   WelcomeNewAccount,
 } from "views";
-// eslint-disable-next-line
-const logger = new Logger("AppAuthenticator.js", "ERROR");
 
 /**
  *
@@ -65,7 +63,6 @@ const AppAuthenticator = ({ children }) => {
       const { accountSetup } = JSON.parse(
         localStorage.getItem(username) || "{}"
       );
-      logger.debug("Is New Account", newAccount, eId, username, accountSetup);
       !newAccount || !!accountSetup
         ? setAuthState(UIAuthState.SignedIn)
         : setAuthState(UIAuthState.WelcomeNewUser);
@@ -86,37 +83,31 @@ const AppAuthenticator = ({ children }) => {
             ? UIAuthState.SignUp
             : UIAuthState.SignIn
         ); // Back to signin page
-        if (e !== "No current user") logger.error(e);
+        if (e !== "No current user") console.error(e);
       });
   }, [dispatch, goToAppOrWelcomeNewUser]);
 
   // Listen for AWS Cognito events
   const hubListener = useCallback(
     (data) => {
-      logger.debug(data);
       switch (data.payload.event) {
         case "signIn":
-          logger.debug("user signed in", data);
           const { payload } = data.payload.data.signInUserSession.idToken;
           dispatch({ type: AppActions.SET_USER, payload });
           goToAppOrWelcomeNewUser(payload);
           break;
         case "signUp":
-          logger.info("user signed up", data);
           break;
         case "signOut":
-          logger.debug("user signed out", data);
           dispatch({ type: AppActions.CLEAR_CONTEXT });
           setAuthState(UIAuthState.SignIn); // Back to signin page
           break;
         case "signIn_failure":
-          logger.info("user sign in failed", data);
           break;
         case "configured":
-          logger.info("the Auth module is configured", data);
           break;
         default:
-          logger.debug("Unimplemented event: " + data.payload.event, data);
+          console.warn("Unimplemented event: " + data.payload.event, data);
       }
     },
     [dispatch, goToAppOrWelcomeNewUser]
@@ -128,7 +119,6 @@ const AppAuthenticator = ({ children }) => {
 
   // These auth state changes happen through UI interactions only
   const handleAuthStateChange = useCallback((nextAuthState, authData) => {
-    logger.debug("Next state: ", nextAuthState, "auth data: ", authData);
     setAuthState(nextAuthState);
     setAuthData(authData);
   }, []);
@@ -180,8 +170,6 @@ const AppAuthenticator = ({ children }) => {
     [authData, handleAuthStateChange]
   );
 
-  logger.debug("(authState, user) => ", authState, user);
-
   const isAuthorized = authState === UIAuthState.SignedIn && user;
   useEffect(() => {
     if (isAuthorized) {
@@ -194,13 +182,13 @@ const AppAuthenticator = ({ children }) => {
       if (preUsername !== username) {
         client
           .resetStore()
-          .then(logger.info("Reset Store for new user"))
-          .catch((e) => logger.error(e))
+          .then(() => console.log("Reset Store for new user"))
+          .catch((e) => console.error(e))
           .finally(() => setAuthorized(true));
         try {
           localStorage.setItem(key, username);
         } catch (e) {
-          logger.error(e);
+          console.error(e);
         }
       } else {
         setAuthorized(true);
