@@ -18,7 +18,6 @@ import {
 } from "@material-ui/core";
 import { DateLocal, TimeRecord } from "components";
 import PropTypes from "prop-types";
-import { Logger } from "aws-amplify";
 import { Edit as EditIcon } from "@material-ui/icons";
 import {
   getFormatedTime,
@@ -35,9 +34,6 @@ import {
   useTimeRecordReport,
   useGetEmployee,
 } from "hooks";
-
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("TimeCardTable.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: { maxWidth: 800 },
@@ -242,7 +238,6 @@ const TimeCardTableSingle = (props) => {
 
   useEffect(() => {
     if (employeeId && fromDate && toDate) {
-      logger.debug("RunQuery", employeeId, fromDate, toDate);
       setVars({
         employeeId,
         fromDate: dateToUnixTimestamp(fromDate),
@@ -255,12 +250,6 @@ const TimeCardTableSingle = (props) => {
   const { items = [] } = (data && data.listEmployeeTimeRecords) || {};
   const recordsMap = new Map();
   if (items.length > 0) recordsMap.set(employeeId, items);
-  logger.debug(
-    "companyId, employeeId, fromDate, toDate",
-    employeeId,
-    fromDate,
-    toDate
-  );
   return (
     <PrivateTimeCardTable
       {...rest}

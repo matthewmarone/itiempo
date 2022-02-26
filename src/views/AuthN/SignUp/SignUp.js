@@ -11,11 +11,9 @@ import {
   Checkbox,
   CircularProgress,
 } from "@material-ui/core";
-import { Auth, Logger } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { UIAuthState } from "AppAuthenticator";
 import { AuthLayout } from "./../components";
-// eslint-disable-next-line
-const logger = new Logger("SignUp.js", "ERROR");
 
 const schema = {
   email: {
@@ -130,7 +128,7 @@ const SignUp = (props) => {
     Auth.signUp(email.toLowerCase(), password)
       .then(() => {
         Auth.signIn(email.toLowerCase(), password).catch((e) =>
-          logger.error(e)
+          console.error(e)
         );
       })
       .catch((authError) => setAuthState({ authError, authorizing: false }));
@@ -142,7 +140,7 @@ const SignUp = (props) => {
   const hasError = (field) =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
-  if (authState.authError) logger.warn(authState.authError);
+  if (authState.authError) console.warn(authState.authError);
   return (
     <AuthLayout>
       <form

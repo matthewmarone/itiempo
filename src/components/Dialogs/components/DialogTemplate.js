@@ -5,10 +5,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme, makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import { Logger } from "aws-amplify";
 
-// eslint-disable-next-line
-const logger = new Logger("ProfilePictureDialog.js", "ERROR");
 const useStyles = makeStyles((theme) => ({
   paper: { width: 550, textAlign: "center" },
   paperMobile: {

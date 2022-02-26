@@ -21,10 +21,7 @@ import {
 } from "components";
 import { v4 as uuid } from "uuid";
 import { useSnackbar } from "notistack";
-import { Logger } from "aws-amplify";
 import { useDownloadImage, useUploadImage } from "hooks";
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("UserProfile.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   root: {},

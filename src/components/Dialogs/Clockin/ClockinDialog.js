@@ -19,9 +19,6 @@ import { useClockIn, useClockOut, useUploadImage } from "hooks";
 import { v4 as uuidv4 } from "uuid";
 import { makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
-import { Logger } from "aws-amplify";
-// eslint-disable-next-line no-unused-vars
-const logger = new Logger("Clockin.js", "ERROR");
 
 const useStyles = makeStyles((theme) => ({
   wageSelectRoot: {
@@ -244,7 +241,7 @@ const ClockinDialog = (props) => {
 
   const handleCameraError = useCallback((e) => {
     // TODO (): Implement case where users camera dosen't work
-    logger.warn(e);
+    console.warn(e);
     setIsReady(true);
   }, []);
 
