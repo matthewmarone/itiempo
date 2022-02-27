@@ -82,7 +82,7 @@ const printVerse = (verseObj) => {
 
     `);
 
-  console.log(JSON.stringify(verseObj) + ",\n");
+  console.log("," + JSON.stringify(verseObj) + "\n");
 
   firstQuestion();
 };

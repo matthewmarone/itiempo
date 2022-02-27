@@ -462,5 +462,37 @@
     "verseEnd": null,
     "translation": "NIV",
     "text": "Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you."
+  },
+  {
+    "book": "Psalm",
+    "chapter": 138,
+    "verseStart": 8,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "The Lord will vindicate me; your love, Lord, endures forever—do not abandon the works of your hands."
+  },
+  {
+    "book": "Isaiah",
+    "chapter": 12,
+    "verseStart": 4,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "In that day you will say: “Give praise to the Lord, proclaim his name; make known among the nations what he has done, and proclaim that his name is exalted."
+  },
+  {
+    "book": "Matthew",
+    "chapter": 24,
+    "verseStart": 35,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "Heaven and earth will pass away, but my words will never pass away."
+  },
+  {
+    "book": "Psalm",
+    "chapter": 18,
+    "verseStart": 30,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "As for God, his way is perfect: The Lord’s word is flawless; he shields all who take refuge in him."
   }
 ]
