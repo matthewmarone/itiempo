@@ -1,8 +1,11 @@
 const readline = require("readline");
+const fs = require('fs');
 
 const myArgs = process.argv.slice(2);
-const [translation = "NIV"] = myArgs;
+const [translation = "NIV", filePath = "src/assets/verses/en.json"] = myArgs;
 const rl = readline.createInterface(process.stdin, process.stdout);
+
+let verses = [];
 
 const parseBookChapterAndVerse = (str) => {
   const bookChapterAndVers = str.split(" ");
@@ -82,12 +85,49 @@ const printVerse = (verseObj) => {
 
     `);
 
-  console.log("," + JSON.stringify(verseObj) + "\n");
-
-  firstQuestion();
+  // console.log("," + JSON.stringify(verseObj) + "\n");
+  
+  writeNewVerse(verseObj)
 };
 
-firstQuestion();
+const writeFile = () => {
+  const data = JSON.stringify(verses, null, 4)
+  // console.log(data)
+  fs.writeFile(filePath, data, 'utf8', firstQuestion); // write it back
+}
+
+const writeNewVerse = (verseObj) => {
+  verses.push(verseObj)
+  writeFile()
+  rl.question("Saved!  Should we remove? (y/N)? ", function (answer) {
+    if (answer === 'y' || answer === 'yes') {
+      const verse = verses.pop()
+      writeFile()
+      console.log('Removed \n\n:' + JSON.stringify(verse, null, 4))
+    }
+    // Finally, start over again
+    firstQuestion();
+  });
+
+};
+
+const start = () => {
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err){
+        console.log(err);
+    } else {
+    verses = JSON.parse(data); //now it an object
+    firstQuestion();
+    // console.log(obj)
+    // obj.table.push({id: 2, square:3}); //add some data
+    // json = JSON.stringify(obj); //convert it back to json
+    // fs.writeFile('myjsonfile.json', json, 'utf8', callback); // write it back 
+  
+  }});
+
+}
+
+start();
 
 // const [book, chapterVerse, text, translation = "NIV" ] = myArgs;
 

@@ -494,5 +494,21 @@
     "verseEnd": null,
     "translation": "NIV",
     "text": "As for God, his way is perfect: The Lord’s word is flawless; he shields all who take refuge in him."
+  },
+  {
+    "book": "Ephesians",
+    "chapter": 3,
+    "verseStart": 20,
+    "verseEnd": 21,
+    "translation": "NIV",
+    "text": "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us, to him be glory in the church and in Christ Jesus throughout all generations, for ever and ever! Amen."
+  },
+  {
+    "book": "Philippians",
+    "chapter": 1,
+    "verseStart": 6,
+    "verseEnd": null,
+    "translation": "NIV",
+    "text": "being confident of this, that he who began a good work in you will carry it on to completion until the day of Christ Jesus."
   }
 ]
