@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useCallback, useContext } from "react";
+import { Context } from "Store";
+import { AppActions } from "Reducer";
 import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
-import { AppBar, Toolbar, Hidden, IconButton } from "@material-ui/core";
+import { AppBar, Toolbar, Hidden, IconButton, Button } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import TranslateIcon from "@material-ui/icons/Translate";
 // import InputIcon from '@material-ui/icons/Input';
 // import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 
@@ -24,12 +27,22 @@ const useStyles = makeStyles((theme) => ({
   image: {
     height: "1.175em",
   },
+  langBtn: {
+    color: "white",
+  },
 }));
 
 const Topbar = (props) => {
   const { className, onSidebarOpen, ...rest } = props;
-
+  const [{ lang }, dispatch] = useContext(Context);
   const classes = useStyles();
+
+  const changeLanguage = useCallback(() => {
+    dispatch({
+      type: AppActions.CHANGE_LANG,
+      payload: { lang: lang === 'en' ? 'es' : 'en' },
+    });
+  }, [dispatch, lang])
 
   // const [notifications] = useState([]);
 
@@ -44,6 +57,15 @@ const Topbar = (props) => {
           />
         </RouterLink>
         <div className={classes.flexGrow} />
+        <Button
+          size="small"
+          startIcon={<TranslateIcon />}
+          color="primary"
+          classes={{ textPrimary: classes.langBtn }}
+          onClick={changeLanguage}
+        >
+          {lang === "es" ? "English" : "Español"}
+        </Button>
         {/* <Hidden mdDown>
           <IconButton color="inherit">
             <Badge

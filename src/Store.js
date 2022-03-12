@@ -1,5 +1,11 @@
 import React, { createContext, useReducer } from "react";
 import Reducer from "Reducer";
+import { I18n } from "aws-amplify";
+import { dict } from "I18n";
+
+const lang = "es";
+I18n.putVocabularies(dict);
+I18n.setLanguage(lang);
 
 /**
  *
@@ -7,6 +13,7 @@ import Reducer from "Reducer";
 export const initialState = {
   user: null,
   userLocalAppData: { accountSetup: false },
+  lang,
 };
 
 /**

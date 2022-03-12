@@ -3,6 +3,7 @@ import { Context } from "Store";
 import { Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 import { useListEmployeesByEmail } from "hooks";
 import PropTypes from "prop-types";
+import { I18n } from "aws-amplify";
 
 /**
  *
@@ -35,7 +36,7 @@ const SingleEmployeeSelect = (props) => {
 
   return (
     <FormControl classes={classes}>
-      <InputLabel htmlFor="work-and-rate">Employee</InputLabel>
+      <InputLabel htmlFor="work-and-rate">{I18n.get("Employee")}</InputLabel>
       <Select value={value} onChange={handleChange}>
         {menuItems}
       </Select>

@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
 import { FormControl, InputLabel, Select } from "@material-ui/core";
+import { I18n } from "aws-amplify";
 /**
  *
  * @param {*} rate required a payRate object
@@ -47,7 +48,7 @@ const EmployeePayRateSelect = (props) => {
 
   return (
     <FormControl classes={classes}>
-      <InputLabel htmlFor="work-and-rate">Job / Rate</InputLabel>
+      <InputLabel htmlFor="work-and-rate">{I18n.get("Job / Rate")}</InputLabel>
       <Select
         native
         name="payRateIndex"
@@ -58,11 +59,11 @@ const EmployeePayRateSelect = (props) => {
           id: "work-and-rate",
         }}
       >
-        <option value="-1">None - $0.00</option>
+        <option value="-1">{I18n.get("None - $0.00")}</option>
         {payRates?.map((v, i) => (
           <option key={i} value={`${i}`}>
             {`${v?.name || ``} - $${v?.amount || ``}${
-              v?.isDefault === true ? ` (default)` : ``
+              v?.isDefault === true ? ` (${I18n.get("default")})` : ``
             }`}
           </option>
         ))}

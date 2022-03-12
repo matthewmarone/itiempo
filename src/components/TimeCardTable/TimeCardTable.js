@@ -34,6 +34,7 @@ import {
   useTimeRecordReport,
   useGetEmployee,
 } from "hooks";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: { maxWidth: 800 },

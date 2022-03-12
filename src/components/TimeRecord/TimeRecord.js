@@ -9,6 +9,7 @@ import { getEarnings, getFormatedTime, getTimeDifference } from "helpers";
 import { useDownloadImage } from "hooks";
 import PropTypes from "prop-types";
 import clsx from "clsx";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles({
   imageSize: { maxHeight: "175px" },
@@ -30,20 +31,18 @@ const TimeRecord = (props) => {
   const classes = useStyles();
   const [currentScene, setCurrentScene] = useState(scene.details);
   const { open, record, onClose } = props;
-  const {
-    timestampIn,
-    timestampOut,
-    clockInDetails,
-    clockOutDetails,
-    rate,
-  } = record;
+  const { timestampIn, timestampOut, clockInDetails, clockOutDetails, rate } =
+    record;
   const {
     photo: photoIn,
     note: noteIn,
     ipAddress: ipAddressIn,
   } = clockInDetails;
-  const { photo: photoOut, note: noteOut, ipAddress: ipAddressOut } =
-    clockOutDetails || {};
+  const {
+    photo: photoOut,
+    note: noteOut,
+    ipAddress: ipAddressOut,
+  } = clockOutDetails || {};
   const [setClockInImageVars, { data: clockInImage }] = useDownloadImage();
   const [setClockOutImageVars, { data: clockOutImage }] = useDownloadImage();
   const { name: payName, amount, isHourly } = rate || {};
@@ -80,43 +79,47 @@ const TimeRecord = (props) => {
     <Grid container spacing={4}>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Date</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Date")}</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>
-          <DateLocal epochSeconds={timestampIn} local="es" format="l" />
+          <DateLocal epochSeconds={timestampIn} local="en" format="l" />
         </Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Time</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Time")}</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>
-          <DateLocal epochSeconds={timestampIn} local="es" format="LT" />
+          <DateLocal epochSeconds={timestampIn} local="en" format="LT" />
           {`${timestampOut > 0 ? ` - ` : ``}`}
-          <DateLocal epochSeconds={timestampOut} local="es" format="LT" />
+          <DateLocal epochSeconds={timestampOut} local="en" format="LT" />
         </Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Duration (MM:HH)</Typography>
+        <Typography {...leftTxtProps}>
+          {I18n.get("Duration (MM:HH)")}
+        </Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>{formatedTotalTime}</Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Rate</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Rate")}</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>
-          {amount > 0 ? `${payName} - $${amount}` : `Unspecified - $0`}
+          {amount > 0
+            ? `${payName} - $${amount}`
+            : `${I18n.get("Unspecified")} - $0`}
         </Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6} className={clsx(isHourly || classes.noShow)}>
-        <Typography {...leftTxtProps}>Earnings</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Earnings")}</Typography>
       </Grid>
       <Grid item xs={6} className={clsx(isHourly || classes.noShow)}>
         <Typography {...rightTxtProps}>
@@ -125,50 +128,50 @@ const TimeRecord = (props) => {
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Photo In:</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Photo in:")}</Typography>
       </Grid>
       <Grid item xs={12}>
         <Image
           imgClass={classes.imageSize}
           src={photoIn ? clockInImage : noImg}
-          alt="Clock in"
+          alt={I18n.get("Clock-in")}
         />
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Photo Out:</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Photo out:")}</Typography>
       </Grid>
       <Grid item xs={12}>
         <Image
           imgClass={classes.imageSize}
           src={photoIn ? clockOutImage : noImg}
-          alt="Clock out"
+          alt={I18n.get("Clock-out")}
         />
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Clock In Note:</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Clock-in Note")}:</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>{noteIn}</Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Clock Out Note:</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Clock-out Note")}:</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>{noteOut}</Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Clock-in IP Address:</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Clock-in IP Address")}:</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>{ipAddressIn}</Typography>
       </Grid>
       {/** Start Row  */}
       <Grid item xs={6}>
-        <Typography {...leftTxtProps}>Clock-out IP Address:</Typography>
+        <Typography {...leftTxtProps}>{I18n.get("Clock-out IP Address")}:</Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography {...rightTxtProps}>{ipAddressOut}</Typography>
@@ -185,7 +188,7 @@ const TimeRecord = (props) => {
         variant="contained"
         classes={{ containedPrimary: classes.deleteBtn }}
       >
-        Delete
+        {I18n.get("Delete")}
       </Button>
     ),
     [classes.deleteBtn]
@@ -199,7 +202,7 @@ const TimeRecord = (props) => {
         color="primary"
         variant="contained"
       >
-        Edit
+        {I18n.get("Edit")}
       </Button>
     ),
     []
@@ -212,7 +215,7 @@ const TimeRecord = (props) => {
         color="secondary"
         variant="outlined"
       >
-        Close
+        {I18n.get("Close")}
       </Button>
     ),
     [onClose]

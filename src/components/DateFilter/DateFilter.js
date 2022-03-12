@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
+import { I18n } from "aws-amplify";
 /**
  *
  * @param {*} props
@@ -14,7 +15,7 @@ const DateFilter = (props) => {
           required
           fullWidth
           type="date"
-          label="From Date"
+          label={I18n.get("From Date")}
           name="fromDate"
           onChange={handleDateChange}
           variant="outlined"
@@ -30,7 +31,7 @@ const DateFilter = (props) => {
           required
           fullWidth
           type="date"
-          label="To Date"
+          label={I18n.get("To Date")}
           name="toDate"
           onChange={handleDateChange}
           variant="outlined"

@@ -4,6 +4,7 @@ import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import { Button } from "@material-ui/core";
 import { ClockinDialog } from "components";
 import { CLOCK_IN_STATE, useClockedIn, useGetEmployee } from "hooks";
+import { I18n } from 'aws-amplify';
 
 /**
  *
@@ -31,7 +32,8 @@ const ClockInButton = (props) => {
         startIcon={<AccessTimeIcon />}
         onClick={() => setOpen(true)}
       >
-        {clockedIn !== CLOCK_IN_STATE.IN ? "Clock In" : "Clock Out"}
+        
+        {clockedIn !== CLOCK_IN_STATE.IN ? I18n.get('Clock-in') : I18n.get('Clock-out')}
       </Button>
       {!employee || (
         <ClockinDialog

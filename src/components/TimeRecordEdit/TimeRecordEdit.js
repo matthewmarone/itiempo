@@ -26,6 +26,7 @@ import {
   useGetEmployee,
 } from "hooks";
 import PropTypes from "prop-types";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles({
   selectRoot: {
@@ -104,7 +105,7 @@ const CreateRecord = (props) => {
 
   useEffect(() => {
     if (!loading && error) {
-      setErrorMsg("An error occurred");
+      setErrorMsg(I18n.get("An error occurred"));
     }
   }, [error, loading]);
 
@@ -216,9 +217,10 @@ const TimeRecordForm = (props) => {
     [onChange]
   );
 
-  const handleRateChange = useCallback((v) => onChange({ rate: v }), [
-    onChange,
-  ]);
+  const handleRateChange = useCallback(
+    (v) => onChange({ rate: v }),
+    [onChange]
+  );
 
   const handleTextChange = useCallback(
     ({ target: { name, value } }) => {
@@ -233,25 +235,20 @@ const TimeRecordForm = (props) => {
 
   const handleSave = useCallback(() => onSave(), [onSave]);
 
-  const [
-    formatedTimeIn,
-    formatedTimeOut,
-    formatedTotalTime,
-    valid,
-    earnings,
-  ] = React.useMemo(() => {
-    const ti = timestampIn ? getDateLocal(timestampIn) : "";
-    const to = timestampOut ? getDateLocal(timestampOut) : "";
-    const v = (timestampIn && !timestampOut) || timestampIn < timestampOut;
-    const timeDifference = getTimeDifference(timestampIn, timestampOut);
-    return [
-      ti,
-      to,
-      getFormatedTime(timeDifference),
-      v,
-      getEarnings(timeDifference, rate?.amount),
-    ];
-  }, [rate?.amount, timestampIn, timestampOut]);
+  const [formatedTimeIn, formatedTimeOut, formatedTotalTime, valid, earnings] =
+    React.useMemo(() => {
+      const ti = timestampIn ? getDateLocal(timestampIn) : "";
+      const to = timestampOut ? getDateLocal(timestampOut) : "";
+      const v = (timestampIn && !timestampOut) || timestampIn < timestampOut;
+      const timeDifference = getTimeDifference(timestampIn, timestampOut);
+      return [
+        ti,
+        to,
+        getFormatedTime(timeDifference),
+        v,
+        getEarnings(timeDifference, rate?.amount),
+      ];
+    }, [rate?.amount, timestampIn, timestampOut]);
 
   const dialogContent = (
     <Grid container spacing={3}>
@@ -297,7 +294,7 @@ const TimeRecordForm = (props) => {
               required
               fullWidth
               type="datetime-local"
-              label="Time In"
+              label={I18n.get("Time In")}
               name="timestampIn"
               error={!valid && !!timestampOut}
               onChange={handleTextChange}
@@ -314,7 +311,7 @@ const TimeRecordForm = (props) => {
               required
               fullWidth
               type="datetime-local"
-              label="Time Out"
+              label={I18n.get("Time Out")}
               name="timestampOut"
               error={!valid && !!timestampOut}
               onChange={handleTextChange}
@@ -330,7 +327,7 @@ const TimeRecordForm = (props) => {
             <TextField
               fullWidth
               multiline
-              label={`${!singleNote ? `Clock In ` : ``}Note`}
+              label={`${!singleNote ? `${I18n.get("Clock-in")} ` : ``}${I18n.get("Note")}`}
               name="noteIn"
               onChange={handleTextChange}
               variant="outlined"

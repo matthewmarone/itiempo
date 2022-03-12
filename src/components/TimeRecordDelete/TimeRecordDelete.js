@@ -9,6 +9,7 @@ import {
 import { DialogTemplate } from "components/Dialogs/components";
 import { useDeleteTimeRecord } from "hooks";
 import PropTypes from "prop-types";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles({
   deleteBtn: {
@@ -47,7 +48,7 @@ const Deleting = (props) => {
       </Grid>
       <Grid item>
         <Typography variant="body1" color="textSecondary">
-          Deleting, please wait...
+          {I18n.get("Deleting, please wait")}...
         </Typography>
       </Grid>
     </Grid>
@@ -68,7 +69,7 @@ const Confirm = (props) => {
     >
       <Grid item xs={12}>
         <Typography variant="h5" color="textSecondary">
-          Are you sure, this cannot be undone?
+          {I18n.get("Are you sure, this cannot be undone?")}
         </Typography>
       </Grid>
       <Grid
@@ -86,7 +87,7 @@ const Confirm = (props) => {
             variant="outlined"
             classes={{ outlinedSecondary: classes.deleteBtn }}
           >
-            Yes, delete it
+            {I18n.get("Yes, delete it")}
           </Button>
         </Grid>
         <Grid item xs={12}>
@@ -95,7 +96,7 @@ const Confirm = (props) => {
             color="primary"
             variant="contained"
           >
-            No, keep the record
+            {I18n.get("No, keep the record")}
           </Button>
         </Grid>
       </Grid>
@@ -121,7 +122,7 @@ const Error = (props) => {
     >
       <Grid item xs={12}>
         <Typography variant="h5" color="textSecondary">
-          An error occurred.
+          {I18n.get("An error occurred")}.
         </Typography>
       </Grid>
     </Grid>
@@ -152,7 +153,7 @@ const TimeRecordDelete = (props) => {
         color="secondary"
         variant="outlined"
       >
-        Cancel
+        {I18n.get("Cancel")}
       </Button>
     ),
     [onClose]
@@ -171,7 +172,7 @@ const TimeRecordDelete = (props) => {
     <DialogTemplate
       open={open}
       handleClose={onClose}
-      title="Delete Time Record"
+      title={I18n.get("Delete Time Record")}
       dialogContent={
         !confirmed ? (
           <Confirm onChoice={handleChoice} />

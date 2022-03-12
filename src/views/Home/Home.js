@@ -17,6 +17,7 @@ import {
   AddTimeButton,
 } from "components";
 import { getWorkWeek, formateDate } from "helpers";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +72,7 @@ const Home = () => {
           <Card>
             <CardContent>
               <Typography gutterBottom variant="h3">
-                Welcome!
+                {I18n.get("Welcome!")}
               </Typography>
             </CardContent>
             <Divider />
@@ -87,7 +88,7 @@ const Home = () => {
                   variant="outlined"
                   onClick={() => setOpenAddTime(true)}
                 >
-                  Add Time
+                  {I18n.get("Add Time")}
                 </Button>
               </AddTimeButton>
             </CardActions>

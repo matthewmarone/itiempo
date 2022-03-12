@@ -1,9 +1,11 @@
 import { initialState } from "Store";
+import { I18n } from "aws-amplify";
 
 export const AppActions = {
   SET_USER: "SET_USER",
   UPDATE_LOCAL_APP_DATA: "UPDATE_LOCAL_APP_DATA",
   CLEAR_CONTEXT: "CLEAR_CONTEXT",
+  CHANGE_LANG: "CHANGE_LANG",
 };
 
 const Reducer = (state, action) => {
@@ -58,6 +60,13 @@ const Reducer = (state, action) => {
       };
     case AppActions.CLEAR_CONTEXT:
       return initialState;
+    case AppActions.CHANGE_LANG:
+      const { lang } = action.payload;
+      I18n.setLanguage(lang);
+      return {
+        ...state,
+        lang,
+      };
     default:
       console.warn("Action Type not implemented");
       return state;
