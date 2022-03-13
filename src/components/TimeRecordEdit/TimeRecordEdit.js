@@ -341,7 +341,7 @@ const TimeRecordForm = (props) => {
               <TextField
                 fullWidth
                 multiline
-                label="Clock Out Note"
+                label={`${I18n.get("Clock-out")} ${I18n.get("Note")}`}
                 name="noteOut"
                 onChange={handleTextChange}
                 variant="outlined"
@@ -365,7 +365,7 @@ const TimeRecordForm = (props) => {
         variant="contained"
         disabled={!valid}
       >
-        Save
+        {I18n.get("Save")}
       </Button>
     ),
     [handleSave, valid]
@@ -378,7 +378,7 @@ const TimeRecordForm = (props) => {
         color="secondary"
         variant="outlined"
       >
-        Back
+        {I18n.get("Back")}
       </Button>
     ),
     [onClose]
@@ -389,7 +389,7 @@ const TimeRecordForm = (props) => {
     <DialogTemplate
       open={open}
       handleClose={onClose}
-      title="Time Record Details"
+      title={I18n.get("Time Record Details")}
       dialogContent={dialogContent}
       actions={actions}
     />

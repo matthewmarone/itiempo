@@ -113,17 +113,17 @@ const TimeRecordRow = (props) => {
         <TimeRecord record={record} open={open} onClose={handleClose} />
       </TableCell>
       <TableCell>
-        <DateLocal epochSeconds={tIn} local="es" format="l" />
+        <DateLocal epochSeconds={tIn} local="en" format="l" />
       </TableCell>
       <TableCell align="center">
         {!!tOut ? (
           <React.Fragment>
-            <DateLocal epochSeconds={tIn} local="es" format="LT" /> -{" "}
-            <DateLocal epochSeconds={tOut} local="es" format="LT" />
+            <DateLocal epochSeconds={tIn} local="en" format="LT" /> -{" "}
+            <DateLocal epochSeconds={tOut} local="en" format="LT" />
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <DateLocal epochSeconds={tIn} local="es" format="LT" />
+            <DateLocal epochSeconds={tIn} local="en" format="LT" />
             {" ..."}
           </React.Fragment>
         )}
@@ -167,7 +167,7 @@ const createTimeSheetRow = (timeRecords, iconClassName) =>
       );
       const updatedTotal =
         totalMinutes +
-        getTimeDifference(timestampIn, timestampOut || timestampIn); // ingnores seconds
+        getTimeDifference(timestampIn, timestampOut || timestampIn); // ignores seconds
 
       return [rows, updatedTotal];
     },
@@ -216,9 +216,6 @@ const TimeCardTableMultiple = (props) => {
     }, recordsMap);
   }, [employeeIds, items]);
 
-  console.log("filter", fromDate, toDate, employeeIds, companyId);
-  console.log("filter", timeRecords);
-
   return (
     <PrivateTimeCardTable
       {...rest}
@@ -234,8 +231,6 @@ const TimeCardTableSingle = (props) => {
   const [setVars, { loading, data }] = useListEmployeeTimeRecord({
     employeeId,
   });
-
-  console.log("data 2", data);
 
   useEffect(() => {
     if (employeeId && fromDate && toDate) {
@@ -291,16 +286,13 @@ const PrivateTimeCardTable = (props) => {
   // Left off here, I need to pass the employee recod and not the user to AddTimeButton
 
   const numOfCols = 4;
-  const { className, timeRecords, employeeIds = [], isFetching } = props;
+  const { className, timeRecords, isFetching } = props;
   const [collapseObj, setCollapseObj] = useState({});
-
-  console.log(`Employee Filtering ${!!employeeIds}`);
 
   let totalMinutes = 0;
   const rows = [];
   // Loop through
   // creating a title row, and children rows
-  console.log("timeRecords", timeRecords);
   timeRecords.forEach((value, key) => {
     if (value[0]) {
       // const {
@@ -370,10 +362,12 @@ const PrivateTimeCardTable = (props) => {
                   <TableCell padding="checkbox" align="center">
                     <EditIcon className={classes.titleIcon} />
                   </TableCell>
-                  <TableCell align="left">Date</TableCell>
-                  <TableCell align="center">Time</TableCell>
+                  <TableCell align="left">{I18n.get("Date")}</TableCell>
+                  <TableCell align="center">{I18n.get("Time")}</TableCell>
                   <TableCell align="right">
-                    <span className={classes.outSideTotals}>Hours</span>
+                    <span className={classes.outSideTotals}>
+                      {I18n.get("Hours")}
+                    </span>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -394,7 +388,8 @@ const PrivateTimeCardTable = (props) => {
                   <TableRow>
                     <TableCell colSpan={4} className={classes.loadingCell}>
                       <Typography color="textSecondary" variant="body1">
-                        No time yet for these dates. Let's get you clocked in!
+                        {I18n.get("No time yet for these dates.")}{" "}
+                        {I18n.get("Let's get you clocked in!")}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -408,7 +403,7 @@ const PrivateTimeCardTable = (props) => {
                     </TableCell>
                     <TableCell colSpan={2} align="left">
                       <Typography variant="h6" gutterBottom component="div">
-                        Total
+                        {I18n.get("Total")}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">

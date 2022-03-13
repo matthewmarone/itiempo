@@ -239,7 +239,7 @@ const TimeRecord = (props) => {
         <DialogTemplate
           open={open}
           handleClose={onClose}
-          title="Time Record Details"
+          title={I18n.get("Time Record Details")}
           dialogContent={dialogContent}
           actions={actions}
         />
