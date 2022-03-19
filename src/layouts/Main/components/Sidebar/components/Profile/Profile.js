@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { Avatar, Typography } from "@material-ui/core";
 import { getInitials } from "helpers";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,12 +43,11 @@ const Profile = (props) => {
     clockedIn,
     ...rest
   } = props;
-  const subtext = `Clocked ${clockedIn ? `In` : `Out`}`;
-  console.log("profile", profileName);
+  const subtext = I18n.get(`Clocked-${clockedIn ? `in` : `out`}`)
   return (
     <div {...rest} className={clsx(classes.root, className)}>
       <Avatar
-        alt="Profile Photo"
+        alt={I18n.get("Profile Photo")}
         className={classes.avatar}
         component={RouterLink}
         src={avatarURL}
@@ -65,7 +65,7 @@ const Profile = (props) => {
           onClick={onClose}
           style={{ color: "inherit" }}
         >
-          {profileName ? profileName : "Loading User"}
+          {profileName ? profileName : "..."}
         </RouterLink>
       </Typography>
       <Typography variant="body2">{subtext}</Typography>

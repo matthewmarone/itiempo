@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { Typography, Link } from "@material-ui/core";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Footer = (props) => {
   const classes = useStyles();
-  const { className, copyRightYaer, ...rest } = props;
+  const { className, copyRightYear, ...rest } = props;
 
   return (
     <div {...rest} className={clsx(classes.root, className)}>
@@ -21,10 +22,10 @@ const Footer = (props) => {
         <Link component="a" href="https://www.iTiempo.com/" target="_blank">
           iTiempo! LLC
         </Link>
-        &nbsp;{copyRightYaer}
+        &nbsp;{copyRightYear}
       </Typography>
       <Typography variant="caption">
-        Because time is a valuable thing.
+        {I18n.get("Because time is a valuable thing.")}
       </Typography>
     </div>
   );
@@ -32,7 +33,7 @@ const Footer = (props) => {
 
 Footer.propTypes = {
   className: PropTypes.string,
-  copyRightYaer: PropTypes.string.isRequired,
+  copyRightYear: PropTypes.string.isRequired,
 };
 
 export default Footer;

@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/styles";
 import { AppBar, Toolbar, Hidden, IconButton, Button } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import TranslateIcon from "@material-ui/icons/Translate";
+import { I18n } from "aws-amplify";
 // import InputIcon from '@material-ui/icons/Input';
 // import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 
@@ -51,7 +52,7 @@ const Topbar = (props) => {
       <Toolbar>
         <RouterLink to="/">
           <img
-            alt="Logo"
+            alt={I18n.get("Logo")}
             src="/images/logos/iTiempo - White.svg"
             className={classes.image}
           />

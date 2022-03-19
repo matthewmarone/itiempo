@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { List, ListItem, Button, colors } from "@material-ui/core";
 import InputIcon from "@material-ui/icons/Input";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -73,7 +74,7 @@ const SidebarNav = (props) => {
           <div className={classes.icon}>
             <InputIcon />
           </div>
-          Log out
+          {I18n.get("Log out")}
         </Button>
       </ListItem>
     </List>

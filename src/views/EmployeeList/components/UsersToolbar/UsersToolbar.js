@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { SearchInput } from "components";
 import { Button } from "@material-ui/core";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -47,7 +48,7 @@ const UsersToolbar = (props) => {
           className={classes.secondaryButton}
           onClick={onInactiveUserButtonClick}
         >
-          Show {showingActiveUsers ? 'Inactive' : 'Active'}
+          {I18n.get(`Show ${showingActiveUsers ? "Inactive" : "Active"}`)}
         </Button>
         {/* <Button
           color="primary"
@@ -60,7 +61,7 @@ const UsersToolbar = (props) => {
       <div className={classes.row}>
         <SearchInput
           className={classes.searchInput}
-          placeholder="Search employees"
+          placeholder={I18n.get("Search employees")}
           value={searchValue}
           onChange={onSearchChange}
         />

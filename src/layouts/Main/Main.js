@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/styles";
 import { useMediaQuery } from "@material-ui/core";
 import { Sidebar, Topbar, Footer } from "./components";
+import { getYear } from 'date-fns'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
 }));
+
+const COPY_RIGHT_YEAR = getYear(new Date());
 
 const Main = (props) => {
   const { children } = props;
@@ -41,8 +44,6 @@ const Main = (props) => {
   };
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
-  // TODO (Matthew): Make this dynamic
-  const copyRightYaer = "2020";
 
   return (
     <div
@@ -59,7 +60,7 @@ const Main = (props) => {
       />
       <main className={classes.content}>
         {children}
-        <Footer copyRightYaer={copyRightYaer} />
+        <Footer copyRightYear={COPY_RIGHT_YEAR} />
       </main>
     </div>
   );

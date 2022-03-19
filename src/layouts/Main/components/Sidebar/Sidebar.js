@@ -17,6 +17,7 @@ import {
   useGetEmployee,
   useDownloadImage,
 } from "hooks";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -74,7 +75,7 @@ const Sidebar = (props) => {
 
   const pages = [
     {
-      title: "Home",
+      title: I18n.get("Home"),
       href: "/home",
       icon: <HomeIcon />,
     },
@@ -102,18 +103,18 @@ const Sidebar = (props) => {
 
   if (isNotEmployee) {
     pages.push({
-      title: "Employees",
+      title: I18n.get("Employees"),
       href: "/employees",
       icon: <PeopleIcon />,
     });
     pages.push({
-      title: "Report",
+      title: I18n.get("Report"),
       href: "/report",
       icon: <TimelineIcon />,
     });
   } else {
     pages.push({
-      title: "Profile",
+      title: I18n.get("Profile"),
       href: profileURL,
       icon: <PersonIcon />,
     });
@@ -131,7 +132,7 @@ const Sidebar = (props) => {
         <Profile
           profileName={
             !employee
-              ? "First Last Name"
+              ? " "
               : `${employee.firstName} ${employee.lastName}`
           }
           profileURL={profileURL}
