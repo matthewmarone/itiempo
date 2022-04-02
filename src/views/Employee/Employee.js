@@ -13,6 +13,7 @@ import { EmployeeProfile, EmployeeDetails, EmployeeSetup } from "./components";
 import { useGetEmployee, useUpdateEmployee } from "hooks";
 import { Loading } from "views";
 import clsx from "clsx";
+import { I18n } from "aws-amplify";
 
 /**
  *
@@ -153,8 +154,6 @@ const EmployeeView = (props) => {
   const employeeModal = useMemo(() => {
     return { ...employeeState, ...updatedFields };
   }, [employeeState, updatedFields]);
-
-  console.log("employeeModal", employeeModal);
 
   const { managers } = employeeState;
 

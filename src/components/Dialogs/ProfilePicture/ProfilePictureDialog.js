@@ -10,6 +10,7 @@ import CropRotateIcon from "@material-ui/icons/CropRotate";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import { makeStyles } from "@material-ui/styles";
 import { useDropzone } from "react-dropzone";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   middle: {
@@ -41,7 +42,9 @@ const UploadScean = (props) => {
           <input {...getInputProps()} />
           <PhotoLibraryIcon fontSize="large" color={color} />
           <DialogContentText color={color}>
-            Drag 'n' drop or click here to choose a photo from your device.
+            {I18n.get(
+              "Drag 'n' drop or click here to choose a photo from your device."
+            )}
           </DialogContentText>
         </div>
       </Grid>
@@ -112,7 +115,7 @@ const ProfilePictureDialog = (props) => {
   const [editor, setEditor] = useState(null);
   const [scean, setScean] = useState(UPLOAD_SCEAN);
   const webcamRef = useRef(null);
-  const title = "Upload Profile Picture";
+  const title = I18n.get("Upload Profile Picture");
 
   useEffect(() => {
     // Always return to Upload Scean on re-renders
@@ -171,7 +174,7 @@ const ProfilePictureDialog = (props) => {
           color="primary"
           variant="contained"
         >
-          Use Camera
+          {I18n.get("Use Camera")}
         </Button>
       );
       if (onRemovePhoto)
@@ -187,7 +190,7 @@ const ProfilePictureDialog = (props) => {
             variant="outlined"
             classes={{ outlinedSecondary: classes.deleteBtn }}
           >
-            Remove Photo
+            {I18n.get("Remove Photo")}
           </Button>
         );
       break;
@@ -201,7 +204,7 @@ const ProfilePictureDialog = (props) => {
           color="primary"
           variant="contained"
         >
-          Take Photo
+          {I18n.get("Take Photo")}
         </Button>
       );
       break;
@@ -215,7 +218,7 @@ const ProfilePictureDialog = (props) => {
           color="primary"
           variant="contained"
         >
-          Save
+          {I18n.get("Save")}
         </Button>
       );
       break;
@@ -233,7 +236,7 @@ const ProfilePictureDialog = (props) => {
       color="secondary"
       variant="outlined"
     >
-      {isWebcamScean ? "Back" : "Cancel"}
+      {isWebcamScean ? I18n.get("Back") : I18n.get("Cancel")}
     </Button>
   );
   actions.push(cancleBtn);

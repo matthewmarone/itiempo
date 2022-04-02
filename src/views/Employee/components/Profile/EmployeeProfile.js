@@ -22,6 +22,7 @@ import {
 import { v4 as uuid } from "uuid";
 import { useSnackbar } from "notistack";
 import { useDownloadImage, useUploadImage } from "hooks";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -103,8 +104,6 @@ const EmployeeProfile = (props) => {
     }
   }, [profilePhoto, setPhotoVars]);
 
-  console.log("My profile photo", profilePhoto);
-
   const actions = [];
   if (isCurrentUser) {
     actions.push(
@@ -114,7 +113,7 @@ const EmployeeProfile = (props) => {
         variant="contained"
         onClick={() => setOpenPinDialog(true)}
       >
-        Set Pin
+        {I18n.get("Set Pin")}
       </Button>
     );
     actions.push(
@@ -124,7 +123,7 @@ const EmployeeProfile = (props) => {
         variant="outlined"
         onClick={() => setOpenPsswdChangeDilog(true)}
       >
-        Change Password
+        {I18n.get("Change Password")}
       </Button>
     );
   } else {
@@ -135,11 +134,11 @@ const EmployeeProfile = (props) => {
         variant="outlined"
         onClick={() => setOpenPsswdRestDilog(true)}
       >
-        Send New Password
+        {I18n.get("Send New Password")}
       </Button>
     );
   }
-  console.log("My role", userRole);
+
   if (userRole !== "Employee")
     actions.push(
       <Button
@@ -148,7 +147,7 @@ const EmployeeProfile = (props) => {
         variant="outlined"
         onClick={onDeactivateActivate}
       >
-        {inactive ? "Re-activate" : "Deactivate"}
+        {inactive ? I18n.get("Re-activate") : I18n.get("Deactivate")}
       </Button>
     );
 
@@ -159,21 +158,21 @@ const EmployeeProfile = (props) => {
           <div className={classes.details}>
             <div>
               <Typography gutterBottom variant="h2">
-                {(firstName || "First Name") + " " + (lastName || "Last Name")}
+                {(firstName || " ") + " " + (lastName || " ")}
               </Typography>
               <Typography
                 className={classes.locationText}
                 color="textSecondary"
                 variant="body1"
               >
-                {"Title: " + (jobTitle || "")}
+                {`${I18n.get("Title")}: ${jobTitle ?? ''}`}
               </Typography>
               <Typography
                 className={classes.locationText}
                 color="textSecondary"
                 variant="body1"
               >
-                {"Role: " + (role || "")}
+                {`${I18n.get("Role")}: ${I18n.get(role ?? '')}`}
               </Typography>
             </div>
             <Avatar

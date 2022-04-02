@@ -6,6 +6,7 @@ import { DialogTemplate } from "../components";
 import { isDigits } from "helpers";
 import { default as PinPad } from "../../PinPad";
 import { useCreateQuickPunch as useCreate, useGetEmployee } from "hooks";
+import { I18n } from "aws-amplify";
 
 const CreatPin = (props) => {
   const { input, onCreate, onError } = props;
@@ -24,7 +25,9 @@ const CreatPin = (props) => {
   return (
     <div>
       <CircularProgress color="secondary" />
-      <Typography variant="body1">Setting your pin, please wait...</Typography>
+      <Typography variant="body1">
+        {I18n.get("Setting your pin, please wait")}...
+      </Typography>
     </div>
   );
 };
@@ -34,7 +37,7 @@ CreatPin.propTypes = {
   onError: PropTypes.func.isRequired,
 };
 
-const defaultTitle = "Set Pin";
+const defaultTitle = I18n.get("Set Pin");
 
 /**
  *
@@ -74,16 +77,16 @@ const SetPinDialog = (props) => {
     if (isValidPin(pin)) {
       if (!firstPin) {
         setFirstPin(pin);
-        setTitle("Confirm Pin");
+        setTitle(I18n.get("Confirm Pin"));
         setPin("");
         setErrorMessage("");
       } else if (pin === firstPin) {
         createOrUpdatePin(firstPin);
       } else {
-        clear("Pin did not match");
+        clear(I18n.get("Pin did not match"));
       }
     } else {
-      clear("Invalid Pin");
+      clear(I18n.get("Invalid Pin"));
     }
   };
   const handleClose = () => onClose();
@@ -102,7 +105,7 @@ const SetPinDialog = (props) => {
 
   const handlePinCreate = useCallback((d) => onClose(), [onClose]);
   const handlePinCreateError = useCallback(
-    (e) => clear("Error creating pin, please try again"),
+    (e) => clear(I18n.get("Error creating pin, please try again")),
     []
   );
 
@@ -119,7 +122,7 @@ const SetPinDialog = (props) => {
             onSubmit={handlePinSubmit}
             errorMessage={errorMessage}
             valid={isValidPin(pin)}
-            hint={!firstPin ? undefined : "Re-enter pin"}
+            hint={!firstPin ? undefined : I18n.get("Re-enter pin")}
           />
         ) : (
           <CreatPin
@@ -136,7 +139,7 @@ const SetPinDialog = (props) => {
           color="secondary"
           variant="outlined"
         >
-          Cancel
+          {I18n.get("Cancel")}
         </Button>,
       ]}
     />

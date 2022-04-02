@@ -4,6 +4,7 @@ import Webcam from "react-webcam";
 import { CircularProgress, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { VideocamOffTwoTone } from "@material-ui/icons";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +31,7 @@ const LoadingCamera = (props) => {
     <div className={classes.spinner}>
       <CircularProgress />
       <Typography variant="body1" color="textSecondary">
-        Loading camera...
+        {I18n.get("Loading camera")}...
       </Typography>
     </div>
   );
@@ -66,18 +67,18 @@ const WebcamCapture = React.forwardRef((props, webcamRef) => {
 
   useEffect(() => {
     const max_attempts = 7;
-    let timmerId = null,
+    let timerId = null,
       attempts = 0;
     if (isLoading) {
-      timmerId = window.setInterval(() => {
+      timerId = window.setInterval(() => {
         if (!!webcamRef.current.getScreenshot()) {
-          window.clearInterval(timmerId);
+          window.clearInterval(timerId);
           if (onReady) onReady();
           setIsLoading(false);
           return;
         }
         if (++attempts === max_attempts) {
-          window.clearInterval(timmerId);
+          window.clearInterval(timerId);
           onUserMediaError(
             new Error("Camera is still not available after 7 seconds")
           );
@@ -86,8 +87,8 @@ const WebcamCapture = React.forwardRef((props, webcamRef) => {
     }
 
     return () => {
-      if (timmerId) {
-        window.clearInterval(timmerId);
+      if (timerId) {
+        window.clearInterval(timerId);
       }
     };
   }, [isLoading, onReady, onUserMediaError, webcamRef]);

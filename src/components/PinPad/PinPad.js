@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Grid, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
+import { I18n } from "aws-amplify";
 
 /**
  *
@@ -45,7 +46,7 @@ const PinPad = (props) => {
       ? createStars(pin)
       : hint && hint.length > 0
       ? hint
-      : "Enter Pin";
+      : I18n.get("Enter Pin");
 
   return (
     <Grid
@@ -103,13 +104,13 @@ const PinPad = (props) => {
         >
           <Grid item>
             <Button color="default" onClick={() => onChange("")}>
-              Clear
+              {I18n.get("Clear")}
             </Button>
           </Grid>
           {createRow([0])}
           <Grid item>
             <Button color="default" onClick={handleBack}>
-              Del
+              {I18n.get("Del")}
             </Button>
           </Grid>
         </Grid>
@@ -122,7 +123,7 @@ const PinPad = (props) => {
           disabled={!valid}
           onClick={onSubmit}
         >
-          Enter
+          {I18n.get("Enter")}
         </Button>
       </Grid>
     </Grid>

@@ -25,6 +25,7 @@ import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
 import { AddEmployeeDialog } from "components";
 import { useDownloadImage } from "hooks";
+import { I18n } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -161,9 +162,9 @@ const UsersTable = (props) => {
                       onChange={handleSelectAll}
                     />
                   </TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Role</TableCell>
+                  <TableCell>{I18n.get("Name")}</TableCell>
+                  <TableCell>{I18n.get("Email")}</TableCell>
+                  <TableCell>{I18n.get("Role")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -202,9 +203,11 @@ const UsersTable = (props) => {
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>
-                        {user.roles && user.roles[0]
-                          ? user.roles[0]
-                          : "Employee"}
+                        {I18n.get(
+                          user.roles && user.roles[0]
+                            ? user.roles[0]
+                            : "Employee"
+                        )}
                       </TableCell>
                     </TableRow>
                   ))
@@ -224,7 +227,7 @@ const UsersTable = (props) => {
                 variant="contained"
                 onClick={() => setOpen(true)}
               >
-                Add Employee
+                {I18n.get("Add Employee")}
               </Button>
             </div>
           </Grid>

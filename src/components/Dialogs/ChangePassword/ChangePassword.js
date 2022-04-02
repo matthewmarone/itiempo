@@ -3,6 +3,7 @@ import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
 import { Auth } from "aws-amplify";
+import { I18n } from "aws-amplify";
 
 /**
  *
@@ -42,7 +43,7 @@ const Content = (props) => {
             name="current"
             value={current}
             onChange={onChange}
-            label="Current Password"
+            label={I18n.get("Current Password")}
             type="password"
           />
         </Grid>
@@ -51,7 +52,7 @@ const Content = (props) => {
             name="password"
             value={password}
             onChange={onChange}
-            label="New Password"
+            label={I18n.get("New Password")}
             type="password"
           />
         </Grid>
@@ -60,7 +61,7 @@ const Content = (props) => {
             name="confirm"
             value={confirm}
             onChange={onChange}
-            label="Confirm Password"
+            label={I18n.get("Confirm Password")}
             type="password"
           />
         </Grid>
@@ -72,7 +73,7 @@ const Content = (props) => {
             {errorMessage?.length > 0
               ? errorMessage
               : success
-              ? "Your password has been changed."
+              ? I18n.get("Your password has been changed.")
               : ""}
           </Typography>
           <Button
@@ -81,7 +82,8 @@ const Content = (props) => {
             disabled={!valid || saving}
             type="submit"
           >
-            {!saving ? "Change" : "Saving"}
+            {!saving ? I18n.get("Change") : I18n.get("Saving")}
+            {/* Left off here */}
           </Button>
         </Grid>
       </Grid>
