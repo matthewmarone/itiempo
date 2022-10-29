@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
 
 const Topbar = (props) => {
   const { className, ...rest } = props;
-  const [{ lang }, dispatch] = useContext(Context);
+  const [{ lang, disableI18n }, dispatch] = useContext(Context);
   const classes = useStyles();
 
   const changeLanguage = useCallback(() => {
@@ -49,15 +49,17 @@ const Topbar = (props) => {
           className={classes.image}
         />
         <div className={classes.flexGrow} />
-        <Button
-          size="small"
-          startIcon={<TranslateIcon />}
-          color="primary"
-          classes={{ textPrimary: classes.langBtn }}
-          onClick={changeLanguage}
-        >
-          {lang === "es" ? "English" : "Español"}
-        </Button>
+        {!disableI18n && (
+          <Button
+            size="small"
+            startIcon={<TranslateIcon />}
+            color="primary"
+            classes={{ textPrimary: classes.langBtn }}
+            onClick={changeLanguage}
+          >
+            {lang === "es" ? "English" : "Español"}
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );

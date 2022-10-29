@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { DialogTemplate } from "../components";
 import { useResetPassword } from "hooks";
 import { isValidPassword, createTemporaryPassword } from "helpers";
+import { I18n } from "aws-amplify";
 
 /**
  *
@@ -11,15 +12,8 @@ import { isValidPassword, createTemporaryPassword } from "helpers";
  * @returns
  */
 const Content = (props) => {
-  const {
-    saving,
-    onSubmit,
-    errorMessage,
-    success,
-    password,
-    onChange,
-    valid,
-  } = props;
+  const { saving, onSubmit, errorMessage, success, password, onChange, valid } =
+    props;
 
   return (
     <form
@@ -42,7 +36,7 @@ const Content = (props) => {
             name="password"
             value={password}
             onChange={onChange}
-            label="Temporary Password"
+            label={I18n.get("Temporary Password")}
           />
         </Grid>
         <Grid item xs={12}>
@@ -53,7 +47,11 @@ const Content = (props) => {
             {errorMessage?.length > 0
               ? errorMessage
               : success
-              ? `Done! Employee has been emaild a temporary (${password}) password which they can use to login and then set a new password.`
+              ? `${I18n.get(
+                  "Done! Employee has been emailed a temporary password"
+                )} (${password}) ${I18n.get(
+                  ", which they can use to login and set a new password."
+                )}`
               : ""}
           </Typography>
           <Button
@@ -62,7 +60,7 @@ const Content = (props) => {
             disabled={!valid || saving || success}
             type="submit"
           >
-            {!saving ? "Email Temporary Password" : "Sending..."}
+            {!saving ? I18n.get("Email Temporary Password") : I18n.get("Sending...")}
           </Button>
         </Grid>
       </Grid>
@@ -81,14 +79,13 @@ const PasswordReset = (props) => {
   const [success, setSuccess] = useState(false);
   const [password, setPassword] = useState(createTemporaryPassword());
 
-  console.log("Password reset", error, data);
   useEffect(() => {
     if (!loading && data?.resetPassword) {
       setSuccess(true);
       setErrorMessage(null);
     } else if (!loading && error) {
       setSuccess(false);
-      setErrorMessage("Failed to reset password, please try again");
+      setErrorMessage(I18n.get("Failed to reset password, please try again"));
     }
   }, [data, error, loading]);
   /**
@@ -122,7 +119,7 @@ const PasswordReset = (props) => {
     <DialogTemplate
       open={open}
       handleClose={onClose}
-      title="Password Reset"
+      title={I18n.get("Password Reset")}
       dialogContent={
         <Content
           saving={loading}
@@ -142,7 +139,7 @@ const PasswordReset = (props) => {
           onClick={handleClose}
           disabled={loading}
         >
-          Close
+          {I18n.get("Close")}
         </Button>,
       ]}
     />

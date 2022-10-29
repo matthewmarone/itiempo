@@ -92,6 +92,18 @@ const spanish = {
     "Your password has been changed.": "...",
     Change: "Cambio",
     Saving: "...",
+    "Incorrect password.": "...",
+    "You appear to be off-line, please check your Internet connection and try again.":
+      "...",
+    "Attempt limit exceeded, please try after some time.": "...",
+    "An error occurred, please try again later.": "...",
+    "Temporary Password": "...",
+    "Done! Employee has been emailed a temporary password": "...",
+    ", which they can use to login and set a new password.": "...",
+    "Email Temporary Password": "...",
+    "Sending...": "...",
+    "Failed to reset password, please try again": "...",
+    "Password Reset": "...",
   },
 };
 

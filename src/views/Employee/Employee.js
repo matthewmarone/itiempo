@@ -13,7 +13,6 @@ import { EmployeeProfile, EmployeeDetails, EmployeeSetup } from "./components";
 import { useGetEmployee, useUpdateEmployee } from "hooks";
 import { Loading } from "views";
 import clsx from "clsx";
-import { I18n } from "aws-amplify";
 
 /**
  *

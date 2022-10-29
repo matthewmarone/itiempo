@@ -35,15 +35,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Topbar = (props) => {
   const { className, onSidebarOpen, ...rest } = props;
-  const [{ lang }, dispatch] = useContext(Context);
+  const [{ lang, disableI18n }, dispatch] = useContext(Context);
   const classes = useStyles();
 
   const changeLanguage = useCallback(() => {
     dispatch({
       type: AppActions.CHANGE_LANG,
-      payload: { lang: lang === 'en' ? 'es' : 'en' },
+      payload: { lang: lang === "en" ? "es" : "en" },
     });
-  }, [dispatch, lang])
+  }, [dispatch, lang]);
 
   // const [notifications] = useState([]);
 
@@ -58,15 +58,18 @@ const Topbar = (props) => {
           />
         </RouterLink>
         <div className={classes.flexGrow} />
-        <Button
-          size="small"
-          startIcon={<TranslateIcon />}
-          color="primary"
-          classes={{ textPrimary: classes.langBtn }}
-          onClick={changeLanguage}
-        >
-          {lang === "es" ? "English" : "Español"}
-        </Button>
+        {/* Left off translating src/views/Employee/Employee.js:178  Just finished EmployeeProfile and was going to do EmployeeSetup next */}
+        {!disableI18n && (
+          <Button
+            size="small"
+            startIcon={<TranslateIcon />}
+            color="primary"
+            classes={{ textPrimary: classes.langBtn }}
+            onClick={changeLanguage}
+          >
+            {lang === "es" ? "English" : "Español"}
+          </Button>
+        )}
         {/* <Hidden mdDown>
           <IconButton color="inherit">
             <Badge

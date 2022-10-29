@@ -83,7 +83,6 @@ const Content = (props) => {
             type="submit"
           >
             {!saving ? I18n.get("Change") : I18n.get("Saving")}
-            {/* Left off here */}
           </Button>
         </Grid>
       </Grid>
@@ -132,15 +131,15 @@ const ChangePassword = (props) => {
       .catch((err) => {
         const { code } = err;
         if (code === "NotAuthorizedException") {
-          clear("Incorrect password.");
+          clear(I18n.get("Incorrect password."));
         } else if (code === "NetworkError") {
           clear(
-            "You appear to be off-line, please check your Internet connection and try again"
+            I18n.get("You appear to be off-line, please check your Internet connection and try again.")
           );
         } else if (code === "LimitExceededException") {
-          clear("Attempt limit exceeded, please try after some time.");
+          I18n.get(clear("Attempt limit exceeded, please try after some time."));
         } else {
-          clear("An error occurred, please try again later.");
+          clear(I18n.get("An error occurred, please try again later."));
           console.error(err);
         }
       });
@@ -156,7 +155,7 @@ const ChangePassword = (props) => {
     <DialogTemplate
       open={open}
       handleClose={onClose}
-      title="Change Password"
+      title={I18n.get("Change Password")}
       dialogContent={
         <Content
           onChange={handleChange}
@@ -177,7 +176,7 @@ const ChangePassword = (props) => {
           color="secondary"
           variant="outlined"
         >
-          Close
+          {I18n.get("Close")}
         </Button>,
       ]}
     />

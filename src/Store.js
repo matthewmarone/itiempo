@@ -3,7 +3,7 @@ import Reducer from "Reducer";
 import { I18n } from "aws-amplify";
 import { dict } from "I18n";
 
-const lang = "es";
+const lang = "en";
 I18n.putVocabularies(dict);
 I18n.setLanguage(lang);
 
@@ -14,6 +14,7 @@ export const initialState = {
   user: null,
   userLocalAppData: { accountSetup: false },
   lang,
+  disableI18n: true,
 };
 
 /**
